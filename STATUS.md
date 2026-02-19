@@ -1,58 +1,47 @@
 # SuperTrainer — Current Status
 
-**Last updated:** Feb 19, 2026 (end of planning session)
-**Current phase:** Pre-build — all planning complete
-**Current week:** 0
-**Next action:** Set up accounts, then start Week 1
+**Last updated:** Feb 19, 2026 (end of Day 1 session)
+**Current phase:** Week 1 — Backend Foundation
+**Current week:** 1
+**Next action:** Day 2 — seed script, CRUD endpoints, more tests
 
 ---
 
-## Planning — COMPLETE
+## Day 1 — COMPLETE
 
-All planning documents are finalized and reviewed:
+What got built:
+- Git repo initialized, pushed to github.com/pranavjain20/supertrainer (private)
+- Project renamed from `super_trainer` to `supertrainer`
+- Docker Compose: Postgres 16 (port 5434) + test DB (port 5433)
+- FastAPI app with health check at `/api/v1/health`
+- Config via pydantic-settings, async SQLAlchemy engine
+- All 7 SQLAlchemy models: Trainer, Client, Session, ExerciseLog, InjuryFlag, ClientAnalysis, Exercise
+- Pydantic request/response schemas for all models
+- Alembic configured for async, initial migration generated and applied
+- 24 tests passing (14 model tests, 2 health tests, 8 schema tests)
 
-- `PRD.md` — Product requirements, 19 features across 4 phases, data model (7 tables), API design, build timeline (14 weeks to beta)
-- `TECH_STACK.md` — Every technology choice researched with alternatives and rationale. Stack: FastAPI + PostgreSQL + ARQ/Redis + React Native/Expo + Deepgram + Claude + Supabase Auth + Railway
-- `BUILD_PLAN.md` — Week-by-week plan, 4-agent parallelization per week, ~300 tests planned, 3 critical checkpoints (Week 3 parser, Week 6 MVP, Week 10 beta readiness)
-- `WORKFLOW.md` — Daily collaboration (STATUS.md system), git worktree strategy, branch naming, merge rules, communication protocol
-- `CLAUDE.md` — Project config loaded every session
-- `AI_TRAINING_PLATFORM_DEEP_SPEC.md` — Original deep spec (reference only, contains outdated hackathon references)
+Key details:
+- Native Postgres was already running on port 5432, so Docker dev DB uses port 5434
+- Git identity set to pranavjain20 / janpranavjain12@gmail.com
+- Python venv at `backend/.venv/`
 
-## Key Decisions Made
+## API Keys Status
 
-- Building a real product, not a hackathon demo
-- React Native + Expo (not web app) for mobile
-- PostgreSQL on Railway (not SQLite)
-- Deepgram Nova-3 for STT (keyterm prompting for gym vocabulary — killer feature)
-- ARQ + Redis for async task queue (native asyncio, lightweight, fits FastAPI)
-- Supabase for auth + file storage (free tier)
-- Rule-based risk scoring initially (no ML until Phase 4 when real data exists)
-- Claude tool_use for parser (reliable structured JSON output)
-- TDD enforced: write failing tests first, implement until they pass
-- Store weights in kg internally, convert for display
-- Git worktrees for parallel agent development
+- Deepgram: has key (not needed until Week 3)
+- Anthropic: has key (not needed until Week 3)
+- Railway: has key (not needed until deployment)
+- Supabase: not mentioned yet (needed Week 3 for storage, Week 5 for auth)
 
-## Before You Can Start Building — 4 Account Signups
+## Day 2 Tasks
 
-1. **Deepgram** — deepgram.com → Create account → Get API key → $200 free credit (no card needed)
-2. **Anthropic** — console.anthropic.com → Create account → Get API key → ~$5-10 during dev
-3. **Railway** — railway.app → Create account → $5/month hobby plan (hosts backend + DB + Redis)
-4. **Supabase** — supabase.com → Create project → Free tier (auth + file storage)
-
-## Day 1 Tasks (Once Accounts Are Ready)
-
-1. Initialize dedicated git repo in this folder
-2. Create GitHub remote and push
-3. Set up .env with all API keys
-4. Create FastAPI project structure
-5. Define all 7 SQLAlchemy models
-6. Set up PostgreSQL on Railway + Alembic migrations
-7. Write seed script (5 clients with realistic profiles)
-8. Build client + session CRUD endpoints
-9. Write ~60 tests
-10. Milestone: `pytest` passes, `curl localhost:8000/api/v1/clients` returns data
+1. Seed script with 5 realistic clients + session history
+2. Client CRUD endpoints (list, create, get, update, archive)
+3. Session CRUD endpoints (create, get, list by client)
+4. Tests for all CRUD endpoints
+5. Milestone: `curl localhost:8000/api/v1/clients` returns seeded data
 
 ## Test Count
-- Backend: 0
+
+- Backend: 24
 - Mobile: 0
-- Total: 0
+- Total: 24
