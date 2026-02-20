@@ -1,10 +1,18 @@
-from fastapi import FastAPI
+import logging
+import time
+
+from fastapi import FastAPI, Request
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app.api.clients import router as clients_router
 from app.api.exercise_logs import router as exercise_logs_router
 from app.api.injury_flags import router as injury_flags_router
 from app.api.sessions import router as sessions_router
+
+logger = logging.getLogger("supertrainer")
 
 app = FastAPI(title="SuperTrainer API", version="0.1.0")
 
@@ -15,6 +23,50 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+# --- Error Handlers ---
+
+
+@app.exception_handler(StarletteHTTPException)
+async def http_exception_handler(request: Request, exc: StarletteHTTPException):
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"error": {"code": f"http_{exc.status_code}", "message": str(exc.detail)}},
+    )
+
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    messages = []
+    for err in exc.errors():
+        loc = " → ".join(str(l) for l in err["loc"])
+        messages.append(f"{loc}: {err['msg']}")
+    return JSONResponse(
+        status_code=422,
+        content={"error": {"code": "validation_error", "message": "; ".join(messages)}},
+    )
+
+
+# --- Request Logging Middleware ---
+
+
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    start = time.perf_counter()
+    response = await call_next(request)
+    duration_ms = (time.perf_counter() - start) * 1000
+    logger.info(
+        "%s %s → %d (%.1fms)",
+        request.method,
+        request.url.path,
+        response.status_code,
+        duration_ms,
+    )
+    return response
+
+
+# --- Routers ---
 
 
 app.include_router(clients_router, prefix="/api/v1")

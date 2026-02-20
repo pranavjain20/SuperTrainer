@@ -1,9 +1,9 @@
 # SuperTrainer — Current Status
 
-**Last updated:** Feb 19, 2026 (end of Day 3 session)
-**Current phase:** Week 2 — CRUD API Endpoints (COMPLETE)
+**Last updated:** Feb 19, 2026 (end of Day 3 session, Week 2 wrap-up)
+**Current phase:** Week 2 — CRUD API Endpoints (FULLY COMPLETE)
 **Current week:** 2
-**Next action:** Remaining Week 2 items (error handling middleware, request logging middleware), then Week 3 — Voice Pipeline
+**Next action:** Week 3 — Voice Pipeline
 
 ---
 
@@ -55,11 +55,18 @@ Bugs caught and fixed during audit:
 - Injury flag endpoint didn't validate exercise_log_id (would cause 500 instead of 404)
 - Initial exercise_log_id validation was hacky (fetched all logs) — replaced with proper get_exercise_log() service function
 
-## Week 2 — Remaining Items
+## Week 2 — Final Items (same session as Day 3)
 
-Not yet built (from BUILD_PLAN.md Week 2 scope):
-- Error handling middleware: responses still use FastAPI default `{"detail": "..."}` instead of planned `{"error": {"code": "...", "message": "..."}}`
-- Request logging middleware
+What got built:
+- Error handling middleware: all errors now return `{"error": {"code": "...", "message": "..."}}` instead of FastAPI default `{"detail": "..."}`
+  - HTTPException handler: returns `{"error": {"code": "http_404", "message": "..."}}`
+  - Validation error handler: returns `{"error": {"code": "validation_error", "message": "field → msg; ..."}}`
+- Request logging middleware: logs `METHOD /path → STATUS (Xms)` via `logging.getLogger("supertrainer")`
+- 4 new tests for error format verification (404 format, 422 validation format, invalid UUID format, no `detail` key)
+- Updated 2 existing tests that checked `response.json()["detail"]` to use `response.json()["error"]["message"]`
+- 93 tests passing
+
+Week 2 is now fully complete per BUILD_PLAN.md scope.
 
 ## API Keys Status
 
@@ -78,6 +85,6 @@ Not yet built (from BUILD_PLAN.md Week 2 scope):
 
 ## Test Count
 
-- Backend: 89
+- Backend: 93
 - Mobile: 0
-- Total: 89
+- Total: 93

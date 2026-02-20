@@ -137,7 +137,7 @@ async def test_create_injury_flag_session_client_mismatch(client, trainer_client
         "pain_level": 5,
     })
     assert response.status_code == 422
-    assert "does not belong" in response.json()["detail"]
+    assert "does not belong" in response.json()["error"]["message"]
 
 
 async def test_create_injury_flag_exercise_log_session_mismatch(client, trainer_client_session):
@@ -165,7 +165,7 @@ async def test_create_injury_flag_exercise_log_session_mismatch(client, trainer_
         "pain_level": 4,
     })
     assert response.status_code == 422
-    assert "does not belong" in response.json()["detail"]
+    assert "does not belong" in response.json()["error"]["message"]
 
 
 async def test_create_injury_flag_missing_fields(client, trainer_client_session):
