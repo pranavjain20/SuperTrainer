@@ -3,7 +3,14 @@ import uuid
 import pytest
 from pydantic import ValidationError
 
-from app.schemas import ClientCreate, InjuryFlagCreate, SessionCreate, TrainerCreate
+from app.schemas import (
+    ClientCreate,
+    ExerciseLogCreate,
+    InjuryFlagCreate,
+    SessionCreate,
+    SessionUpdate,
+    TrainerCreate,
+)
 
 
 def test_client_create_requires_name():
@@ -67,3 +74,61 @@ def test_injury_flag_valid():
 def test_trainer_create_requires_email_and_name():
     with pytest.raises(ValidationError):
         TrainerCreate()
+
+
+# --- SessionUpdate ---
+
+
+def test_session_update_all_fields_optional():
+    s = SessionUpdate()
+    assert s.ended_at is None
+    assert s.duration_minutes is None
+    assert s.raw_transcript is None
+    assert s.processing_status is None
+    assert s.trainer_edited is None
+
+
+def test_session_update_valid():
+    s = SessionUpdate(
+        duration_minutes=60,
+        processing_status="completed",
+        trainer_edited=True,
+    )
+    assert s.duration_minutes == 60
+    assert s.processing_status.value == "completed"
+    assert s.trainer_edited is True
+
+
+def test_session_update_invalid_processing_status():
+    with pytest.raises(ValidationError):
+        SessionUpdate(processing_status="bogus")
+
+
+# --- ExerciseLogCreate ---
+
+
+def test_exercise_log_create_requires_fields():
+    with pytest.raises(ValidationError):
+        ExerciseLogCreate()
+
+
+def test_exercise_log_create_valid():
+    e = ExerciseLogCreate(
+        session_id=uuid.uuid4(),
+        exercise_name="Bench Press",
+        sets=[{"set": 1, "weight_kg": 80, "reps": 8}],
+    )
+    assert e.exercise_name == "Bench Press"
+    assert len(e.sets) == 1
+
+
+def test_exercise_log_create_minimal():
+    e = ExerciseLogCreate(session_id=uuid.uuid4(), exercise_name="Squat")
+    assert e.sets is None
+    assert e.total_volume_kg is None
+    assert e.form_notes is None
+
+
+def test_exercise_log_create_rejects_empty_name():
+    with pytest.raises(ValidationError):
+        ExerciseLogCreate(session_id=uuid.uuid4(), exercise_name="")

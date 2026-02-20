@@ -53,6 +53,8 @@ async def create_client(db: AsyncSession, trainer_id: uuid.UUID, **kwargs) -> Cl
 
 
 async def update_client(db: AsyncSession, client: Client, **kwargs) -> Client:
+    # NOTE: skips None values, so you can't clear optional fields via PATCH yet.
+    # Acceptable for now — revisit when we need "set email to null" functionality.
     for key, value in kwargs.items():
         if value is not None:
             setattr(client, key, value)

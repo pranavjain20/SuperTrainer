@@ -75,7 +75,6 @@ def upgrade() -> None:
     sa.Column('last_computed_at', sa.DateTime(timezone=True), nullable=True),
     sa.ForeignKeyConstraint(['client_id'], ['clients.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('client_id'),
     sa.UniqueConstraint('client_id')
     )
     op.create_table('sessions',

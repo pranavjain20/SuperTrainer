@@ -1,9 +1,9 @@
 # SuperTrainer — Current Status
 
-**Last updated:** Feb 19, 2026 (end of Day 2 session)
-**Current phase:** Week 1 — Backend Foundation
-**Current week:** 1
-**Next action:** Day 3 — exercise log endpoints, voice pipeline scaffolding
+**Last updated:** Feb 19, 2026 (end of Day 3 session)
+**Current phase:** Week 2 — CRUD API Endpoints (COMPLETE)
+**Current week:** 2
+**Next action:** Remaining Week 2 items (error handling middleware, request logging middleware), then Week 3 — Voice Pipeline
 
 ---
 
@@ -38,6 +38,29 @@ What got built:
 Key fix:
 - Switched from savepoint/rollback test isolation to truncate-based cleanup — CRUD services call `db.commit()` internally, which broke savepoint-based approach
 
+## Day 3 — COMPLETE
+
+What got built:
+- Session update (PATCH) + delete (DELETE with cascade)
+- Exercise log CRUD: create, list by session, list by client (with exercise_name filter)
+- Injury flag CRUD: create, list by client
+- Full cross-entity validation: session belongs to client, exercise_log belongs to session
+- Schema validation for all new create/update types
+- Pagination cursor test (verifies no page overlap)
+- Cascade delete tests (both exercise_logs and injury_flags verified via parent endpoints)
+- 89 tests passing
+
+Bugs caught and fixed during audit:
+- Injury flag endpoint didn't validate session belonged to client (data integrity hole)
+- Injury flag endpoint didn't validate exercise_log_id (would cause 500 instead of 404)
+- Initial exercise_log_id validation was hacky (fetched all logs) — replaced with proper get_exercise_log() service function
+
+## Week 2 — Remaining Items
+
+Not yet built (from BUILD_PLAN.md Week 2 scope):
+- Error handling middleware: responses still use FastAPI default `{"detail": "..."}` instead of planned `{"error": {"code": "...", "message": "..."}}`
+- Request logging middleware
+
 ## API Keys Status
 
 - Deepgram: has key (not needed until Week 3)
@@ -45,8 +68,16 @@ Key fix:
 - Railway: has key (not needed until deployment)
 - Supabase: not mentioned yet (needed Week 3 for storage, Week 5 for auth)
 
+## Endpoints Built (15)
+
+- Clients: list, create, get, update, archive, list sessions
+- Sessions: create, get, list by client, update, delete
+- Exercise Logs: create, list by session, list by client (with name filter)
+- Injury Flags: create, list by client
+- Health: health check
+
 ## Test Count
 
-- Backend: 47
+- Backend: 89
 - Mobile: 0
-- Total: 47
+- Total: 89

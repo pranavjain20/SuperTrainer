@@ -1,5 +1,4 @@
 import uuid
-from datetime import datetime, timezone
 
 import pytest
 
@@ -114,3 +113,147 @@ async def test_list_sessions_empty_for_new_client(client, trainer_and_client):
     response = await client.get(f"/api/v1/clients/{new_client_id}/sessions")
     assert response.status_code == 200
     assert response.json()["data"] == []
+
+
+# --- Update Session ---
+
+
+async def test_update_session_success(client, trainer_and_client):
+    _, db_client = trainer_and_client
+    create_resp = await client.post("/api/v1/sessions", json={
+        "client_id": str(db_client.id),
+        "started_at": "2026-02-19T10:00:00Z",
+    })
+    session_id = create_resp.json()["data"]["id"]
+
+    response = await client.patch(f"/api/v1/sessions/{session_id}", json={
+        "ended_at": "2026-02-19T11:00:00Z",
+        "duration_minutes": 60,
+        "raw_transcript": "Some transcript text",
+        "processing_status": "completed",
+        "trainer_edited": True,
+    })
+    assert response.status_code == 200
+    data = response.json()["data"]
+    assert data["duration_minutes"] == 60
+    assert data["raw_transcript"] == "Some transcript text"
+    assert data["processing_status"] == "completed"
+    assert data["trainer_edited"] is True
+
+
+async def test_update_session_partial(client, trainer_and_client):
+    _, db_client = trainer_and_client
+    create_resp = await client.post("/api/v1/sessions", json={
+        "client_id": str(db_client.id),
+        "started_at": "2026-02-19T10:00:00Z",
+    })
+    session_id = create_resp.json()["data"]["id"]
+
+    # Update only one field
+    response = await client.patch(f"/api/v1/sessions/{session_id}", json={
+        "duration_minutes": 45,
+    })
+    assert response.status_code == 200
+    data = response.json()["data"]
+    assert data["duration_minutes"] == 45
+    # Other fields unchanged
+    assert data["processing_status"] == "pending"
+    assert data["trainer_edited"] is False
+    assert data["raw_transcript"] is None
+
+
+async def test_update_session_not_found(client, trainer_and_client):
+    response = await client.patch(f"/api/v1/sessions/{uuid.uuid4()}", json={
+        "duration_minutes": 60,
+    })
+    assert response.status_code == 404
+
+
+# --- Delete Session ---
+
+
+async def test_delete_session_success(client, trainer_and_client):
+    _, db_client = trainer_and_client
+    create_resp = await client.post("/api/v1/sessions", json={
+        "client_id": str(db_client.id),
+        "started_at": "2026-02-19T12:00:00Z",
+    })
+    session_id = create_resp.json()["data"]["id"]
+
+    response = await client.delete(f"/api/v1/sessions/{session_id}")
+    assert response.status_code == 204
+
+    # Verify it's gone
+    get_resp = await client.get(f"/api/v1/sessions/{session_id}")
+    assert get_resp.status_code == 404
+
+
+async def test_delete_session_not_found(client, trainer_and_client):
+    response = await client.delete(f"/api/v1/sessions/{uuid.uuid4()}")
+    assert response.status_code == 404
+
+
+async def test_delete_session_cascades_exercise_logs(client, trainer_and_client):
+    _, db_client = trainer_and_client
+    # Create session
+    create_resp = await client.post("/api/v1/sessions", json={
+        "client_id": str(db_client.id),
+        "started_at": "2026-02-19T13:00:00Z",
+    })
+    session_id = create_resp.json()["data"]["id"]
+
+    # Create exercise log on that session
+    await client.post("/api/v1/exercise-logs", json={
+        "session_id": session_id,
+        "exercise_name": "Bench Press",
+    })
+
+    # Verify exercise log exists via client endpoint
+    logs_before = await client.get(f"/api/v1/clients/{db_client.id}/exercise-logs")
+    bench_logs = [l for l in logs_before.json()["data"] if l["exercise_name"] == "Bench Press"]
+    assert len(bench_logs) >= 1
+
+    # Delete session — cascade should remove exercise logs
+    delete_resp = await client.delete(f"/api/v1/sessions/{session_id}")
+    assert delete_resp.status_code == 204
+
+    # Verify exercise logs are gone via client endpoint
+    logs_after = await client.get(f"/api/v1/clients/{db_client.id}/exercise-logs")
+    remaining_session_logs = [
+        l for l in logs_after.json()["data"] if l["session_id"] == session_id
+    ]
+    assert remaining_session_logs == []
+
+
+async def test_delete_session_cascades_injury_flags(client, trainer_and_client):
+    _, db_client = trainer_and_client
+    # Create session
+    create_resp = await client.post("/api/v1/sessions", json={
+        "client_id": str(db_client.id),
+        "started_at": "2026-02-19T14:00:00Z",
+    })
+    session_id = create_resp.json()["data"]["id"]
+
+    # Create injury flag on that session
+    await client.post("/api/v1/injury-flags", json={
+        "client_id": str(db_client.id),
+        "session_id": session_id,
+        "body_part": "left knee",
+        "pain_level": 5,
+    })
+
+    # Verify injury flag exists
+    flags_before = await client.get(f"/api/v1/clients/{db_client.id}/injury-flags")
+    knee_flags = [f for f in flags_before.json()["data"] if f["session_id"] == session_id]
+    assert len(knee_flags) >= 1
+
+    # Delete session — cascade should remove injury flags
+    delete_resp = await client.delete(f"/api/v1/sessions/{session_id}")
+    assert delete_resp.status_code == 204
+
+    # Verify injury flags for that session are gone
+    flags_after = await client.get(f"/api/v1/clients/{db_client.id}/injury-flags")
+    remaining_session_flags = [
+        f for f in flags_after.json()["data"] if f["session_id"] == session_id
+    ]
+    assert remaining_session_flags == []

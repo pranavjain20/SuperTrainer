@@ -48,3 +48,18 @@ async def create_session(db: AsyncSession, trainer_id: uuid.UUID, **kwargs) -> S
     await db.commit()
     await db.refresh(session)
     return session
+
+
+async def update_session(db: AsyncSession, session: Session, **kwargs) -> Session:
+    # NOTE: skips None values, so you can't clear optional fields via PATCH yet.
+    for key, value in kwargs.items():
+        if value is not None:
+            setattr(session, key, value)
+    await db.commit()
+    await db.refresh(session)
+    return session
+
+
+async def delete_session(db: AsyncSession, session: Session) -> None:
+    await db.delete(session)
+    await db.commit()

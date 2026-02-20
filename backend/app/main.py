@@ -2,6 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.clients import router as clients_router
+from app.api.exercise_logs import router as exercise_logs_router
+from app.api.injury_flags import router as injury_flags_router
 from app.api.sessions import router as sessions_router
 
 app = FastAPI(title="SuperTrainer API", version="0.1.0")
@@ -17,6 +19,8 @@ app.add_middleware(
 
 app.include_router(clients_router, prefix="/api/v1")
 app.include_router(sessions_router, prefix="/api/v1")
+app.include_router(exercise_logs_router, prefix="/api/v1")
+app.include_router(injury_flags_router, prefix="/api/v1")
 
 
 @app.get("/api/v1/health")

@@ -68,7 +68,7 @@ class ClientCreate(BaseModel):
 
 
 class ClientUpdate(BaseModel):
-    name: str | None = None
+    name: str | None = Field(None, min_length=1)
     email: str | None = None
     phone: str | None = None
     birth_date: date | None = None
@@ -107,6 +107,14 @@ class SessionCreate(BaseModel):
     started_at: datetime
 
 
+class SessionUpdate(BaseModel):
+    ended_at: datetime | None = None
+    duration_minutes: int | None = None
+    raw_transcript: str | None = None
+    processing_status: ProcessingStatusEnum | None = None
+    trainer_edited: bool | None = None
+
+
 class SessionResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
@@ -133,6 +141,16 @@ class SessionListResponse(BaseModel):
 # --- ExerciseLog ---
 
 
+class ExerciseLogCreate(BaseModel):
+    session_id: uuid.UUID
+    exercise_name: str = Field(..., min_length=1)
+    exercise_canonical: str | None = None
+    sets: list | dict | None = None
+    total_volume_kg: float | None = None
+    form_notes: list[str] | None = None
+    cues_given: list[str] | None = None
+
+
 class ExerciseLogResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
@@ -141,7 +159,7 @@ class ExerciseLogResponse(BaseModel):
     client_id: uuid.UUID
     exercise_name: str
     exercise_canonical: str | None
-    sets: dict | None
+    sets: list | dict | None
     total_volume_kg: float | None
     form_notes: list[str] | None
     cues_given: list[str] | None
@@ -178,3 +196,13 @@ class InjuryFlagResponse(BaseModel):
     resolved: bool
     resolved_at: datetime | None
     flagged_at: datetime
+
+
+class ExerciseLogListResponse(BaseModel):
+    data: list[ExerciseLogResponse]
+    meta: PaginationMeta = PaginationMeta()
+
+
+class InjuryFlagListResponse(BaseModel):
+    data: list[InjuryFlagResponse]
+    meta: PaginationMeta = PaginationMeta()

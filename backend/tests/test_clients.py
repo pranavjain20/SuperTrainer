@@ -40,6 +40,32 @@ async def test_list_clients_returns_created(client, trainer_for_api):
     assert "List Test Client" in names
 
 
+async def test_list_clients_pagination_with_cursor(client, trainer_for_api):
+    # Create 3 clients
+    for i in range(3):
+        await client.post("/api/v1/clients", json={"name": f"Page Client {i}"})
+
+    # Fetch page 1 with limit=2
+    page1 = await client.get("/api/v1/clients", params={"limit": 2})
+    assert page1.status_code == 200
+    page1_data = page1.json()
+    assert len(page1_data["data"]) == 2
+    assert page1_data["meta"]["has_more"] is True
+    cursor = page1_data["meta"]["cursor"]
+    assert cursor is not None
+
+    # Fetch page 2 with cursor
+    page2 = await client.get("/api/v1/clients", params={"limit": 2, "cursor": cursor})
+    assert page2.status_code == 200
+    page2_data = page2.json()
+    assert len(page2_data["data"]) >= 1
+
+    # Pages should not overlap
+    page1_ids = {c["id"] for c in page1_data["data"]}
+    page2_ids = {c["id"] for c in page2_data["data"]}
+    assert page1_ids.isdisjoint(page2_ids)
+
+
 # --- Create Client ---
 
 
@@ -133,6 +159,14 @@ async def test_update_client_partial(client, trainer_for_api):
 async def test_update_client_not_found(client, trainer_for_api):
     response = await client.patch(f"/api/v1/clients/{uuid.uuid4()}", json={"name": "X"})
     assert response.status_code == 404
+
+
+async def test_update_client_empty_name_rejected(client, trainer_for_api):
+    create_resp = await client.post("/api/v1/clients", json={"name": "Valid Name"})
+    client_id = create_resp.json()["data"]["id"]
+
+    response = await client.patch(f"/api/v1/clients/{client_id}", json={"name": ""})
+    assert response.status_code == 422
 
 
 # --- Archive Client ---

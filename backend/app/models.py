@@ -12,7 +12,6 @@ from sqlalchemy import (
     Integer,
     String,
     Text,
-    UniqueConstraint,
     func,
 )
 from sqlalchemy.dialects.postgresql import ARRAY, JSONB, UUID
@@ -116,7 +115,7 @@ class ExerciseLog(Base):
     client_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("clients.id", ondelete="CASCADE"), nullable=False)
     exercise_name: Mapped[str] = mapped_column(String(255), nullable=False)
     exercise_canonical: Mapped[str | None] = mapped_column(String(255))
-    sets: Mapped[dict | None] = mapped_column(JSONB)
+    sets: Mapped[list | None] = mapped_column(JSONB)
     total_volume_kg: Mapped[float | None] = mapped_column(Float)
     form_notes: Mapped[list[str] | None] = mapped_column(ARRAY(String))
     cues_given: Mapped[list[str] | None] = mapped_column(ARRAY(String))
@@ -153,8 +152,6 @@ class InjuryFlag(Base):
 
 class ClientAnalysis(Base):
     __tablename__ = "client_analysis"
-    __table_args__ = (UniqueConstraint("client_id"),)
-
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     client_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("clients.id", ondelete="CASCADE"), nullable=False, unique=True)
     total_sessions: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
