@@ -1,9 +1,9 @@
 # SuperTrainer — Current Status
 
-**Last updated:** Feb 19, 2026 (end of Day 1 session)
+**Last updated:** Feb 19, 2026 (end of Day 2 session)
 **Current phase:** Week 1 — Backend Foundation
 **Current week:** 1
-**Next action:** Day 2 — seed script, CRUD endpoints, more tests
+**Next action:** Day 3 — exercise log endpoints, voice pipeline scaffolding
 
 ---
 
@@ -25,6 +25,19 @@ Key details:
 - Git identity set to pranavjain20 / janpranavjain12@gmail.com
 - Python venv at `backend/.venv/`
 
+## Day 2 — COMPLETE
+
+What got built:
+- Seed script: 1 trainer ("Coach Pranav"), 5 clients with varied profiles, 20 sessions, exercise logs, injury flags
+- Client CRUD: list (cursor pagination, archive filter), create, get, update, archive
+- Session CRUD: create, get, list by client (newest first, cursor pagination)
+- Service layer pattern: thin route handlers → service functions → database
+- Temp trainer ID pattern (hardcoded until auth in Week 10)
+- 47 tests passing (15 client, 8 session, 14 model, 2 health, 9 schema)
+
+Key fix:
+- Switched from savepoint/rollback test isolation to truncate-based cleanup — CRUD services call `db.commit()` internally, which broke savepoint-based approach
+
 ## API Keys Status
 
 - Deepgram: has key (not needed until Week 3)
@@ -32,16 +45,8 @@ Key details:
 - Railway: has key (not needed until deployment)
 - Supabase: not mentioned yet (needed Week 3 for storage, Week 5 for auth)
 
-## Day 2 Tasks
-
-1. Seed script with 5 realistic clients + session history
-2. Client CRUD endpoints (list, create, get, update, archive)
-3. Session CRUD endpoints (create, get, list by client)
-4. Tests for all CRUD endpoints
-5. Milestone: `curl localhost:8000/api/v1/clients` returns seeded data
-
 ## Test Count
 
-- Backend: 24
+- Backend: 47
 - Mobile: 0
-- Total: 24
+- Total: 47

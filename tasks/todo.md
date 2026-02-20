@@ -11,10 +11,10 @@
 - [x] Step 6: Tests (24 passing)
 - [x] Step 7: End-to-end verification
 
-## Day 2: Seed Data + CRUD Endpoints
+## Day 2: Seed Data + CRUD Endpoints — DONE
 
-- [ ] Seed script (5 clients with realistic profiles + session history)
-- [ ] Client CRUD: list, create, get, update, archive
-- [ ] Session CRUD: create, get, list by client
-- [ ] Tests for all CRUD endpoints
-- [ ] Milestone: API serves seeded data
+- [x] Seed script (5 clients with realistic profiles + session history)
+- [x] Client CRUD: list, create, get, update, archive
+- [x] Session CRUD: create, get, list by client
+- [x] Tests for all CRUD endpoints (23 new tests)
+- [x] Milestone: API serves seeded data
