@@ -1,29 +1,43 @@
-# SuperTrainer: Build Plan
+# SuperTrainer: Build Plan (PRD v3)
 
 ---
 
 ## Timeline Overview
 
-**MVP (voice loop works end-to-end on phone): Week 8**
-**Beta-ready (intelligence + auth + polish): Week 14**
-**Public launch: Week 16-18**
+Every phase is ≤2 weeks. Review and approve each before moving to the next.
 
-Total: ~4-4.5 months part-time (3-4 hrs/day from you, unlimited from Claude Code agents)
+| Phase | Weeks | What |
+|-------|-------|------|
+| **1a** | 1-2 | Backend Foundation (models, CRUD, seed data) |
+| **1b** | 3-4 | Voice Pipeline (Deepgram + Claude parser) |
+| **2a** | 5-6 | Mobile — Core Session Screen + Navigation |
+| **2b** | 7 | Mobile — Session Detail + Flags + Onboarding |
+| **3a** | 8-9 | Planning Flow (voice → structured plans) |
+| **3b** | 10 | Pre-Session Briefing (4-layer, push notifications) |
+| **3c** | 11-12 | The Brain (RAG, honest states, plan actions) |
+| **4a** | 13-14 | Calendar Integration + Auth |
+| **4b** | 15-16 | Polish + Beta Launch |
+| **5a** | 17-18 | Client Score + Pattern Detection |
+| **5b** | 19-20 | Injury Risk Scoring + Progress Charts |
+| **6a** | 21-22 | Client App + Wearable Integration |
+| **6b** | 23-24 | Multi-Trainer + Session Sharing + Scale |
+
+Total: ~6 months part-time (3-4 hrs/day from Pranav, unlimited from Claude Code agents)
 
 ---
 
 ## How We Work Together
 
-**Your role (3-4 hrs/day):**
-- Review code I write (most important — you must understand everything)
+**Pranav's role (3-4 hrs/day):**
+- Review code (most important — you must understand everything)
 - Make product decisions when I hit forks
 - Test on your physical phone
 - Write/refine sample transcripts (you know what trainers say, I don't)
-- Approve or reject my architectural choices
+- Approve or reject architectural choices
 
-**My role (Claude Code, 4 parallel agents):**
+**My role (Claude Code, up to 4 parallel agents):**
 - Write code, tests, and iterate
-- I can prepare multiple features in parallel while you sleep/study
+- Prepare multiple features in parallel while you sleep/study
 - When you come online, you review what's ready
 - I never merge anything you haven't reviewed
 
@@ -39,688 +53,546 @@ Total: ~4-4.5 months part-time (3-4 hrs/day from you, unlimited from Claude Code
 ## Feature Dependency Map
 
 ```
-F1: Data Models + Database
+Models + Database (10 models)
     ↓
-    ├── F2: Client/Session CRUD API
-    │       ↓
-    │       ├── F5: Mobile — Client List + Session History screens
-    │       │
-    │       └── F3: Voice Pipeline (Deepgram STT + Claude Parser)
-    │               ↓
-    │               ├── F4: Audio Upload + Processing endpoint
-    │               │       ↓
-    │               │       └── F6: Mobile — Record + Review flow
-    │               │
-    │               └── F7: Intelligence Layer
-    │                       ├── F7a: Pre-session Briefings
-    │                       ├── F7b: Pattern Detection
-    │                       └── F7c: Risk Scoring
-    │                               ↓
-    │                               └── F8: Mobile — Briefing + Dashboard screens
-    │
-    └── F9: Auth (Supabase) — can be added as middleware at any point
+    ├── Client CRUD
+    ├── Session CRUD (with scheduled_for)
+    ├── Session Entry CRUD (exercise_card + observation_card)
+    ├── Session Plan CRUD
+    └── Injury Flag CRUD
             ↓
-            └── F10: Mobile Auth screens
+            └── Voice Pipeline (Deepgram + Claude Parser)
+                    ├── Per-clip synchronous processing
+                    ├── Session state management (client-side)
+                    └── Intent classification + additive parsing
+                            ↓
+                            ├── Mobile — Core Session Flow
+                            │       ├── Navigation shell
+                            │       ├── Tap-to-speak + real-time timeline
+                            │       ├── Client profile + session history
+                            │       └── Onboarding
+                            │
+                            ├── Planning Flow (voice → exercise cards)
+                            │       ↓
+                            │       └── Pre-Session Briefing (4-layer)
+                            │               └── Push notifications
+                            │
+                            └── The Brain (RAG + agent)
+                                    ├── Single + cross-client queries
+                                    ├── Three honest states
+                                    ├── Plan actions via voice
+                                    └── Conversation history
 
-F11: Polish, error handling, edge cases (throughout)
-F12: App Store submission + landing page
+Auth (Supabase) — added as middleware in Phase 4a
+Calendar — added in Phase 4a
+Intelligence Layer — Phase 5 (patterns, scoring, charts)
 ```
 
 **What can be parallelized:**
-- Backend CRUD endpoints + Mobile app scaffolding (different agents, same week)
-- Voice pipeline backend + Mobile client list UI (no dependency)
-- Tests always written in parallel with implementation (TDD)
-- Exercise database seeding + API endpoint development
-- Auth integration (backend) + Auth screens (mobile) simultaneously
+- Backend CRUD endpoints (clients, sessions, entries, plans, injuries — all independent)
+- Backend CRUD + Mobile scaffolding (different agents, same phase)
+- Voice pipeline services (Deepgram + Claude parser + exercise DB — independent)
+- Pattern detection algorithms (weight, pain, form, volume — independent)
+- Brain service + Briefing service (both need data, independent of each other)
 
 ---
 
-## Week-by-Week Plan
+## Phase 1a: Backend Foundation (Weeks 1-2)
 
-### WEEK 1: Project Setup + Data Models
-
-**Goal:** Database is up, models are defined, migrations work, seed data exists.
+**Goal:** New database schema, all CRUD endpoints working, rich seed data.
 
 **What gets built:**
-- FastAPI project structure (app/, api/, services/, models, schemas)
-- SQLAlchemy models: Trainer, Client, Session, ExerciseLog, InjuryFlag, ClientAnalysis, Exercise
-- Alembic migrations setup + initial migration
-- PostgreSQL on Railway provisioned and connected
-- Seed script: 5 realistic clients with varied profiles
+- All 10 SQLAlchemy models: trainers, clients, sessions, session_entries, session_plans, injury_flags, client_analysis, exercises, brain_conversations, brain_messages
+- pgvector extension enabled + embedding columns for text-heavy fields (observation_text, form_notes, plan_text, raw_transcript)
 - Pydantic schemas for all request/response types
-- Config management (pydantic-settings, env vars for API keys)
+- Delete old Alembic migrations, fresh migration for new schema
+- Seed script: 5 synthetic clients with 1/3/5/10/15 sessions each
+- Client CRUD: list (cursor pagination, archive filter), create, get, update, archive
+- Session CRUD: create (with scheduled_for), get, list by client, update, delete
+- Session entry CRUD: create (exercise_card + observation_card types), list by session, list by client
+- Session plan CRUD: create, get by client, update
+- Injury flag CRUD: create, list by client
+- Standard response format + error handling middleware + request logging
+- Pagination (cursor-based)
 
 **Agent parallelization:**
 - Agent 1: Models + database setup + migrations
-- Agent 2: Pydantic schemas + config
-- Agent 3: Seed script with realistic client data
-- Agent 4: Project structure + Docker compose for local dev
+- Agent 2: Pydantic schemas + seed script
+- Agent 3: Client + session endpoints + tests
+- Agent 4: Session entry + plan + injury flag endpoints + tests
 
-**Your time this week:**
-- Review data model design (~1 hr)
-- Provide feedback on client profiles for seed data (~30 min)
-- Review and approve all code (~2 hrs across the week)
+**Pranav's time:**
+- Review data model (10 models, compare against PRD v3) (~1 hr)
+- Review seed data profiles (~30 min)
+- Review and approve all code (~2 hrs)
 
 **Testing plan:**
-- Test: All models can be created and queried
-- Test: Migrations run cleanly (up and down)
-- Test: Seed script populates database correctly
-- Test: All Pydantic schemas validate correctly (valid + invalid inputs)
-- Test: Database constraints enforced (unique emails, FK integrity, check constraints)
-- Test: JSONB fields serialize/deserialize correctly (sets data, cue effectiveness)
-- Total tests: ~20-25
+- All models create and query correctly
+- All Pydantic schemas validate (valid + invalid inputs)
+- Database constraints enforced (unique, FK integrity, check constraints)
+- JSONB fields serialize/deserialize (sets data, cue_effectiveness, score_breakdown)
+- Each endpoint: correct status codes (200, 201, 404, 422)
+- List endpoints paginate correctly (cursor-based, no page overlap)
+- Create endpoints validate required fields
+- Update endpoints handle partial updates (PATCH)
+- Archive client doesn't delete data (soft delete)
+- entry_type validation (must be exercise_card or observation_card)
+- Cross-entity ownership validated (session belongs to client, entry belongs to session)
+- Cascade deletes verified (session delete cascades to entries)
+- Error responses match standard format `{"error": {...}}`
+- Invalid UUIDs return 404 not 500
+- Empty database returns empty lists, not errors
+- Seed script populates correctly
+- Total tests: ~60-80
 
-**Milestone:** `alembic upgrade head` runs clean, seed script creates 5 clients, all tests pass.
+**Milestone:** All CRUD tests pass, API serves seeded synthetic data, Swagger docs show all endpoints.
 
 ---
 
-### WEEK 2: CRUD API Endpoints
+## Phase 1b: Voice Pipeline (Weeks 3-4)
 
-**Goal:** Full REST API for clients and sessions. Any frontend can connect.
-
-**What gets built:**
-- Client endpoints: list, create, get, update, archive
-- Session endpoints: create, get, list by client, update, delete
-- Exercise log endpoints: list by session, list by client + exercise name
-- Injury flag endpoints: list by client, create
-- Standard response format: `{"data": ..., "meta": {...}}`
-- Error handling middleware (consistent error responses)
-- Pagination (cursor-based)
-- Request logging middleware
-
-**Agent parallelization:**
-- Agent 1: Client endpoints + tests
-- Agent 2: Session endpoints + tests
-- Agent 3: Exercise log + injury flag endpoints + tests
-- Agent 4: Middleware (error handling, logging, pagination utility)
-
-**Your time this week:**
-- Review API design decisions (~1 hr)
-- Test endpoints manually via Swagger UI (~1 hr)
-- Review all code (~2 hrs)
-
-**Testing plan:**
-- Test: Each endpoint returns correct status codes (200, 201, 404, 422)
-- Test: List endpoints paginate correctly (cursor-based)
-- Test: Create endpoints validate required fields
-- Test: Update endpoints handle partial updates (PATCH)
-- Test: Archive client doesn't delete data (soft delete)
-- Test: Session list filtered by client_id
-- Test: Exercise logs queryable by exercise name across sessions
-- Test: Error responses match standard format
-- Test: Invalid UUIDs return 404 not 500
-- Test: Empty database returns empty lists, not errors
-- Total tests: ~40-50
-
-**Milestone:** Full Swagger docs at `/docs`, all CRUD operations work, all tests pass.
-
----
-
-### WEEK 3: Voice Pipeline — Deepgram + Claude Parser
-
-**Goal:** Upload audio → get structured session data back. This is the core technical bet.
+**Goal:** Per-clip voice processing. Trainer speaks -> structured session entry in <=3 seconds.
 
 **What gets built:**
-- Deepgram service: audio file → transcript (with keyterm prompting for exercise names)
-- Claude parser service: transcript → structured JSON (using tool_use)
-- Parser prompt engineering (this takes the most iteration)
+- Deepgram service: per-clip audio -> transcript (with keyterm prompting for exercise names)
+- Claude parser service: transcript + full session context -> structured JSON (via tool_use)
+- Session state management: client maintains full session state, sends with each clip request. Server is stateless.
+- Intent classification: new exercise, additive (updating previous entry), set-level note, exercise-level note, observation card
+- Additive parsing: "oh, 80 kilos I forgot" correctly updates previous exercise entry
 - Rule-based validation layer:
   - Exercise name normalization (fuzzy match to canonical database)
-  - Weight unit detection and normalization
-  - Implicit set expansion ("3 more sets at 145" → creates 3 set entries)
+  - Weight unit detection and normalization (always stored as kg)
+  - Implicit set expansion ("3 sets of 10" -> 3 individual set records)
   - Pain report extraction with body part mapping
-- Exercise database: JSON seed file with 100 exercises + aliases
+- Exercise database: seed 100 common exercises + aliases
+- Audio upload endpoint (Supabase Storage)
+- Real-time voice clip endpoint: POST /sessions/{id}/voice-clip -> parsed entry in <=3 seconds
+- Embedding generation on session save (for pgvector, used by Brain in Phase 3c)
+- Parser test suite: 15+ transcript samples covering all intent types
 
 **Agent parallelization:**
 - Agent 1: Deepgram integration service + tests
 - Agent 2: Claude parser service + prompt engineering
-- Agent 3: Validation layer (exercise matching, weight normalization)
-- Agent 4: Exercise database + seeding
+- Agent 3: Validation layer (exercise matching, weight normalization, set expansion)
+- Agent 4: Exercise database + voice clip endpoint + integration tests
 
-**Your time this week:**
-- Write 5-10 sample transcripts of what a trainer actually says (~2 hrs — this is critical, only you can do this)
-- Review parser output on your transcripts and give feedback (~1 hr)
-- Iterate on prompt with me (~1 hr)
+**Pranav's time (critical):**
+- Write 5-10 sample transcripts of what a trainer actually says (~2 hrs)
+- Review parser output and give feedback (~1 hr)
+- Iterate on prompt (~1 hr)
 
 **Testing plan:**
-- Test: Deepgram returns transcript for clean audio file
-- Test: Deepgram returns transcript for noisy audio file
-- Test: Deepgram keyterm prompting improves exercise name recognition
-- Test: Claude parser extracts exercises from simple transcript ("squats at 135 for 4 sets of 8")
-- Test: Claude parser extracts multiple exercises from one transcript
-- Test: Claude parser extracts form observations ("knee caving in")
-- Test: Claude parser extracts pain reports ("hip is tight")
-- Test: Claude parser extracts coaching cues ("push your knees out")
-- Test: Claude parser extracts programming notes ("next time try 150")
-- Test: Claude parser handles implicit sets ("3 more sets at 145")
-- Test: Claude parser handles weight changes mid-exercise ("dropped to 135")
-- Test: Claude parser handles RPE mentions ("that was about an RPE 8")
-- Test: Validation layer normalizes "squat" → "barbell_back_squat"
-- Test: Validation layer normalizes "deads" → "conventional_deadlift"
-- Test: Validation layer converts "135 pounds" to kg internally
-- Test: Validation layer handles ambiguous exercise names (flags for review)
-- Test: End-to-end: raw audio file → complete structured JSON
-- Test: Parser gracefully handles garbage/empty transcript
-- Test: Parser handles transcript with no exercises (just chatting)
+- Deepgram returns transcript for clean audio
+- Deepgram returns transcript for noisy audio
+- Deepgram keyterm prompting improves exercise name recognition
+- Claude parser extracts exercises from simple transcript
+- Claude parser extracts multiple exercises from one transcript
+- Claude parser handles additive parsing ("oh, 80 kilos")
+- Claude parser classifies intent correctly (exercise card vs observation card)
+- Claude parser maintains session state across clips (knows current exercise/set)
+- Claude parser extracts form observations, pain reports, coaching cues
+- Claude parser handles implicit sets ("3 more sets at 145")
+- Claude parser handles weight changes ("dropped to 135")
+- Claude parser handles RPE mentions
+- Validation normalizes exercise names (fuzzy match)
+- Validation converts weight units to kg
+- Validation handles ambiguous exercise names (flags for review)
+- End-to-end: voice clip + session context -> structured entry in <=3 seconds
+- Parser gracefully handles garbage/empty transcript
+- Parser handles transcript with no exercises (creates observation card)
 - Total tests: ~30-40
 
-**Milestone:** Feed in a 5-minute training transcript, get back correctly structured exercises with 85%+ accuracy.
+**Milestone:** Speak naturally -> correctly parsed exercise card or observation card at 85%+ accuracy within 3 seconds.
+
+**CRITICAL CHECKPOINT:** Does per-clip parsing work at 85%+ accuracy? If not, fix before moving to Phase 2a. Everything downstream depends on this.
 
 ---
 
-### WEEK 4: Audio Upload + Async Processing
+## Phase 2a: Mobile — Core Session Screen + Navigation (Weeks 5-6)
 
-**Goal:** Trainer uploads audio, gets immediate response, processing happens in background, results appear when ready.
-
-**What gets built:**
-- Supabase Storage integration (audio file upload via presigned URL)
-- ARQ + Redis setup for async task queue
-- Audio processing worker:
-  1. Download audio from Supabase Storage
-  2. Send to Deepgram → get transcript
-  3. Send transcript to Claude parser → get structured data
-  4. Validate and normalize
-  5. Save to database (session, exercise_logs, injury_flags)
-  6. Update session.processing_status
-- Processing status endpoint (client polls for completion)
-- Session creation flow: create session → upload audio → trigger processing → poll status → get results
-
-**Agent parallelization:**
-- Agent 1: Supabase Storage integration + file upload endpoint
-- Agent 2: ARQ setup + worker definition
-- Agent 3: Processing orchestration (the full pipeline in one worker task)
-- Agent 4: Status polling endpoint + integration tests
-
-**Your time this week:**
-- Review async architecture (~1 hr)
-- Test upload flow manually (~1 hr)
-- Review code (~1-2 hrs)
-
-**Testing plan:**
-- Test: File upload to Supabase Storage succeeds
-- Test: Presigned URL generation works
-- Test: ARQ worker picks up queued job
-- Test: Processing pipeline runs end-to-end (mock external APIs)
-- Test: Processing pipeline handles Deepgram API failure (retry)
-- Test: Processing pipeline handles Claude API failure (retry)
-- Test: Processing status transitions: pending → processing → completed
-- Test: Processing status transitions: pending → processing → failed (on error)
-- Test: Failed job includes error message
-- Test: Completed job creates exercise_logs in database
-- Test: Completed job creates injury_flags for pain mentions
-- Test: Concurrent uploads don't interfere with each other
-- Test: Large audio file (30 min) doesn't timeout
-- Test: Status polling endpoint returns correct state
-- Total tests: ~20-25
-
-**Milestone:** POST audio file → poll status → GET completed session with parsed exercises.
-
----
-
-### WEEK 5: Mobile App — Foundation + Client Views
-
-**Goal:** React Native app running on phone with client list and session history.
+**Goal:** Full navigation shell, session recording with real-time timeline.
 
 **What gets built:**
-- React Native + Expo project initialization
-- Navigation structure (tab navigator + stack navigators)
-- API client service (Axios with base URL, error handling, retry)
-- Client List screen (cards with name, last session, session count)
-- Client Detail screen (profile info + session history list)
-- Session Detail screen (exercise breakdown, form notes, pain reports)
-- Pull-to-refresh on all list screens
-- Loading states and error states for all screens
+- React Native + Expo project setup
+- Bottom navigation: Home, Clients, Brain (placeholder), Session (contextual)
+- Trainer home screen: calendar-style today's sessions list
+  - Each row: session time + client name
+  - Two entry points: tap row -> client profile, "Today's Plan" button -> plan view
+  - Empty state: "No sessions today"
+- Clients screen: alphabetical list, search bar, date-added sort
+- Client profile screen: identity/goals, status indicator (placeholder), next session, session history list
+- Session screen with real-time timeline:
+  - Exercise cards (structured: exercise name, sets, reps, weight)
+  - Observation cards (freeform: observations, pain, coaching notes)
+  - Cards build live as trainer speaks
+- Tap-to-speak button: visually expands when active, contracts when stopped, haptic on both taps
+- Inline editing on all timeline fields (exercise name, weight, reps, notes)
+- End session flow: review summary -> "Anything to note for next time?" -> save plan dictation -> confirm -> save
+- API client layer with error handling
 - TypeScript types matching backend Pydantic schemas
 
 **Agent parallelization:**
 - Agent 1: Expo project setup + navigation structure
 - Agent 2: API client service + TypeScript types
-- Agent 3: Client List + Client Detail screens
-- Agent 4: Session Detail screen + shared components (cards, badges, loading states)
-
-**Your time this week:**
-- Install Expo Go on your phone, test throughout (~30 min setup)
-- Review UI/UX on actual device (~1 hr/day)
-- Make design decisions (colors, layout, what info to show) (~1 hr)
+- Agent 3: Home screen + Clients screen + Client profile
+- Agent 4: Session screen + tap-to-speak + timeline components
 
 **Testing plan:**
-- Test: App launches without crash
-- Test: Client list loads and displays all clients
-- Test: Client list shows correct last session date
-- Test: Tapping client navigates to detail screen
-- Test: Client detail shows session history in chronological order
-- Test: Session detail shows all exercises with sets/reps/weight
-- Test: Session detail shows form observations
-- Test: Session detail shows pain reports with severity
-- Test: Pull-to-refresh fetches updated data
-- Test: Loading state shows while fetching
-- Test: Error state shows when API is unreachable
-- Test: Empty state shows when client has no sessions
-- Test: Back navigation works correctly
-- Total tests: ~15-20 (Jest + React Native Testing Library)
-
-**Milestone:** Open app on phone → see client list → tap client → see session history → tap session → see full breakdown.
-
----
-
-### WEEK 6: Mobile App — Voice Recording + Session Flow
-
-**Goal:** Record a training session on the phone, upload, see results.
-
-**What gets built:**
-- Voice Recorder component (expo-av):
-  - Start/stop/pause recording
-  - Recording timer
-  - Audio level visualization
-  - Save as .m4a
-- "New Session" flow:
-  1. Select client from list
-  2. Tap "Start Recording"
-  3. Record (with timer and visual feedback)
-  4. Tap "Stop"
-  5. Show "Processing..." with progress
-  6. Display parsed results
-  7. Edit any field (inline editing)
-  8. Tap "Confirm" to save
-- Session review/edit screen:
-  - Edit exercise name (dropdown from exercise database)
-  - Edit weight, reps per set
-  - Add/remove sets
-  - Edit form notes
-  - Add/remove pain reports
-
-**Agent parallelization:**
-- Agent 1: Voice Recorder component
-- Agent 2: Recording flow screens (select client → record → processing)
-- Agent 3: Session review/edit screen
-- Agent 4: Upload service (audio → Supabase Storage → trigger processing → poll)
-
-**Your time this week:**
-- Test recording on your actual phone in different environments (~1 hr)
-- Test the full flow end-to-end multiple times (~1 hr)
-- Give UX feedback on the recording experience (~1 hr)
-- Review code (~1 hr)
-
-**Testing plan:**
-- Test: Recording starts and stops cleanly
-- Test: Recording produces valid audio file
-- Test: Audio file uploads to Supabase Storage
-- Test: Processing is triggered after upload
-- Test: Status polling shows progress
-- Test: Parsed results display correctly
-- Test: Edit exercise name updates in state
-- Test: Edit weight/reps updates in state
-- Test: Add set appends to exercise
-- Test: Remove set deletes from exercise
-- Test: Confirm saves edited data to backend
-- Test: Cancel discards changes
-- Test: Recording while phone screen is off still works
-- Test: Large recording (30 min) handles correctly
-- Test: Network error during upload shows retry option
+- App launches without crash
+- Navigation between all tabs works
+- Client list loads and displays all clients
+- Client profile shows correct data
+- Session screen: tap to record -> clip sent to API -> parsed entry appears on timeline
+- Exercise card renders correctly (name, sets, reps, weight)
+- Observation card renders correctly (freeform text)
+- Inline editing updates fields
+- End session flow saves to backend
+- Plan dictation saves to session_plans
+- Home screen shows today's sessions
+- Empty states display correctly
+- Loading and error states work
 - Total tests: ~20-25
 
-**Milestone:** Record audio on phone → wait for processing → see structured session → edit → save. This is the MVP moment.
+**Milestone:** Full navigation working, tap to record -> see live timeline -> save session end-to-end.
 
 ---
 
-### WEEK 7: MVP Hardening + Exercise Database
+## Phase 2b: Mobile — Session Detail + Flags + Onboarding (Week 7)
 
-**Goal:** The core voice loop is bulletproof. Edge cases handled. Exercise matching is solid.
-
-**What gets built:**
-- Exercise database expanded to 200 exercises with aliases
-- Fuzzy matching improvements (handle misspellings, abbreviations)
-- Parser prompt refinement based on real usage in Week 6
-- Error recovery flows:
-  - What happens when Deepgram fails?
-  - What happens when Claude fails?
-  - What happens when upload fails mid-way?
-  - What happens when user kills app during processing?
-- Offline audio recording queue (record now, upload later)
-- Session deletion and re-processing
-- Comprehensive edge case testing
-
-**Agent parallelization:**
-- Agent 1: Exercise database expansion + fuzzy matching
-- Agent 2: Error recovery flows + retry logic
-- Agent 3: Offline queue for recordings
-- Agent 4: Edge case test suite
-
-**Your time this week:**
-- Use the app as if you were a trainer for 30 min/day
-- Record real-world-style sessions and report parser failures
-- Prioritize which edge cases matter most
-
-**Testing plan:**
-- Test: Every exercise in database matches at least 3 aliases
-- Test: Fuzzy match handles "bench" → "barbell_bench_press"
-- Test: Fuzzy match handles "RDL" → "romanian_deadlift"
-- Test: Fuzzy match handles misspelled exercise names
-- Test: Deepgram failure triggers retry (up to 3 attempts)
-- Test: Claude failure triggers retry (up to 3 attempts)
-- Test: Both APIs failing returns clean error to user
-- Test: Upload failure saves audio locally for retry
-- Test: Offline recording queues and uploads when online
-- Test: Re-processing a session replaces old parsed data
-- Test: Deleting a session removes all associated exercise_logs and injury_flags
-- Test: App handles 0 exercises in transcript gracefully
-- Test: App handles 10+ exercises in one transcript
-- Test: Parser handles mixed units in one transcript ("135 pounds... then 80 kilos")
-- Test: 50 concurrent users don't degrade performance
-- Total tests: ~25-30
-
-**Milestone:** You've used the app for a full week. The core loop works reliably. Parser accuracy is 85%+. This is the MVP.
-
----
-
-### WEEK 8: Intelligence — Pre-Session Briefings
-
-**Goal:** Open a client and see an AI-generated briefing before their session.
+**Goal:** Session history browsing, flag system, onboarding.
 
 **What gets built:**
-- Briefing generation service:
-  - Compile last 3-5 sessions into context
-  - Include injury flags, pattern data, programming notes
-  - Claude generates 4-6 sentence briefing
-  - Cache result (invalidate when new session data arrives)
-- Briefing API endpoint
-- Mobile: Briefing card on Client Detail screen
-  - Prominent placement at top
-  - Shows risk level badge
-  - Expandable for full details
-  - "Refresh" button to regenerate
-- Session context builder (compile relevant history for Claude prompt)
+- Session detail view: AI one-line summary at top, full timeline below
+- Swipe navigation between sessions (previous/next for same client)
+- Flag system:
+  - AI assigns flags on session save (green/yellow/orange/red based on content)
+  - Flags visible on session rows in client history
+  - Flags visible inside session detail on specific entries
+  - Trainer can override any flag (tap to change)
+- Client profile: session history list with flags visible
+- Onboarding flow: trainer profile setup -> guided first client creation
+- Home screen: small indicator on client row if recent red/orange flag
 
 **Agent parallelization:**
-- Agent 1: Briefing service + context builder
-- Agent 2: Briefing API endpoint + caching
-- Agent 3: Mobile Briefing card component
-- Agent 4: Briefing quality tests (are the briefings actually useful?)
-
-**Your time this week:**
-- Read 10+ generated briefings and rate quality (~1 hr)
-- Give feedback on briefing content (too long? too short? missing info?) (~1 hr)
-- Review UI placement and design (~30 min)
+- Agent 1: Session detail view + swipe navigation
+- Agent 2: Flag system (AI assignment + display + override)
+- Agent 3: Onboarding flow
+- Agent 4: Polish + comprehensive test sweep
 
 **Testing plan:**
-- Test: Briefing generates for client with 1 session
-- Test: Briefing generates for client with 10 sessions
-- Test: Briefing includes last session summary
-- Test: Briefing mentions active injury flags
-- Test: Briefing mentions programming notes from last session
-- Test: Briefing mentions concerning patterns (if any)
-- Test: Briefing is cached (second request is instant)
-- Test: Cache invalidates when new session is saved
-- Test: Briefing generation handles client with no sessions
-- Test: Briefing renders correctly on mobile
-- Test: Briefing risk badge shows correct color (green/yellow/red)
+- Session detail shows AI summary and full timeline
+- Swipe between sessions works
+- Flags assigned correctly based on session content
+- Flags display on session rows
+- Trainer can override flags
+- Onboarding creates trainer profile and first client
 - Total tests: ~15-20
 
-**Milestone:** Open client → see compelling briefing that would actually help a trainer prepare.
+**Milestone:** Complete client profile and session history end to end. Flag system functional.
+
+**MVP CHECKPOINT:** Can you record on your phone, speak naturally, see a live timeline build, save, and browse session history? If yes, core interaction works. If not, diagnose before Phase 3a.
 
 ---
 
-### WEEK 9: Intelligence — Pattern Detection + Risk Scoring
+## Phase 3a: Planning Flow (Weeks 8-9)
 
-**Goal:** System automatically detects concerning patterns and scores injury risk.
+**Goal:** Trainers can create, view, and modify session plans via voice.
 
 **What gets built:**
-- Pattern detection engine:
-  - Weight progression analysis (per exercise, per client)
-  - Pain frequency tracking (per body part)
-  - Form quality trending (error rate over time)
-  - Volume trend analysis (weekly totals)
-- Risk scoring formula:
-  - Weighted combination of pattern signals
-  - Configurable thresholds
-  - Outputs: score (0-100), level (low/medium/high), top risk factors
-- ClientAnalysis table: auto-recompute after each session save
-- Pattern alerts on Client Detail screen
-- Dashboard screen: all clients sorted by risk level
-
-**Agent parallelization:**
-- Agent 1: Weight progression + volume analysis algorithms
-- Agent 2: Pain frequency + form quality algorithms
-- Agent 3: Risk scoring + ClientAnalysis recompute job
-- Agent 4: Mobile dashboard screen + pattern alert components
-
-**Your time this week:**
-- Review pattern detection logic (does the math make sense?) (~1 hr)
-- Review risk thresholds (is 5%/week too fast? too slow?) (~1 hr)
-- Test dashboard with seeded data (~1 hr)
+- Planning flow: voice input -> AI structures into exercise cards (same format as session timeline)
+- Plan creation and modification endpoints
+- Deep preparation view: today's plan displayed as structured exercise cards
+- Plan fields only contain what trainer said — weight/reps optional, never inferred, never zero
+- End-session plan dictation: "Anything to note for next time?" saves to session_plans
+- Plan vs. actual: plan_id FK on sessions enables comparison (tracked silently, never enforced)
+- Plan and session completely independent — plan never invalidated by different session
 
 **Testing plan:**
-- Test: Weight progression detects >5%/week as "too fast"
-- Test: Weight progression detects <0.5%/week for 4 weeks as "stagnant"
-- Test: Weight progression detects 2-3%/week as "healthy"
-- Test: Pain frequency flags body part with 3+ occurrences
-- Test: Pain frequency tracks severity trend (worsening vs stable)
-- Test: Form quality detects increasing error rate over last 5 sessions
-- Test: Volume analysis detects >10% week-over-week spike
-- Test: Risk score calculation is deterministic (same input = same score)
-- Test: Risk score handles client with only 1 session (insufficient data, not crash)
-- Test: ClientAnalysis recomputes after session save
-- Test: Dashboard sorts clients by risk level (high first)
-- Test: Dashboard shows correct session count and last session date
-- Test: Pattern alert shows on Client Detail when patterns detected
-- Test: No false alerts on healthy client profile
+- Voice dictate a plan -> structured exercise cards created
+- Plan fields empty when not specified (no inference, no zero)
+- End-session plan dictation saves correctly
+- Plan modification (add/remove exercise, update sets/reps) works
+- Plan and session independence verified
+- Total tests: ~15-20
+
+**Milestone:** Trainer can voice-dictate a plan, see it structured, modify it — completely independent of sessions.
+
+---
+
+## Phase 3b: Pre-Session Briefing (Week 10)
+
+**Goal:** Push notification with adaptive 4-layer briefing before sessions.
+
+**What gets built:**
+- Briefing service: 4-layer generation
+  - Layer 0: Today's plan (or "No plan set — want to add one?")
+  - Layer 1: Last session (any muscle group) — notable observations only
+  - Layer 2: Last session of same muscle group — exercise-specific context
+  - Layer 3: Trend flags for today's exercises — scored by recency x severity x trend direction x actionability
+- Data maturity gates enforced in backend:
+  - 0 sessions: no briefing
+  - 1 session: Layer 1 only
+  - 2-3 sessions: Layer 0 + Layer 1
+  - 4+ sessions: all layers active
+  - 10+ sessions: richer trend analysis
+- Briefing scoring: top 2-3 flags max, hide empty layers entirely
+- Briefing endpoint: GET /clients/{id}/briefing
+- Push notification 10-15 minutes before session (Expo Push)
+- Notification content: client name + one-line preview of most important flag
+- Briefing screen in mobile: conditional layer display, no filler text
+- Cache briefing, invalidate on new session data
+- "No plan set — want to add one?" nudge when plan missing
+
+**Testing plan:**
+- Briefing generates correctly for each data maturity level (0/1/2-3/4+/10+ sessions)
+- Empty layers hidden entirely
+- Briefing scoring ranks flags correctly
+- Max 2-3 flags surfaced
+- Push notification fires at correct time
+- Cache invalidation on new session data
+- "No plan set" nudge appears correctly
+- Total tests: ~20-25
+
+**Milestone:** Push notification fires, tap opens briefing, 4 layers display correctly based on available data.
+
+---
+
+## Phase 3c: The Brain — Conversational Agent (Weeks 11-12)
+
+**Goal:** Conversational AI that knows everything about every client, takes actions.
+
+**What gets built:**
+- Hybrid RAG architecture: structured SQL for precise queries + pgvector semantic search for fuzzy queries
+- Brain service: Claude Sonnet with system prompt enforcing three honest states
+  - State 1: Full answer (knowledge + client data)
+  - State 2: Partial answer (knowledge but insufficient client data — be honest about gaps)
+  - State 3: Neither (honest "I don't know" — web search via Tavily added here)
+- Single-client queries with session citation
+- Cross-client queries (retrieve from all clients, reason across)
+- Action-taking V1: create plan, modify plan (add/remove exercise, update sets/reps/weight) via structured tool calls
+- Confirmation required before irreversible actions
+- Conversation history: threads stored in brain_conversations + brain_messages
+- Brain tab in bottom nav: current conversation + conversation history (like Claude.ai)
+- Brain accessible mid-session (secondary button, session state preserved)
+- Brain opens from briefing with briefing context pre-loaded
+- Full unrestricted brain — not scoped to single client even when opened from briefing
+- Response time: under 3 seconds single-client, under 5 seconds cross-client
+
+**Testing plan:**
+- Brain answers single-client questions accurately (cites specific sessions)
+- Brain answers cross-client questions
+- Brain correctly identifies which honest state it's in
+- Brain never halluccinates client data
+- Brain creates plan via voice instruction
+- Brain modifies plan (add/remove exercise, update sets/reps/weight)
+- Brain asks for confirmation on irreversible actions
+- Conversation history stored and retrievable
+- Brain accessible mid-session without disrupting session state
+- Brain not scoped to single client when opened from briefing
+- Response times within targets
 - Total tests: ~25-30
 
-**Milestone:** Dashboard shows all clients with risk indicators. Tap client → see patterns and risk factors.
+**Milestone:** Ask brain anything about any client -> accurate, cited answer. Brain creates/modifies plans via voice.
+
+**BRAIN CHECKPOINT:** Is The Brain genuinely useful? Accurate answers, no hallucination, plan actions work? If yes, move to Phase 4a. If not, iterate.
 
 ---
 
-### WEEK 10: Auth + Security
+## Phase 4a: Calendar + Auth (Weeks 13-14)
 
-**Goal:** Real user accounts. Trainer can only see their own clients.
+**Goal:** Calendar integration and real authentication. Trainer data is properly scoped.
 
 **What gets built:**
-- Supabase Auth integration:
-  - Email + password registration
-  - Google OAuth
-  - Apple OAuth (required for App Store)
-  - Password reset flow
-  - Email verification
-- FastAPI auth middleware (verify JWT on every request)
-- Trainer-scoped queries (all database queries filter by trainer_id)
-- Mobile auth screens:
-  - Login screen
-  - Registration screen
-  - Forgot password screen
-  - OAuth buttons
-- Secure token storage on mobile (expo-secure-store)
-- Auto-refresh expired tokens
 
-**Agent parallelization:**
-- Agent 1: Supabase Auth setup + FastAPI middleware
-- Agent 2: Trainer-scoped database queries (every endpoint)
-- Agent 3: Mobile auth screens + navigation guards
-- Agent 4: Security test suite
+*Week 13 — Calendar:*
+- Google Calendar OAuth integration
+- Apple Calendar integration
+- Session auto-detection from calendar events
+- Trainer-to-client contact mapping (one-time setup, automatic thereafter)
+- Pre-session notification triggered from calendar events
+- Calendar connection settings screen
 
-**Your time this week:**
-- Test login/registration flow on phone (~1 hr)
-- Test OAuth (Google) on phone (~30 min)
-- Review security approach (~1 hr)
+*Week 14 — Auth:*
+- Supabase Auth integration (email signup + Google OAuth)
+- JWT handling in mobile app (secure storage)
+- Trainer-scoped data access (all queries filter by trainer_id)
+- Password reset flow
+- Audit logging
 
 **Testing plan:**
-- Test: Registration creates account in Supabase
-- Test: Login returns valid JWT
-- Test: Invalid credentials return 401
-- Test: Expired token returns 401
-- Test: Token refresh works
-- Test: Authenticated request includes trainer_id
-- Test: Trainer A cannot see Trainer B's clients
-- Test: Trainer A cannot see Trainer B's sessions
-- Test: Unauthenticated request returns 401 on all endpoints
-- Test: Password reset sends email
-- Test: Google OAuth returns valid session
-- Test: Mobile stores token securely
-- Test: App redirects to login when token missing
-- Test: App redirects to login when token expired and refresh fails
-- Test: Registration with existing email returns appropriate error
-- Total tests: ~20-25
+- Calendar OAuth flow completes successfully
+- Sessions auto-created from calendar events
+- Contact-to-client mapping works
+- Briefing notification fires from calendar-detected sessions
+- Registration creates account
+- Login returns valid JWT
+- Trainer A cannot see Trainer B's data
+- Expired token returns 401
+- Password reset works
+- Total tests: ~25-30
 
-**Milestone:** Create account → login → see only your clients → logout → login again.
+**Milestone:** Calendar-driven sessions appear in app. Real login works. Data is properly scoped per trainer.
 
 ---
 
-### WEEK 11-12: Polish + Edge Cases + Performance
+## Phase 4b: Polish + Beta Launch (Weeks 15-16)
 
-**Goal:** App feels professional. No rough edges. Fast.
+**Goal:** Production-ready app. Ship to real trainers.
 
 **What gets built:**
-- Loading skeletons (not spinners) on all screens
-- Error boundaries with retry buttons
-- Empty states with helpful CTAs
-- Haptic feedback on key actions (start/stop recording)
-- Animation on transitions
-- Performance optimization:
-  - Database query optimization (N+1 checks, indexes)
-  - API response time target: <200ms for CRUD, <500ms for briefings
-  - Image/asset optimization
-  - List virtualization for long session histories
-- Push notifications:
-  - "Session processed" notification
-  - Daily briefing reminder (optional)
-- Settings screen:
-  - Weight unit preference (kg/lbs)
-  - Notification preferences
-  - Account management
-- Onboarding flow:
-  - First-time user experience
-  - "Add your first client" prompt
-  - "Record your first session" walkthrough
 
-**Agent parallelization:**
-- Agent 1: UI polish (loading states, empty states, animations)
-- Agent 2: Performance optimization (queries, caching, indexes)
-- Agent 3: Push notifications + settings screen
-- Agent 4: Onboarding flow + comprehensive test sweep
+*Week 15 — Polish:*
+- Settings screen (units kg/lbs, notifications, account, calendar connection)
+- Loading states, error handling, edge cases throughout entire app
+- Performance optimization (query efficiency, caching, indexes)
+- App Store / Play Store build prep (Expo EAS)
+- Exercise database expanded to 200+ exercises
 
-**Your time this week:**
-- Use the app daily as primary tester (~30 min/day)
-- Report every rough edge, no matter how small
-- Test on multiple network conditions (wifi, cellular, airplane mode)
+*Week 16 — Beta:*
+- Bug bash: fix everything found in self-testing
+- Parser accuracy review: full test suite, iterate prompt if needed
+- Brain accuracy review: test all three honest states on real queries
+- Deploy to production
+- Onboard 5-10 beta trainers (personal network, gym contacts)
+- Monitor: error rates, API costs, edit rate, brain query accuracy, plan adoption rate
 
 **Testing plan:**
-- Test: All screens show loading skeleton while fetching
-- Test: All screens show error state with retry on failure
-- Test: All list screens show empty state when no data
-- Test: Weight displays in user's preferred unit
-- Test: Changing unit preference updates all displayed weights
-- Test: Push notification received when session processing completes
-- Test: Onboarding flow guides new user to first recording
-- Test: API endpoints respond in <200ms (p95) for CRUD
-- Test: Briefing generation responds in <3 seconds (p95)
-- Test: Client list with 50 clients scrolls smoothly
-- Test: Session history with 100 sessions scrolls smoothly
-- Test: App doesn't crash after 30 minutes of continuous use
-- Test: Memory usage doesn't grow unbounded
-- Total tests: ~20-25
+- Weight displays in user's preferred unit
+- All screens show loading/error/empty states correctly
+- API endpoints respond in <200ms (p95) for CRUD
+- Briefing generation responds in <3 seconds (p95)
+- No crashes after 30 minutes continuous use
+- Total tests: ~15-20
+
+**Milestone:** App deployed to production. 5-10 trainers onboarded and using it.
+
+**BETA READINESS CHECKPOINT:** Would you give this app to a trainer friend and not be embarrassed? Parser 85%+, brain doesn't hallucinate, briefings useful, planning works. If yes, launch.
 
 ---
 
-### WEEK 13: Billing + Landing Page
+## Phase 5a: Client Score + Pattern Detection (Weeks 17-18)
 
-**Goal:** People can pay us. People can find us.
+**Goal:** Automated pattern detection and holistic client scoring.
 
 **What gets built:**
-- Stripe integration:
-  - Free tier (5 clients, 10 sessions/month)
-  - Pro tier ($X/month, unlimited) — price TBD based on research
-  - Subscription management
-  - Webhook handling (payment success, failure, cancellation)
-- Free tier enforcement (API checks limits, shows upgrade prompt)
-- Landing page:
-  - Simple, clean, one-page
-  - Hero: what it does (30-second video or animation)
-  - How it works (3 steps)
-  - Pricing
-  - Sign up CTA
-- App Store / Play Store prep:
-  - EAS Build configuration
-  - Screenshots
-  - App description
-  - Privacy policy
+- Client score algorithm: progression toward goals + injury risk + consistency -> 0-100 score
+- Score stored in client_analysis.client_score with JSONB breakdown for explainability
+- Green/yellow/red indicator on client profile
+- Data maturity: "Not enough data yet" for clients with <4-6 sessions
+- Pattern detection engine:
+  - Weight progression rate (too fast / stagnant / healthy)
+  - Pain frequency by body part (recurring = flag, threshold-based)
+  - Form quality degradation (increasing error rate over sessions)
+  - Volume and overtraining indicators
+  - Cue effectiveness tracking
+- client_analysis recomputed after each session save
+- Pattern results surfaced in briefing Layer 3
 
-**Agent parallelization:**
-- Agent 1: Stripe backend integration + webhook handler
-- Agent 2: Free tier enforcement + upgrade prompts in mobile
-- Agent 3: Landing page
-- Agent 4: App Store prep + screenshots
+**Testing plan:**
+- Client score calculation is deterministic (same input = same score)
+- Score handles clients with <4 sessions ("Not enough data")
+- Weight progression detects healthy / stagnant / too-fast
+- Pain frequency flags recurring body part issues
+- Form quality detects increasing error rate
+- Patterns surface correctly in briefing Layer 3
+- Total tests: ~20-25
 
-**Your time this week:**
-- Decide on pricing (~1 hr research + decision)
-- Write app store description (~1 hr)
-- Review landing page copy (~1 hr)
+**Milestone:** Client profiles show green/yellow/red indicators. Briefings surface meaningful patterns.
 
 ---
 
-### WEEK 14: Beta Launch
+## Phase 5b: Injury Risk Scoring + Progress Charts (Weeks 19-20)
 
-**Goal:** 5-10 real trainers using the app.
+**Goal:** Explainable risk scores and visual progress tracking.
 
-**What gets done:**
-- Final bug bash (use app for 2 hours straight, fix everything)
-- Deploy backend to Railway production
-- Submit to App Store / Play Store (or TestFlight for faster)
-- Onboard 5-10 beta trainers:
-  - Personal network, gym contacts, Reddit r/personaltraining
-  - Walk each through setup (30 min each)
-  - Set up feedback channel (WhatsApp group or Discord)
-- Monitor:
-  - Error rates (Sentry)
-  - API performance
-  - Parser accuracy on real data
-  - User engagement (are they recording sessions?)
+**What gets built:**
+- Injury risk scoring: rule-based weighted formula (0-100, Low/Medium/High)
+- Explainable: shows top risk factors driving the score
+- Risk score feeds into overall client score
+- Progress charts: weight progression per exercise, volume trends, pain frequency timeline, risk score history
+- Charts accessible from client profile
 
-**Your time this week:**
-- Personally onboard each beta user (~3-5 hrs total)
-- Monitor feedback channel daily
-- Prioritize reported issues
+**Testing plan:**
+- Risk score calculation is deterministic
+- Risk factors explain the score correctly
+- Risk score integrates with client score
+- Charts render correctly with real data
+- Charts handle edge cases (single data point, gaps in data)
+- Total tests: ~20-25
+
+**Milestone:** Risk scores visible on client profiles. Progress charts show meaningful trends.
 
 ---
 
-### WEEKS 15-18: Iterate on Feedback
+## Phase 6a: Client App + Wearable Integration (Weeks 21-22)
 
-What we build depends entirely on what beta users tell us. Likely:
-- Parser accuracy improvements (top priority — every trainer will find cases it gets wrong)
-- UX friction points we didn't anticipate
-- Features they ask for that we haven't built
-- Session sharing (email summaries to clients)
-- Progress charts
+**Goal:** Client-facing experience and recovery data integration.
+
+**What gets built:**
+- Client-facing app (separate user role)
+- Client sees session history, goal progress, trainer-shared notes
+- Whoop / Oura / Apple Watch OAuth integration
+- Recovery/HRV data surfaced in briefing as additional layer (same-day only, never estimated)
+
+**Milestone:** Clients can see their own training data. Wearable recovery data enhances briefings.
+
+---
+
+## Phase 6b: Multi-Trainer + Session Sharing + Scale (Weeks 23-24)
+
+**Goal:** Multi-user support and growth features.
+
+**What gets built:**
+- Multi-trainer support for gyms
+- Permission-based client access
+- Session sharing: send session summary to client via email/SMS
+- Client Health Profile: upload blood reports, body composition scans, medical notes — brain reasons over all of it
+- Stripe billing when appropriate
+- Offline support (record offline, queue for upload, local cache)
+- Performance at 100+ trainers
+
+**Milestone:** Platform supports multiple trainers. Sharing and health profiles working.
+
+---
+
+## Seed Data Strategy
+
+**5 synthetic clients with varied session counts:**
+
+| Client | Sessions | Purpose |
+|--------|----------|---------|
+| Client 1 | 1 | New client. Tests data maturity gates (no trends, briefing Layer 1 only). |
+| Client 2 | 3 | Early client. Tests 2-3 session briefing behavior. |
+| Client 3 | 5 | Moderate history. Tests basic pattern detection activation. |
+| Client 4 | 10 | Established client. Tests full briefing layers, trend flags. |
+| Client 5 | 15 | Long-term client. Tests rich trend analysis, cross-session patterns. |
+
+Each client has:
+- Varied exercise selection (legs, upper body push/pull, core)
+- Mix of exercise cards and observation cards
+- Pain mentions at different frequencies (none, occasional, recurring)
+- Weight progression patterns (healthy, stagnant, too fast)
+- Session plans for clients with 5+ sessions
+- Form notes and coaching cues
 
 ---
 
 ## Total Test Count by Phase
 
-- Week 1 (Models + DB): ~20-25 tests
-- Week 2 (CRUD API): ~40-50 tests
-- Week 3 (Voice Pipeline): ~30-40 tests
-- Week 4 (Async Processing): ~20-25 tests
-- Week 5 (Mobile Foundation): ~15-20 tests
-- Week 6 (Voice Recording Flow): ~20-25 tests
-- Week 7 (MVP Hardening): ~25-30 tests
-- Week 8 (Briefings): ~15-20 tests
-- Week 9 (Patterns + Risk): ~25-30 tests
-- Week 10 (Auth): ~20-25 tests
-- Week 11-12 (Polish): ~20-25 tests
-- Week 13 (Billing): ~15-20 tests
+- Phase 1a (Backend Foundation): ~60-80 tests
+- Phase 1b (Voice Pipeline): ~30-40 tests
+- Phase 2a (Mobile Core): ~20-25 tests
+- Phase 2b (Detail + Flags): ~15-20 tests
+- Phase 3a (Planning Flow): ~15-20 tests
+- Phase 3b (Briefing): ~20-25 tests
+- Phase 3c (The Brain): ~25-30 tests
+- Phase 4a (Calendar + Auth): ~25-30 tests
+- Phase 4b (Polish + Beta): ~15-20 tests
+- Phase 5a (Score + Patterns): ~20-25 tests
+- Phase 5b (Risk + Charts): ~20-25 tests
 
-**Total: ~265-335 tests at launch**
+**Total at beta launch (Phase 4b): ~225-290 tests**
+**Total at Phase 5b complete: ~265-340 tests**
 
-Backend (pytest): ~180-220 tests
-Mobile (Jest): ~85-115 tests
-
----
-
-## Key Risk Checkpoints
-
-**End of Week 3 — CRITICAL CHECKPOINT:**
-Does the parser work? If Claude can't reliably extract structured data from transcripts at 85%+ accuracy, we need to stop and fix the prompt/approach before building anything else. Everything downstream depends on this.
-
-**End of Week 6 — MVP CHECKPOINT:**
-Can you record on your phone, wait, and see correct results? If yes, we have a product. If not, we diagnose what's broken before adding intelligence features.
-
-**End of Week 10 — BETA READINESS:**
-Would you give this app to a trainer friend and not be embarrassed? If yes, we launch beta. If not, we take another week of polish.
+Backend (pytest): ~180-230 tests
+Mobile (Jest): ~85-110 tests

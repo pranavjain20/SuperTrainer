@@ -15,7 +15,7 @@ At the end of every working session, I update `STATUS.md` in the project root. T
 ### Your Morning Routine
 
 1. Open terminal
-2. `cd ~/Desktop/super_trainer`
+2. `cd ~/Desktop/supertrainer`
 3. Launch Claude Code
 4. Say: **"What's the status?"**
 5. I read STATUS.md and walk you through everything
@@ -51,17 +51,17 @@ Normally, git only lets you have one branch checked out at a time. Worktrees let
 ### Directory Structure
 
 ```
-~/Desktop/super_trainer/          ← main branch (stable, reviewed, merged code)
-~/Desktop/super_trainer-worktrees/
-    ├── wt-backend/               ← Backend feature branch
-    ├── wt-mobile/                ← Mobile feature branch
-    ├── wt-pipeline/              ← Voice pipeline feature branch
-    └── wt-tests/                 ← Test suite branch
+~/Desktop/supertrainer/              ← main branch (stable, reviewed, merged code)
+~/Desktop/supertrainer-worktrees/
+    ├── wt-backend/                   ← Backend feature branch
+    ├── wt-mobile/                    ← Mobile feature branch
+    ├── wt-pipeline/                  ← Voice pipeline feature branch
+    └── wt-tests/                     ← Test suite branch
 ```
 
 ### How It Works in Practice
 
-**Example: Week 3 (Voice Pipeline)**
+**Example: Phase 1, Week 3-4 (Voice Pipeline)**
 
 I spin up 4 agents, each in a different worktree:
 
@@ -89,9 +89,11 @@ test/[component]-[what]        → Test additions
 refactor/[component]-[what]    → Refactors
 
 Examples:
-feat/backend-deepgram-service
-feat/mobile-client-list
-feat/pipeline-claude-parser
+feat/backend-session-entries
+feat/backend-session-plans
+feat/mobile-session-timeline
+feat/pipeline-per-clip-parser
+feat/brain-rag-service
 fix/parser-weight-normalization
 test/parser-edge-cases
 ```
@@ -105,32 +107,92 @@ test/parser-edge-cases
 
 ---
 
+## Feature Dependency Map (PRD v3)
+
+```
+Phase 1: Backend Foundation + Voice Pipeline (Weeks 1-4)
+    ├── Models + Database (10 models, Alembic migration)
+    │       ↓
+    │       ├── Client CRUD
+    │       ├── Session CRUD (with scheduled_for)
+    │       ├── Session Entry CRUD (exercise_card + observation_card)
+    │       ├── Session Plan CRUD
+    │       └── Injury Flag CRUD
+    │               ↓
+    │               └── Voice Pipeline (Deepgram STT + Claude Parser)
+    │                       ├── Per-clip synchronous processing (≤3s)
+    │                       ├── Session state management (client-side)
+    │                       └── Intent classification + additive parsing
+    │
+Phase 2: Mobile App — Core Session Flow (Weeks 5-7)
+    │       ├── Navigation shell (Home, Clients, Brain, Session tabs)
+    │       ├── Session screen with real-time timeline
+    │       ├── Tap-to-speak recording flow
+    │       ├── Client profile + session history
+    │       └── Onboarding flow
+    │
+Phase 3: Pre-Session Context + The Brain (Weeks 8-12)
+    │       ├── Planning flow (voice → structured exercise cards)
+    │       ├── 4-layer pre-session briefing
+    │       ├── Push notifications (Expo)
+    │       └── The Brain (RAG + conversational agent)
+    │               ├── Single-client + cross-client queries
+    │               ├── Three honest states
+    │               ├── Plan creation/modification via voice
+    │               └── Conversation history (threads)
+    │
+Phase 4: Calendar + Auth + Launch Prep (Weeks 13-16)
+    │       ├── Google Calendar + Apple Calendar integration
+    │       ├── Supabase Auth (email + OAuth)
+    │       └── Settings, polish, beta launch
+    │
+Phase 5: Intelligence Layer (Weeks 17-20)
+    │       ├── Client score algorithm (green/yellow/red)
+    │       ├── Pattern detection engine
+    │       ├── Injury risk scoring
+    │       └── Progress charts
+    │
+Phase 6: Growth Features (Weeks 21-24+)
+            ├── Client app + wearable integration
+            ├── Multi-trainer + session sharing
+            └── Client Health Profile
+```
+
+**What can be parallelized:**
+- Backend CRUD endpoints (clients, sessions, entries, plans, injuries — all independent)
+- Backend CRUD + Mobile app scaffolding (different agents, same phase)
+- Voice pipeline services (Deepgram + Claude parser + exercise DB — independent)
+- Pattern detection algorithms (weight, pain, form, volume — independent)
+- Brain service + Briefing service (both depend on data, independent of each other)
+
+---
+
 ## When Worktrees Are Most Valuable
 
-**High parallelization weeks:**
-- Week 2: 4 endpoint groups built simultaneously
-- Week 3: Deepgram + Claude parser + exercise DB + validation — all independent
-- Week 5: Mobile screens built in parallel (no shared state yet)
-- Week 9: Pattern detection algorithms (weight, pain, form, volume — all independent)
+**High parallelization phases:**
+- Phase 1, Week 1-2: 4 endpoint groups built simultaneously (clients, sessions, entries, plans)
+- Phase 1, Week 3-4: Deepgram + Claude parser + exercise DB + validation — all independent
+- Phase 2, Week 5-6: Mobile screens built in parallel (no shared state yet)
+- Phase 5: Pattern detection algorithms (weight, pain, form, volume — all independent)
 
-**Low parallelization weeks:**
-- Week 6: Voice recording flow is sequential (record → upload → process → display)
-- Week 10: Auth touches every endpoint (harder to split)
+**Low parallelization phases:**
+- Phase 2, Week 7: Session detail + polish (sequential refinement)
+- Phase 4, Week 14: Auth touches every endpoint (harder to split)
 
 ---
 
 ## Task Tracking
 
-I maintain `tasks/todo.md` with checkboxes for the current week. Updated in real-time as I work.
+I maintain `tasks/todo.md` with checkboxes for the current phase. Updated in real-time as I work.
 
 ```
-Example (Week 3):
+Example (Phase 1, Week 3-4):
 
-## Week 3: Voice Pipeline
+## Week 3-4: Voice Pipeline
 
 ### Deepgram Integration
 - [x] Create Deepgram service class
-- [x] Implement audio upload → transcript
+- [x] Implement per-clip audio → transcript
 - [x] Add keyterm prompting config
 - [ ] Test with noisy audio sample
 - [ ] Handle API errors and retries
@@ -138,6 +200,7 @@ Example (Week 3):
 ### Claude Parser
 - [x] Design tool_use schema for structured output
 - [ ] Write parsing prompt v1
+- [ ] Implement session state management
 - [ ] Test on 5 sample transcripts
 - [ ] Iterate on prompt based on failures
 ```
@@ -148,7 +211,7 @@ Example (Week 3):
 
 **When I need a decision from you:**
 I'll ask clearly with options and my recommendation. Example:
-> "The parser can handle weight in lbs or kg. Should we store in kg internally and convert for display, or store in whatever unit the trainer says? I recommend kg internally (consistent, no mixed units). Option A: kg internally. Option B: store as spoken."
+> "The parser needs to handle session state across clips. Should we maintain state client-side (sent with each clip request) or server-side (stored in memory/redis)? I recommend client-side (stateless server, simpler). Option A: client-side state. Option B: server-side state."
 
 **When something is blocked:**
 I'll tell you immediately, not bury it in a status update. Example:
@@ -156,4 +219,4 @@ I'll tell you immediately, not bury it in a status update. Example:
 
 **When something went wrong:**
 I'll tell you what happened, why, and what I'm doing about it. No hiding failures. Example:
-> "The Claude parser is only 70% accurate on your sample transcripts. The main failure mode is implicit sets ('3 more sets' not expanding). I'm rewriting the prompt to handle this. ETA: 2 hours."
+> "The Claude parser is only 70% accurate on your sample transcripts. The main failure mode is additive parsing ('oh, 80 kilos I forgot' not attaching to previous entry). I'm rewriting the prompt to handle this. ETA: 2 hours."

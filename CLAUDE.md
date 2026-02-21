@@ -1,19 +1,20 @@
 # SuperTrainer — AI Training Intelligence Platform
 
 ## What This Is
-AI-powered coaching assistant for personal trainers. Trainers record sessions via voice, AI transcribes + structures data, generates pre-session briefings with pattern detection and risk alerts.
+AI-powered coaching assistant for personal trainers. Trainers record sessions via voice (per-clip, real-time), AI transcribes + structures data into a live session timeline (exercise cards + observation cards). Generates adaptive pre-session briefings with pattern detection and risk alerts. Conversational AI agent ("The Brain") answers any question about any client, creates and modifies session plans.
 
 ## Current Status
-**Phase: Pre-build. Planning complete.**
-- No code written yet. Greenfield project.
+**Phase: PRD v3 Rebuild — Documentation complete, starting Week 1-2 backend.**
 - See STATUS.md for current task state.
+- See PRD.md for full product requirements.
 
 ## Key Documents
 - `PRD.md` — Product requirements, features, build phases, data model
 - `TECH_STACK.md` — Technology choices with rationale and alternatives
-- `BUILD_PLAN.md` — Week-by-week plan, testing plan, agent parallelization
+- `BUILD_PLAN.md` — 6-phase (13 sub-phase) build plan, testing plans, agent parallelization
 - `WORKFLOW.md` — Daily collaboration process, worktrees, communication protocol
-- `AI_TRAINING_PLATFORM_DEEP_SPEC.md` — Original deep spec (reference)
+- `reference/PRD_v1.md` — Original PRD (historical reference)
+- `reference/AI_TRAINING_PLATFORM_DEEP_SPEC.md` — Original deep spec (historical reference)
 
 ## Session Protocol
 - On session start: read STATUS.md, tell Pranav what needs review and what's next
@@ -26,32 +27,43 @@ AI-powered coaching assistant for personal trainers. Trainers record sessions vi
 - **Backend:** Python 3.12 + FastAPI + SQLAlchemy 2.0 (async) + Alembic
 - **Database:** PostgreSQL on Railway
 - **Task Queue:** ARQ + Redis on Railway
-- **Auth:** Supabase Auth (free tier)
+- **Auth:** Supabase Auth (free tier) — Phase 4
 - **File Storage:** Supabase Storage (free tier)
 - **STT:** Deepgram Nova-3 (keyterm prompting for gym vocabulary)
-- **LLM:** Anthropic Claude Sonnet (tool_use for structured extraction)
+- **LLM:** Anthropic Claude Sonnet (tool_use for structured extraction; hybrid RAG for The Brain)
+- **Embeddings:** OpenAI text-embedding-3-small (pgvector semantic search)
+- **Push Notifications:** Expo Push Notifications
+- **Web Search:** Tavily API (Phase 3+ — Brain State 3 fallback)
+- **Calendar:** Google Calendar API + Apple CalDAV (Phase 4)
 - **Hosting:** Railway
 
 ## Project Structure
 ```
-super_trainer/
+supertrainer/
 ├── backend/
 │   ├── app/
 │   │   ├── main.py              # FastAPI entry point
 │   │   ├── config.py            # Settings (pydantic-settings, env vars)
 │   │   ├── database.py          # SQLAlchemy async setup
-│   │   ├── models.py            # All SQLAlchemy models
+│   │   ├── models.py            # All SQLAlchemy models (10 models)
 │   │   ├── schemas.py           # Pydantic request/response schemas
 │   │   ├── api/
 │   │   │   ├── clients.py       # Client CRUD
-│   │   │   ├── sessions.py      # Session endpoints
-│   │   │   ├── voice.py         # Audio upload + processing
-│   │   │   └── insights.py      # Briefings + patterns
+│   │   │   ├── sessions.py      # Session CRUD
+│   │   │   ├── entries.py       # Session entry CRUD (exercise_card + observation_card)
+│   │   │   ├── plans.py         # Session plan CRUD
+│   │   │   ├── injuries.py      # Injury flag CRUD
+│   │   │   ├── voice.py         # Per-clip audio processing
+│   │   │   ├── insights.py      # Briefings + patterns
+│   │   │   ├── agent.py         # Brain conversational agent
+│   │   │   └── calendar.py      # Calendar integration (Phase 4)
 │   │   ├── services/
 │   │   │   ├── transcription.py # Deepgram STT integration
-│   │   │   ├── parser.py        # Claude transcript parser
-│   │   │   ├── briefing.py      # Pre-session briefing generation
-│   │   │   └── patterns.py      # Rule-based pattern detection
+│   │   │   ├── parser.py        # Claude transcript parser (per-clip)
+│   │   │   ├── briefing.py      # Pre-session briefing generation (4-layer)
+│   │   │   ├── patterns.py      # Rule-based pattern detection
+│   │   │   ├── brain.py         # The Brain — RAG + conversational agent
+│   │   │   └── calendar.py      # Calendar sync service (Phase 4)
 │   │   └── seed.py              # Demo data seeding
 │   ├── alembic/                 # Database migrations
 │   ├── requirements.txt
@@ -60,9 +72,38 @@ super_trainer/
 ├── tasks/
 │   ├── todo.md                  # Current task checklist
 │   └── lessons.md               # Mistakes and patterns learned
-├── STATUS.md                    # Current state (updated every session)
+├── reference/                   # Historical documents
+│   ├── PRD_v1.md
+│   └── AI_TRAINING_PLATFORM_DEEP_SPEC.md
+├── PRD.md       # Active PRD
+├── TECH_STACK.md
+├── BUILD_PLAN.md
+├── WORKFLOW.md
+├── STATUS.md
 └── CLAUDE.md                    # This file
 ```
+
+## Data Model (10 Models)
+
+**trainers** — id, email, name, phone, tier, supabase_user_id (Phase 4), created_at, last_login
+
+**clients** — id, trainer_id, name, email, phone, birth_date, training_start_date, goals[], injury_history, archived, created_at
+
+**sessions** — id, trainer_id, client_id, started_at, ended_at, scheduled_for, duration_minutes, audio_url, audio_duration_seconds, raw_transcript, processing_status, trainer_edited, plan_id (FK → session_plans, nullable), created_at, updated_at
+
+**session_entries** — id, session_id, client_id, entry_type (exercise_card | observation_card), sequence_order, exercise_name, exercise_canonical, sets (JSONB), total_volume_kg, form_notes[], cues_given[], cue_effectiveness (JSONB), observation_text, attached_to_set, flag_color, flag_reason, performed_at, created_at
+
+**session_plans** — id, client_id, trainer_id, plan_text, planned_for_date, created_at
+
+**injury_flags** — id, client_id, session_id, session_entry_id (nullable), body_part, pain_level (1-10), description, first_occurrence, last_occurrence, occurrence_count, resolved, resolved_at, flagged_at
+
+**client_analysis** — id, client_id, total_sessions, last_session_date, avg_weight_increase_pct_per_week, current_volume_trend, injury_risk_score, injury_risk_level, risk_factors[], form_degradation_detected, overtraining_indicators, pain_pattern_detected, client_score (0-100), client_score_breakdown (JSONB), last_computed_at
+
+**exercises** — id, canonical_name, aliases[], category, primary_muscles[], equipment[], difficulty, common_errors (JSONB), created_at
+
+**brain_conversations** — id, trainer_id, title (auto-generated), created_at, updated_at
+
+**brain_messages** — id, conversation_id, trainer_id, role (user | assistant), content, created_at
 
 ## Commands
 - `cd backend && uvicorn app.main:app --reload` — Run backend dev server
@@ -141,3 +182,4 @@ After finishing each day's work, before saying "done":
 - **Anthropic Claude:** console.anthropic.com — API key (~$5-10 during dev)
 - **Supabase:** supabase.com — free tier (auth + storage)
 - **Railway:** railway.app — $5/month hobby plan (hosting + DB + Redis)
+- **Tavily:** tavily.com — API key (Phase 3+, web search for Brain State 3)
