@@ -4,7 +4,7 @@ AI-powered coaching assistant for personal trainers. Trainers record sessions vi
 
 ## Status
 
-Phase 1a — Backend Foundation. Core data model (10 models), CRUD endpoints for clients, sessions, session entries, session plans, and injury flags. 262 tests passing. Voice pipeline, AI parsing, and The Brain are upcoming phases.
+Phase 1a complete. Core data model (10 models), 5 CRUD routers (clients, sessions, entries, plans, injury flags), cursor-based pagination, cross-trainer ownership validation, 306 tests. Voice pipeline, AI parsing, and The Brain are upcoming phases.
 
 ## Tech Stack
 

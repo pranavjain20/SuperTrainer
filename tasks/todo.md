@@ -68,9 +68,19 @@
 - [x] 6 new tests (2 edge case, 2 injury flag API, 3 schema)
 - [x] 301 tests passing
 
+### Day 10: Golden Audit + Phase Completion
+- [x] Extract pagination helper (DRY — 5 services → 1 shared function)
+- [x] Fix alembic/env.py to read DATABASE_URL from settings
+- [x] Fix plan_service.update_plan to allow nulling planned_for_date
+- [x] Add 5 missing tests (empty sets, empty goals, null date PATCH, error response structure)
+- [x] Full codebase audit: two agents, every source + test file — clean
+- [x] Squash merge feat/phase-1a-backend → master
+- [x] 306 tests passing on master
+
 ### Verification
-- [x] All tests pass — 301 green (pytest tests/ -x -v)
+- [x] All tests pass — 306 green (pytest tests/ -x -v)
 - [x] Swagger docs: all endpoints typed correctly with DataResponse[XResponse], tags consistent
 - [x] Seed script populates database correctly (34 sessions, 115 entries, 19 exercises, 6 plans, 4 injuries)
 - [x] End-of-day audit: Day 5 Golden Audit complete
 - [x] End-of-phase audit: Day 9 complete, all exit criteria met
+- [x] Day 10 golden audit complete, merged to master
