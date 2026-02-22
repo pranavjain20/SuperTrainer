@@ -127,6 +127,19 @@ supertrainer/
 - Pagination: cursor-based `?cursor=...&limit=20`
 - Weights stored in kilograms internally. Display conversion based on user preference.
 
+## Code Quality Philosophy
+
+The goal is code that a great engineer would enjoy reading. Not clever code, not over-abstracted code — clean code where every piece is obvious, intentional, and earns its place.
+
+- **Readability is the measure.** If someone has to re-read a function to understand it, it's too complex — whether that's because it's too long, too nested, too clever, or poorly named. Use judgment, not line counts.
+- **Each function does one thing you can name.** If you need "and" to describe it, consider splitting. But don't split just to be short — two tangled halves are worse than one clear whole.
+- **Flat over nested.** Early returns, guard clauses, extract-and-name. If logic is three levels deep, there's almost always a cleaner way.
+- **Names are documentation.** `get_client_by_id`, not `get_cli`. `is_archived`, not `archived_flag`. Consistent verbs across the codebase — if one service uses `create_`, they all do.
+- **No dead weight.** No commented-out code, no unused imports, no placeholder functions, no `Any` types without genuine need. If it's not pulling its weight, delete it.
+- **Files stay cohesive.** One domain per file. When a file starts feeling like it covers too many concerns, split by responsibility — not by arbitrary size.
+- **Type hints on all function signatures.** Including return types. This is a typed codebase.
+- **Tests read like specs.** Name describes the behavior (`test_injury_flag_rejects_pain_level_above_10`), one logical assertion per test, arrange-act-assert flow.
+
 ## Build Discipline
 
 IMPORTANT: This is a real product. Early days are the foundation — if the foundation is shaky, everything built on top will be fragile. No hacks. No shortcuts. No "good enough for now."

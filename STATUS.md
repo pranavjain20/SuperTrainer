@@ -1,8 +1,8 @@
 # SuperTrainer — Current Status
 
-**Last updated:** Feb 20, 2026
+**Last updated:** Feb 22, 2026
 **Current phase:** Phase 1a — Backend Foundation
-**Next action:** Start Day 1 (Models + Migration)
+**Next action:** Day 10 — Buffer + Phase Completion (golden audit, walkthrough, devlog)
 
 ---
 
@@ -38,7 +38,7 @@ Documentation phase is complete. All 6 docs reviewed and approved. CLAUDE.md pre
 
 ## Day-by-Day Plan
 
-### Day 1: Models + Migration ← START HERE
+### Day 1: Models + Migration ✅ COMPLETE
 
 **Goal:** Rewrite all models, create fresh migration, basic model tests.
 
@@ -65,37 +65,55 @@ Documentation phase is complete. All 6 docs reviewed and approved. CLAUDE.md pre
 
 **End of day:** All models migrate cleanly, basic create/query works for each model.
 
-### Day 2: Schemas + Test Infrastructure
+**Result:** 10 models, 5 enums, 4 Vector columns, fresh migration, 22 tests (all passing). On branch `feat/phase-1a-backend`.
 
-Rewrite `schemas.py` for all 10 models. Add `EntryTypeEnum`. Update `conftest.py` table names (replace `exercise_logs` with `session_entries`, add `session_plans`, `brain_conversations`, `brain_messages`). Write schema validation tests.
+### Day 2: Schemas + Schema Tests ✅ COMPLETE
 
-### Day 3: Client + Session CRUD
+Rewrote `schemas.py` for all 10 v3 models (34 Pydantic classes). Deleted old ExerciseLog schemas. Added SessionEntry with `@model_validator` for cross-field validation (exercise_card vs observation_card). Added InjuryFlagUpdate, SessionPlan, BrainConversation, BrainMessage, ClientAnalysis, Exercise schemas. Fixed `sets` type from `list | dict | None` to `list[dict] | None`. 57 pure validation tests, 3 audit passes caught 7 gaps. Added Code Quality Philosophy section to CLAUDE.md.
 
-Update `clients.py` and `sessions.py` for v3 schema. Add `scheduled_for`, `plan_id` to sessions. Update `main.py` (remove exercise_logs_router, add entries_router, plans_router). Delete old `test_exercise_logs.py`. Write client + session tests. ~40-50 total tests.
+**Result:** 34 schema classes, 57 schema tests + 22 model tests = 79 total, all green.
 
-### Day 4: Session Entry CRUD
+### Day 3: Client + Session CRUD ✅ COMPLETE
 
-New `entries.py` (replaces `exercise_logs.py`). POST/GET for session entries with entry_type validation. Exercise cards require `exercise_name`, observation cards require `observation_text`. Auto-set `sequence_order`. List by session (ordered) and by client (paginated). ~55-65 total tests.
+Deleted 4 v1 files (exercise_logs.py, exercise_log_service.py, test_exercise_logs.py, test_injury_flags.py). Fixed main.py (removed exercise_logs_router). Fixed injury_flags.py (session_entry_id validation). Added plan_id FK validation to sessions.py. Rewrote conftest.py with HTTP client + trainer fixtures. Rewrote test_clients.py (20 tests) and test_sessions.py (19 tests). Cleaned Co-Authored-By lines from 2 old commits, force-pushed clean history.
 
-### Day 5: Session Plan + Injury Flag CRUD
+**Result:** 124 total tests (22 model + 57 schema + 20 client + 19 session + 4 error handling + 2 health), all green.
 
-New `plans.py`. Update `injury_flags.py` (`exercise_log_id` → `session_entry_id`). Plan CRUD: create, list by client, get, update. ~65-75 total tests.
+### Day 4: Session Entry CRUD ✅ COMPLETE
 
-### Day 6: Seed Script
+Created entry_service.py (7 functions), entries.py router (6 endpoints, 3 URL paths), 54 integration tests. Schema changes: removed session_id from SessionEntryCreate (comes from URL path), made sequence_order optional (auto-calculated). Trainer ownership validated on every endpoint — first router to do this properly. Audit caught: unused import, missing return types, missing PATCH validation tests (sequence_order=0, empty name, negative volume), missing cross-trainer PATCH/DELETE ownership tests.
 
-Rewrite `seed.py`. 5 clients: 1/3/5/10/15 sessions. Mix of exercise_cards + observation_cards. Session plans for clients 3, 4, 5. Injury flags where appropriate. ~70-80 total tests.
+**Result:** 178 total tests (22 model + 58 schema + 20 client + 19 session + 54 entry + 4 error handling + 2 health - 1 overlap), all green.
 
-### Day 7: Edge Cases + Integration Tests
+### Day 5: Session Plan + Injury Flag CRUD ✅ COMPLETE
 
-Cross-endpoint integration. Edge case sweep: invalid UUIDs → 422, non-existent → 404, cross-entity ownership → 404, partial updates, empty DB handling, JSONB fields. ~75-85 total tests.
+Created plan_service.py (5 functions), plans.py router (5 endpoints across 2 URL paths), 28 tests. Completed injury_flag_service.py (added get/update/delete), rewrote injury_flags.py with ownership validation on all endpoints + 3 new endpoints (GET/PATCH/DELETE), 37 tests. Added SessionPlanListResponse to schemas.py. Registered plans router in main.py. Audit caught: missing return type annotations on helper functions, 2 untested ownership paths (PATCH wrong trainer, list wrong trainer's client).
 
-### Day 8: Coverage Audit + Polish
+**Result:** 243 total tests (22 model + 58 schema + 20 client + 19 session + 54 entry + 28 plan + 37 injury flag + 4 error handling + 2 health - 1 overlap), all green.
 
-Audit every endpoint against test checklist. Fill gaps. Verify Swagger docs. Code review for DRY violations. ~80-90 total tests.
+### Day 6: Seed Script ✅ COMPLETE
 
-### Day 9: End-of-Phase Audit
+Full rewrite of `seed.py` for v3 schema. Replaced broken ExerciseLog imports with SessionEntry. Eliminated raw `Session.__table__.select()` hacks — uses ORM object references throughout. 5 clients with realistic profiles: Sarah (1 session, assessment), Marcus (3, powerlifter), Aisha (5, post-pregnancy), Jake (10, beginner), Elena (15, elderly). 34 sessions, 115 session entries (exercise_card + observation_card mix), 19 canonical exercises, 6 session plans, 4 injury flags (1 resolved). Idempotent via TRUNCATE CASCADE. 10 seed tests covering counts, relationships, plan linking, injury validation, resolved flag, and idempotency.
 
-Re-read every file. Check for hacks, missing error handling, FK validation gaps. Fix everything. Full test suite green.
+**Result:** 272 total tests (262 existing + 10 seed), all green. Feature branch pushed to remote.
+
+### Day 7: Edge Cases + Integration Tests ✅ COMPLETE
+
+Fixed plan-client mismatch bug in session create (could attach Client A's plan to Client B's session → now 422). Added `duration_minutes ge=0` validation to SessionUpdate. Created `test_integration.py` (8 tests: entry delete → flag SET NULL via API, archived client child access for 4 entity types, sequence order after deletion, plan-client mismatch, non-existent session_entry_id on flag create). Created `test_edge_cases.py` (12 tests: empty PATCH `{}` for all 5 entities, pagination edge cases limit=0/limit=-1/stale cursor, cross-type contamination documented, pain_level=11 upper bound, negative duration_minutes).
+
+**Result:** 292 total tests (272 existing + 20 new), all green.
+
+### Day 8: Coverage Audit + Polish ✅ COMPLETE
+
+Fixed 3 missing `ondelete="CASCADE"` on trainer FK columns (Session.trainer_id, BrainMessage.trainer_id, SessionPlan.trainer_id DB sync). Added Alembic migration. Consolidated 3 duplicate ownership validators into dependencies.py (5 validators in one file). Replaced `response_model=dict` with typed `DataResponse[XResponse]` on all 14 single-resource endpoints. Fixed injury_flags tag inconsistency (dashes → underscores). Cleaned unused imports. 3 new integration tests.
+
+**Result:** 295 total tests (292 existing + 3 new), all green. 2 Alembic migrations.
+
+### Day 9: End-of-Phase Audit ✅ COMPLETE
+
+Three exploration agents read every source file, test file, and infrastructure file. Found and fixed 1 real bug + 1 data integrity gap + 1 trivial annotation. Fixed cross-type contamination on PATCH /entries (exercise_card accepting observation_text without entry_type in payload → now 422 at route level). Added resolved_at validation on InjuryFlagUpdate (rejects resolved_at without resolved=true). Added return type to health_check(). All exit criteria met.
+
+**Result:** 301 total tests (295 existing + 6 new), all green. All exit criteria checked off.
 
 ### Day 10: Buffer + Phase Completion
 
@@ -105,23 +123,23 @@ Handle overflow. Update STATUS.md. Commit clean to feature branch. Present for r
 
 ## Phase 1a Exit Criteria
 
-- [ ] 10 models in models.py, all with correct fields and relationships
-- [ ] pgvector enabled, embedding columns present
-- [ ] Fresh Alembic migration runs clean
-- [ ] All Pydantic schemas validate correctly
-- [ ] Client CRUD: list, create, get, update, archive — all tested
-- [ ] Session CRUD: create, get, list, update, delete — all tested
-- [ ] Session Entry CRUD: create (both types), list by session, list by client — all tested
-- [ ] Session Plan CRUD: create, get, list, update — all tested
-- [ ] Injury Flag CRUD: create, list by client — all tested
-- [ ] Seed script: 5 clients, 1/3/5/10/15 sessions, varied data — runs clean
-- [ ] ~60-80+ tests all passing
-- [ ] Swagger docs show all endpoints
-- [ ] No 500s for any bad input (all proper 4xx)
-- [ ] Cross-entity ownership validated everywhere
-- [ ] Cascade deletes work and are tested
-- [ ] Error format consistent: `{"error": {"code": "...", "message": "..."}}`
-- [ ] End-of-phase audit completed honestly
+- [x] 10 models in models.py, all with correct fields and relationships
+- [x] pgvector enabled, embedding columns present
+- [x] Fresh Alembic migration runs clean
+- [x] All Pydantic schemas validate correctly
+- [x] Client CRUD: list, create, get, update, archive — all tested
+- [x] Session CRUD: create, get, list, update, delete — all tested
+- [x] Session Entry CRUD: create (both types), list by session, list by client — all tested
+- [x] Session Plan CRUD: create, get, list, update — all tested
+- [x] Injury Flag CRUD: create, list by client — all tested
+- [x] Seed script: 5 clients, 1/3/5/10/15 sessions, varied data — runs clean
+- [x] ~60-80+ tests all passing (301 tests)
+- [x] Swagger docs show all endpoints
+- [x] No 500s for any bad input (all proper 4xx)
+- [x] Cross-entity ownership validated everywhere
+- [x] Cascade deletes work and are tested
+- [x] Error format consistent: `{"error": {"code": "...", "message": "..."}}`
+- [x] End-of-phase audit completed honestly
 
 ---
 

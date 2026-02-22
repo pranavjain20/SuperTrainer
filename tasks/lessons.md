@@ -10,3 +10,51 @@ Updated after every correction.
 - **IntegrityError + savepoints**: After an IntegrityError, the underlying transaction is invalidated. Use `begin_nested()` (savepoint) before the operation that will fail, then `rollback()` after. Otherwise subsequent operations on the same session fail.
 
 - **Native Postgres port conflict**: Pranav has a native Postgres on port 5432. Docker dev DB uses port 5434 to avoid conflict. Remember this for all connection strings.
+
+## Day 1 (v3 rebuild)
+
+- **DO THE AUDIT AUTOMATICALLY**: After finishing implementation, STOP and switch to reviewer mode BEFORE saying "done". Re-read every file. Check every cascade path in the spec against actual tests. Check every FK constraint. On Day 1 v3, I wrote 18 tests, said "all done", and missed 4 cascade behaviors with zero test coverage. The CLAUDE.md says to do this automatically — not when asked. This is non-negotiable. The pattern: finish code → re-read everything → cross-reference spec → find gaps → fix gaps → THEN report.
+
+- **Test the spec table, not just the models**: When there's a cascade/behavior spec table, every single row must have a dedicated test proving it works. Don't assume "18 tests" is enough just because the plan said 18. The plan is a starting point, not a ceiling.
+
+## Day 3 (v3 rebuild)
+
+- **Never include Co-Authored-By in commits.** Two early commits shipped with `Co-Authored-By: Claude` lines. Had to use `git filter-branch --msg-filter` to strip them and force-push both branches. This is in CLAUDE.md and MEMORY.md — no AI attribution, ever. No exceptions.
+
+- **httpx 0.28+ requires ASGITransport**: Can't use `AsyncClient(app=app)` anymore. Must use `httpx.ASGITransport(app=app)` and pass `transport=transport` to `AsyncClient`. The old pattern silently fails.
+
+- **DB session sharing in test fixtures**: The HTTP `client` fixture must override `get_db` to yield the same `db_session` the test is using. Otherwise test data created via `db_session.add()` isn't visible to HTTP handlers — they get a different session and see an empty database.
+
+## Day 4 (v3 rebuild)
+
+- **Audit must cover every HTTP verb per ownership path**: On Day 4, first audit pass only tested GET and POST for cross-trainer ownership but missed PATCH and DELETE. All four verbs go through `_validate_entry_ownership`, but without explicit tests, a regression could silently let trainers modify each other's entries. Rule: if an endpoint validates ownership, there must be an integration test proving wrong-trainer returns 404 for that specific HTTP method.
+
+- **Test validation edge cases at the integration level, not just schema level**: Schema tests proved `sequence_order=0` fails at the Pydantic layer, but there was no integration test proving the API returns 422 (not 500) for this input. Schema validation and API validation are two separate trust boundaries — test both.
+
+- **Report audit findings explicitly**: Don't just say "I did the audit." List what was checked, what was found, what was fixed, and what was already clean. If the report doesn't name specific findings, it didn't happen.
+
+## Day 5 (v3 rebuild)
+
+- **The audit is not a checkbox — it's adversarial review.** Day 5: declared "audit complete" with 3 real issues sitting in plain sight (missing return type annotations, 2 untested ownership paths). Had to be called out again, same mistake as Day 1 and Day 4. The audit means: read each file line by line looking for things that are WRONG. Compare every function signature against the reference file (entries.py). Check that every HTTP verb x every ownership path has a test. If the audit doesn't find at least one issue, you probably didn't look hard enough. Finding nothing is suspicious, not a success.
+
+- **Symmetry check for ownership tests**: When testing ownership (wrong-trainer → 404), ensure ALL endpoints are covered symmetrically. On Day 5, plans had tests for create/get/patch/delete/list with wrong trainer. Injury flags only had create/get/delete — missing patch and list. The check: list every endpoint in the router, verify each one has a wrong-trainer test. No exceptions.
+
+## Day 5 Golden Audit
+
+- **DRY violations compound across days.** Identical `_validate_client_ownership` was copy-pasted into 3 routers over Days 4-5. Each day it was "just one copy." By Day 5, it's 27 lines of identical code in 3 files. Fix: extract shared validation into `dependencies.py` on day one of the pattern. The rule is: if the same function appears in 2+ files, extract immediately.
+
+- **Ownership validation must be checked when adding new endpoints.** Clients and sessions routers shipped without ownership validation on get/update/delete — a trainer could access any client/session by guessing the UUID. Entries, plans, and injury flags (written later) got it right because the pattern was established. The gap: the earlier routers were written before the pattern existed and never got updated. Rule: when establishing a new security pattern, backport it to ALL existing endpoints immediately.
+
+- **FK ownership is a separate concern from FK existence.** Sessions.py validated that `plan_id` exists but not that it belongs to the current trainer. This is a subtle distinction: existence checks prevent 500s, ownership checks prevent cross-tenant data leaks. Every FK reference in a create/update endpoint must check BOTH existence AND ownership.
+
+- **Schema update validators need entry_type context.** SessionEntryUpdate initially had no cross-field validator. The fix adds validation only when `entry_type` is explicitly included in the update payload. Without entry_type, we can't know the current type from the schema alone, so validation is skipped. This is a deliberate design choice, not a gap — document it.
+
+- **Second audit passes catch real issues.** The first audit found 9 issues. After fixing all 9, the second audit found 1 more (plan_id ownership). Always run a second pass after a batch of fixes — the fixes themselves can introduce or reveal new problems.
+
+## Definition of Done
+
+- **"Done" means committed.** On Day 5, declared golden audit complete and ready for Day 6 while 18 files of changes sat uncommitted. Pranav had to ask "have you committed?" — that should never happen. The rule: if it's not committed, it's not done. Before saying "done" or "clean" or "ready to move on," the checklist is: (1) tests pass, (2) changes committed, (3) nothing left hanging. This is what separates a co-architect from someone who needs micromanaging. Big statements ("everything is clean") require big verification.
+
+## Context Window Management
+
+- **Proactively flag context window issues.** Failed TWICE now — Day 5/6 boundary and Day 9/10 boundary. Both times Pranav had to ask "new terminal?" instead of me telling him first. This is in MEMORY.md as a non-negotiable. The rule: BEFORE the user finishes a day or asks what's next, check if context is heavy. If it is, say "heads up, context is full — start a fresh terminal for Day X" BEFORE they have to ask. No more misses on this.

@@ -8,8 +8,9 @@ from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app.api.clients import router as clients_router
-from app.api.exercise_logs import router as exercise_logs_router
+from app.api.entries import router as entries_router
 from app.api.injury_flags import router as injury_flags_router
+from app.api.plans import router as plans_router
 from app.api.sessions import router as sessions_router
 
 logger = logging.getLogger("supertrainer")
@@ -71,10 +72,11 @@ async def log_requests(request: Request, call_next):
 
 app.include_router(clients_router, prefix="/api/v1")
 app.include_router(sessions_router, prefix="/api/v1")
-app.include_router(exercise_logs_router, prefix="/api/v1")
+app.include_router(entries_router, prefix="/api/v1")
 app.include_router(injury_flags_router, prefix="/api/v1")
+app.include_router(plans_router, prefix="/api/v1")
 
 
 @app.get("/api/v1/health")
-async def health_check():
+async def health_check() -> dict:
     return {"data": {"status": "ok"}, "meta": {}}

@@ -1,9 +1,10 @@
 import uuid
 
-from sqlalchemy import func, select
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models import Client
+from app.services.pagination import paginate
 
 
 async def list_clients(
@@ -20,24 +21,7 @@ async def list_clients(
     if not include_archived:
         query = query.where(Client.archived == False)  # noqa: E712
 
-    query = query.order_by(Client.created_at.desc(), Client.id)
-
-    if cursor:
-        cursor_client = await db.get(Client, cursor)
-        if cursor_client:
-            query = query.where(
-                (Client.created_at < cursor_client.created_at)
-                | ((Client.created_at == cursor_client.created_at) & (Client.id > cursor_client.id))
-            )
-
-    result = await db.execute(query.limit(limit + 1))
-    clients = list(result.scalars().all())
-
-    has_more = len(clients) > limit
-    if has_more:
-        clients = clients[:limit]
-
-    return clients, has_more
+    return await paginate(db, query, Client, Client.created_at, cursor=cursor, limit=limit)
 
 
 async def get_client(db: AsyncSession, client_id: uuid.UUID) -> Client | None:

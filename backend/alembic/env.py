@@ -6,18 +6,26 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from alembic import context
 
+from app.config import settings
 from app.database import Base
 from app.models import (  # noqa: F401 — import so Base.metadata picks up all tables
+    BrainConversation,
+    BrainMessage,
     Client,
     ClientAnalysis,
     Exercise,
-    ExerciseLog,
     InjuryFlag,
     Session,
+    SessionEntry,
+    SessionPlan,
     Trainer,
 )
 
 config = context.config
+
+# Override sqlalchemy.url from environment (via pydantic-settings) so
+# migrations work outside local dev (CI, staging, production).
+config.set_main_option("sqlalchemy.url", settings.database_url)
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
