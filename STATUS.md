@@ -1,8 +1,8 @@
 # SuperTrainer — Current Status
 
 **Last updated:** Feb 23, 2026
-**Current phase:** Phase 1b — Voice Pipeline — Starting Day 1
-**Next action:** Day 1 — Exercise database expansion + Deepgram service
+**Current phase:** Phase 1b — Voice Pipeline — Day 1 (in progress)
+**Next action:** Finish Day 1 — Pranav brings researched exercise JSON, swap in, test, complete
 
 ---
 
@@ -160,15 +160,22 @@ First AI-heavy phase. Server is stateless — phone sends full session context w
 
 ### Day-by-Day Plan
 
-#### Day 1: Exercise Database + Deepgram Service
+#### Day 1: Exercise Database + Deepgram Service — IN PROGRESS
 
 **Mode:** Claude drafts, Pranav reviews exercises.
 
-- Expand exercise database from 19 → ~100 exercises with aliases, categories, muscles, equipment
-- Top 100 must be chosen for Deepgram keyterm prompting (API limit: 100 terms)
-- Build `services/transcription.py` — Deepgram STT integration (async, handles errors, returns transcript + confidence)
-- Add `deepgram-sdk` to requirements.txt
-- Tests: Deepgram service unit tests with mocked API responses
+**Done:**
+- [x] Created `exercise_db.json` with 97 exercises (new schema: secondary_muscles, detailed common_errors)
+- [x] Built `services/transcription.py` — load_exercise_db(), build_keyterm_list(), transcribe_audio()
+- [x] Added `deepgram-sdk>=3.0,<4.0` to requirements.txt
+- [x] Updated `seed.py` to load from JSON (dynamic column introspection)
+- [x] Created `tests/test_transcription.py` — 24 tests (DB loading, keyterm building, Deepgram mocked)
+- [x] Updated `tests/test_seed.py` exercise count assertions (dynamic)
+- [x] 330 total tests passing (306 existing + 24 new)
+
+**Remaining:**
+- [ ] Pranav brings researched exercise JSON (deeper aliases, expert-level common_errors)
+- [ ] Swap into exercise_db.json, run tests, verify
 
 #### Day 2: Claude Parser — Tool Schema + Core Parsing
 
