@@ -1,6 +1,73 @@
 # SuperTrainer — Task Tracker
 
-## Week 1-2: Backend Foundation (PRD v3 Rebuild)
+## Phase 1b: Voice Pipeline (Week 3-4)
+
+### Day 1: Exercise Database + Deepgram Service
+- [ ] Expand exercises from 19 → ~100 (aliases, categories, muscles, equipment)
+- [ ] Select top 100 keyterms for Deepgram prompting (API limit: 100)
+- [ ] Create `services/transcription.py` — Deepgram STT integration (async, error handling)
+- [ ] Add `deepgram-sdk` to requirements.txt
+- [ ] Unit tests: Deepgram service with mocked API responses
+
+### Day 2: Claude Parser — Tool Schema + Core Parsing
+- [ ] Design tool_use schema matching SessionEntry model (exercise_card + observation_card tools)
+- [ ] Write system prompt for parser
+- [ ] Create `services/parser.py` — Claude transcript → structured data via tool_use
+- [ ] Core parsing: single exercises, basic set/rep/weight extraction
+- [ ] Add `anthropic` to requirements.txt
+- [ ] Unit tests: parser with mocked Claude responses
+
+### Day 3: Parser — Intent Classification + Additive Parsing + Context
+- [ ] Intent classification: new exercise vs additive vs observation vs correction
+- [ ] Additive parsing: "also, sets 2 through 4 were at RPE 8" modifies existing card
+- [ ] Session context: resolve references ("same weight", "dropped to 75") using prior entries
+- [ ] Tests: intent classification, additive parsing, context resolution
+
+### Day 4: Validation Layer
+- [ ] Create `services/validation.py` — fuzzy match exercise names to canonical DB (rapidfuzz)
+- [ ] Weight normalization: "185 pounds" → 83.9 kg, "80 kilos" → 80.0 kg
+- [ ] Set expansion: "3 sets of 10 at 80" → 3 individual set records
+- [ ] Pain extraction: detect pain/injury mentions, map body parts, extract severity
+- [ ] Add `rapidfuzz` to requirements.txt
+- [ ] Tests: fuzzy matching, weight conversion, set expansion, pain extraction
+
+### Day 5: Voice Clip Endpoint + Integration Tests
+- [ ] Create `api/voice.py` — `POST /api/v1/sessions/{session_id}/voice-clip`
+- [ ] Wire Deepgram → parser → validation pipeline
+- [ ] Return structured entry + timing breakdown (transcription_ms, parsing_ms, validation_ms)
+- [ ] Register voice router in main.py
+- [ ] Integration tests: full pipeline with mocked external APIs
+
+### Day 6: Real Transcript Testing + Prompt Tuning
+- [ ] Pranav writes 5-10 sample transcripts of real trainer speech
+- [ ] Test parser against real speech patterns
+- [ ] Tune system prompt based on failures
+- [ ] Handle gym patterns: "sets 2 through 4 at 85 kilos for 8", "dropped to 75", "superset with curls"
+- [ ] Iterate until ≥85% of test transcripts parse correctly
+
+### Day 7: Embeddings + Full Test Suite + Audit
+- [ ] Embedding generation prep for Phase 3c
+- [ ] Update seed.py with expanded exercise database
+- [ ] Complete test suite (target: 30-40 new tests)
+- [ ] End-of-phase audit: re-read every file, adversarial review, full suite green
+- [ ] All Phase 1b exit criteria met
+
+### Exit Criteria
+- [ ] ≥85% of test transcripts parsed correctly
+- [ ] ≥90% exercise names normalized to canonical
+- [ ] ≥95% set/reps extracted correctly
+- [ ] ≥90% weights extracted correctly
+- [ ] Additive parsing works on all correction test cases
+- [ ] Response time ≤3 seconds per clip
+- [ ] 30-40 new tests, all green
+- [ ] End-of-phase audit completed
+
+---
+
+## Phase 1a: Backend Foundation — COMPLETE (306 tests)
+
+<details>
+<summary>Phase 1a completed tasks (click to expand)</summary>
 
 ### Models + Database
 - [x] New models.py with 10 models (trainers, clients, sessions, session_entries, session_plans, injury_flags, client_analysis, exercises, brain_conversations, brain_messages)
@@ -39,48 +106,18 @@
 - [x] 262 tests passing
 
 ### Seed Data
-- [x] New seed.py: 5 clients with 1/3/5/10/15 sessions (varied histories, pain mentions, progression patterns, observation cards)
-- [x] Seed session_plans for clients with 5+ sessions (Aisha: 1, Jake: 2, Elena: 3)
-- [x] Seed injury_flags with varied body parts and pain levels (Marcus: knee, Jake: back, Elena: shoulder resolved + hip active)
+- [x] New seed.py: 5 clients with 1/3/5/10/15 sessions
+- [x] Seed session_plans for clients with 5+ sessions
+- [x] Seed injury_flags with varied body parts and pain levels
 - [x] Seed 19 canonical exercises in Exercise table
 - [x] 10 seed tests (counts, relationships, idempotency)
 
-### Day 8: Coverage Audit + Polish
-- [x] Fix Session.trainer_id missing ondelete="CASCADE"
-- [x] Fix BrainMessage.trainer_id missing ondelete="CASCADE"
-- [x] Fix SessionPlan.trainer_id DB out of sync (code had CASCADE, DB didn't)
-- [x] Alembic migration for FK cascade fixes
-- [x] Consolidate 3 ownership validators into dependencies.py
-- [x] Replace response_model=dict with DataResponse[XResponse] on all 14 single-resource endpoints
-- [x] Fix injury_flags tag (dashes → underscores)
-- [x] Clean unused imports (clients.py, entries.py, plans.py)
-- [x] Test: plan delete leaves siblings intact
-- [x] Test: trainer cascade deletes sessions (validates FK fix)
-- [x] Test: injury flag rejects entry from wrong session
-- [x] 295 tests passing
+### Days 8-10: Audit + Polish + Merge
+- [x] Fix 3 missing ondelete="CASCADE" on trainer FK columns
+- [x] Consolidate ownership validators into dependencies.py
+- [x] Replace response_model=dict with DataResponse[XResponse] on all endpoints
+- [x] End-of-phase audit: cross-type contamination fix, resolved_at validation
+- [x] Day 10 golden audit: pagination helper extraction, alembic env fix
+- [x] Squash merge to master — 306 tests passing
 
-### Day 9: End-of-Phase Audit
-- [x] Full codebase read: every source file, test file, infrastructure file
-- [x] Fix cross-type contamination bug on PATCH /entries (route-level validation)
-- [x] Add resolved_at validation on InjuryFlagUpdate (model_validator)
-- [x] Add return type annotation to health_check()
-- [x] Check off all 17 Phase 1a exit criteria in STATUS.md
-- [x] 6 new tests (2 edge case, 2 injury flag API, 3 schema)
-- [x] 301 tests passing
-
-### Day 10: Golden Audit + Phase Completion
-- [x] Extract pagination helper (DRY — 5 services → 1 shared function)
-- [x] Fix alembic/env.py to read DATABASE_URL from settings
-- [x] Fix plan_service.update_plan to allow nulling planned_for_date
-- [x] Add 5 missing tests (empty sets, empty goals, null date PATCH, error response structure)
-- [x] Full codebase audit: two agents, every source + test file — clean
-- [x] Squash merge feat/phase-1a-backend → master
-- [x] 306 tests passing on master
-
-### Verification
-- [x] All tests pass — 306 green (pytest tests/ -x -v)
-- [x] Swagger docs: all endpoints typed correctly with DataResponse[XResponse], tags consistent
-- [x] Seed script populates database correctly (34 sessions, 115 entries, 19 exercises, 6 plans, 4 injuries)
-- [x] End-of-day audit: Day 5 Golden Audit complete
-- [x] End-of-phase audit: Day 9 complete, all exit criteria met
-- [x] Day 10 golden audit complete, merged to master
+</details>

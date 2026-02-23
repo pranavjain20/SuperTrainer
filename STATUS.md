@@ -1,8 +1,8 @@
 # SuperTrainer — Current Status
 
-**Last updated:** Feb 22, 2026
-**Current phase:** Phase 1a — Backend Foundation — COMPLETE
-**Next action:** Phase 2 begins
+**Last updated:** Feb 23, 2026
+**Current phase:** Phase 1b — Voice Pipeline — Starting Day 1
+**Next action:** Day 1 — Exercise database expansion + Deepgram service
 
 ---
 
@@ -142,6 +142,114 @@ Day 10 golden audit (covering Days 6-10). Extracted pagination helper — 5 serv
 - [x] Cascade deletes work and are tested
 - [x] Error format consistent: `{"error": {"code": "...", "message": "..."}}`
 - [x] End-of-phase audit completed honestly
+
+---
+
+## Phase 1b: Voice Pipeline
+
+**Goal:** Trainer speaks into phone → audio transcribed by Deepgram → Claude parses transcript into structured exercise/observation cards via tool_use → validation normalizes data → structured entry returned in ≤3 seconds.
+
+First AI-heavy phase. Server is stateless — phone sends full session context with each clip.
+
+### Four Components
+
+1. **Deepgram service** — Speech-to-text. Sends audio + keyterm list (100 exercise names), gets back transcript. Black-box API, minimal custom logic.
+2. **Claude parser service** — Takes transcript + session context, uses tool_use to output structured JSON matching SessionEntry model. Classifies intent (new exercise, additive, observation, etc). 80% of engineering effort (prompt design, testing, iteration).
+3. **Validation layer** — Post-processing. Fuzzy-matches exercise names to canonical DB, normalizes weight units to kg, expands "3 sets of 10" into individual set records, extracts pain reports with body part mapping.
+4. **Voice clip endpoint** — `POST /sessions/{id}/voice-clip`. Ties Deepgram → parser → validation into one API call. Returns structured entry + processing time breakdown.
+
+### Day-by-Day Plan
+
+#### Day 1: Exercise Database + Deepgram Service
+
+**Mode:** Claude drafts, Pranav reviews exercises.
+
+- Expand exercise database from 19 → ~100 exercises with aliases, categories, muscles, equipment
+- Top 100 must be chosen for Deepgram keyterm prompting (API limit: 100 terms)
+- Build `services/transcription.py` — Deepgram STT integration (async, handles errors, returns transcript + confidence)
+- Add `deepgram-sdk` to requirements.txt
+- Tests: Deepgram service unit tests with mocked API responses
+
+#### Day 2: Claude Parser — Tool Schema + Core Parsing
+
+**Mode:** Collaborative (first AI-heavy day, Pranav learns tool_use).
+
+- Design tool_use schema matching SessionEntry model (exercise_card + observation_card tools)
+- Write system prompt for the parser
+- Build `services/parser.py` — sends transcript to Claude with tool_use, returns structured data
+- Core parsing: single exercises, basic set/rep/weight extraction
+- Add `anthropic` to requirements.txt
+- Tests: parser unit tests with mocked Claude responses
+
+#### Day 3: Parser — Intent Classification + Additive Parsing + Context
+
+**Mode:** Collaborative.
+
+- Intent classification: new exercise vs additive info ("actually that was RPE 8") vs observation vs correction ("no wait, 80 not 85")
+- Additive parsing: "also, sets 2 through 4 were at RPE 8" modifies existing card
+- Session context: phone sends prior entries, parser uses them to resolve references ("same weight", "dropped to 75")
+- Tests: intent classification tests, additive parsing tests
+
+#### Day 4: Validation Layer
+
+**Mode:** Independent.
+
+- `services/validation.py` — fuzzy matching exercise names to canonical DB (rapidfuzz)
+- Weight normalization: "185 pounds" → 83.9 kg, "80 kilos" → 80.0 kg, bare numbers default to context
+- Set expansion: "3 sets of 10 at 80" → 3 individual set records
+- Pain extraction: detect pain/injury mentions, map body parts, extract severity
+- Add `rapidfuzz` to requirements.txt
+- Tests: fuzzy matching, weight conversion, set expansion, pain extraction
+
+#### Day 5: Voice Clip Endpoint + Integration Tests
+
+**Mode:** Independent, Pranav reviews.
+
+- `api/voice.py` — `POST /api/v1/sessions/{session_id}/voice-clip`
+- Wire Deepgram → parser → validation into single endpoint
+- Return structured entry + timing breakdown (transcription_ms, parsing_ms, validation_ms)
+- Register router in main.py
+- Integration tests: full pipeline with mocked external APIs
+
+#### Day 6: Real Transcript Testing + Prompt Tuning
+
+**Mode:** Most collaborative day. Pranav writes 5-10 sample transcripts.
+
+- Test parser against real trainer speech patterns
+- Tune system prompt based on failures
+- Handle gym-specific patterns: "sets 2 through 4 at 85 kilos for 8", "dropped to 75", "superset with curls"
+- Iterate until ≥85% of test transcripts parse correctly
+
+#### Day 7: Embeddings + Full Test Suite + End-of-Phase Audit
+
+**Mode:** Independent + audit.
+
+- Embedding generation prep for Phase 3c (exercise descriptions, canonical names)
+- Complete test suite: 30-40 tests total
+- End-of-phase audit: re-read every file, adversarial review, full suite green
+- Update seed.py with expanded exercise database
+
+### Key Concepts
+
+- **Deepgram = ears, Claude = brain.** Deepgram transcribes sound to text. Claude understands and structures it. Our intelligence is in the Claude layer (prompt design, tool schema).
+- **Keyterm prompting:** Cheat sheet of 100 gym terms sent to Deepgram to improve recognition of specialized vocabulary. API limit is 100 terms.
+- **Tool use:** Instead of Claude writing text, we define a structured schema (matching our DB model) and Claude fills it in like a form. Guaranteed valid JSON.
+- **Stateless server:** Phone keeps full session state, sends it with every clip. Server processes each clip in isolation. Handles offline, manual edits, crash recovery, and race conditions.
+
+### Success Criteria
+
+- [ ] ≥85% of test transcripts parsed correctly
+- [ ] ≥90% exercise names normalized to canonical
+- [ ] ≥95% set/reps extracted correctly
+- [ ] ≥90% weights extracted correctly
+- [ ] Additive parsing works on all correction test cases
+- [ ] Response time ≤3 seconds per clip
+- [ ] 30-40 tests total
+- [ ] End-of-phase audit completed
+
+### Pranav's Prep (Before Day 6)
+
+Write 5-10 sample transcripts of real trainer speech. Raw, natural, not polished. Examples of what a trainer actually says mid-session.
 
 ---
 
