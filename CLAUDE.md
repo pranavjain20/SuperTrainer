@@ -6,13 +6,13 @@ AI-powered coaching assistant for personal trainers. Trainers record sessions vi
 ## Current Status
 **Phase: PRD v3 Rebuild — Documentation complete, starting Week 1-2 backend.**
 - See STATUS.md for current task state.
-- See PRD.md for full product requirements.
+- See docs/PRD.md for full product requirements.
 
 ## Key Documents
-- `PRD.md` — Product requirements, features, build phases, data model
-- `TECH_STACK.md` — Technology choices with rationale and alternatives
-- `BUILD_PLAN.md` — 6-phase (13 sub-phase) build plan, testing plans, agent parallelization
-- `WORKFLOW.md` — Daily collaboration process, worktrees, communication protocol
+- `docs/PRD.md` — Product requirements, features, build phases, data model
+- `docs/TECH_STACK.md` — Technology choices with rationale and alternatives
+- `docs/BUILD_PLAN.md` — 6-phase (13 sub-phase) build plan, testing plans, agent parallelization
+- `docs/WORKFLOW.md` — Daily collaboration process, worktrees, communication protocol
 - `reference/PRD_v1.md` — Original PRD (historical reference)
 - `reference/AI_TRAINING_PLATFORM_DEEP_SPEC.md` — Original deep spec (historical reference)
 
@@ -72,13 +72,20 @@ supertrainer/
 ├── tasks/
 │   ├── todo.md                  # Current task checklist
 │   └── lessons.md               # Mistakes and patterns learned
+├── docs/                        # Project documentation
+│   ├── PRD.md                   # Product requirements
+│   ├── BUILD_PLAN.md            # Build plan
+│   ├── TECH_STACK.md            # Technology choices
+│   ├── WALKTHROUGH.md           # System walkthrough
+│   └── WORKFLOW.md              # Collaboration process
 ├── reference/                   # Historical documents
 │   ├── PRD_v1.md
 │   └── AI_TRAINING_PLATFORM_DEEP_SPEC.md
-├── PRD.md       # Active PRD
-├── TECH_STACK.md
-├── BUILD_PLAN.md
-├── WORKFLOW.md
+├── concepts/                    # Daily learning documents
+│   ├── index.md                 # Concepts index
+│   └── YYYY-MM-DD.md            # Per-day entries
+├── devlog/                      # Daily build journal
+│   └── YYYY-MM-DD.md            # Per-day entries
 ├── STATUS.md
 └── CLAUDE.md                    # This file
 ```
@@ -115,7 +122,7 @@ supertrainer/
 ## Git Strategy
 - Main branch: always stable, reviewed, tests passing
 - Feature branches: `feat/[component]-[feature]`
-- Worktrees for parallel agent work (see WORKFLOW.md)
+- Worktrees for parallel agent work (see docs/WORKFLOW.md)
 - Squash merge to main after review
 - Never merge without all tests passing
 

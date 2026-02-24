@@ -38,7 +38,7 @@ pytest tests/ -x -v
 
 ## Project Docs
 
-- [`PRD.md`](PRD.md) — Product requirements and data model
-- [`TECH_STACK.md`](TECH_STACK.md) — Technology choices with rationale
-- [`BUILD_PLAN.md`](BUILD_PLAN.md) — 6-phase build plan
+- [`docs/PRD.md`](docs/PRD.md) — Product requirements and data model
+- [`docs/TECH_STACK.md`](docs/TECH_STACK.md) — Technology choices with rationale
+- [`docs/BUILD_PLAN.md`](docs/BUILD_PLAN.md) — 6-phase build plan
 - [`STATUS.md`](STATUS.md) — Current progress
