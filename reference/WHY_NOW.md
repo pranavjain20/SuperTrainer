@@ -76,17 +76,3 @@ No single one of these changes enables SuperTrainer. It's the convergence:
 - AI-assisted development (one person building at team speed)
 
 Remove any one of these and the product either doesn't work, costs too much, takes too long to build, or requires a team that a bootstrapped founder can't afford. All six became production-ready in the same 18-month window. That's the timing.
-
----
-
-## What This Means Competitively
-
-The same technology window is open to everyone. But most fitness software companies are:
-
-1. **Legacy platforms** (Trainerize, TrueCoach, PTminder) — built on forms and templates, not voice-first AI. Retrofitting AI onto a form-based product is architecturally painful. Their data models aren't designed for real-time structured extraction from speech.
-
-2. **Big tech AI products** — Google, Apple, and OpenAI are building general fitness features, not tools for professional coaches. The difference between "track my workout" and "help a professional trainer manage 30 clients with injury history, progression tracking, and adaptive programming" is enormous.
-
-3. **AI wrappers** — most "AI fitness" startups are ChatGPT wrappers that generate workout plans from a prompt. They don't process real-time session data, don't build longitudinal client profiles, and don't integrate with how trainers actually work during a live session.
-
-The gap: nobody is building a voice-first AI system designed specifically for the professional trainer's workflow during a live session. The technology to do it just became available. The window is open now and will narrow as larger companies catch up.
