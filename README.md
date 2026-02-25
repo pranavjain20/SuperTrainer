@@ -4,7 +4,7 @@ AI-powered coaching assistant for personal trainers. Trainers record sessions vi
 
 ## Status
 
-Phase 1a complete. Core data model (10 models), 5 CRUD routers (clients, sessions, entries, plans, injury flags), cursor-based pagination, cross-trainer ownership validation, 306 tests. Voice pipeline, AI parsing, and The Brain are upcoming phases.
+Phase 1b (Voice Pipeline) in progress — Days 1-5 complete, golden audit passed. Full pipeline working: audio upload → Deepgram STT → Claude tool_use parser → validation (fuzzy exercise matching, weight normalization, pain extraction) → structured session entries. 142-exercise DB with 3,466 aliases. 598 tests passing. Next: real transcript testing with prompt tuning.
 
 ## Tech Stack
 
