@@ -160,63 +160,59 @@ First AI-heavy phase. Server is stateless — phone sends full session context w
 
 ### Day-by-Day Plan
 
-#### Day 1: Exercise Database + Deepgram Service — IN PROGRESS
+#### Day 1: Exercise Database + Deepgram Service ✅ COMPLETE
 
-**Mode:** Claude drafts, Pranav reviews exercises.
+**Mode:** Claude drafts, Pranav researches exercises.
 
-**Done:**
-- [x] Created `exercise_db.json` with 97 exercises (new schema: secondary_muscles, detailed common_errors)
+- [x] Created `exercise_db.json` — started at 97 exercises, Pranav researched and rebuilt to 142 exercises with 3,466 aliases, 706 expert common_errors, specific anatomy (115 unique muscle terms)
 - [x] Built `services/transcription.py` — load_exercise_db(), build_keyterm_list(), transcribe_audio()
 - [x] Added `deepgram-sdk>=3.0,<4.0` to requirements.txt
 - [x] Updated `seed.py` to load from JSON (dynamic column introspection)
 - [x] Created `tests/test_transcription.py` — 24 tests (DB loading, keyterm building, Deepgram mocked)
+- [x] Created `tests/test_exercise_db.py` — 36 tests (comparative metrics, trainer speech recognition, structural quality, keyterm coverage)
 - [x] Updated `tests/test_seed.py` exercise count assertions (dynamic)
-- [x] 330 total tests passing (306 existing + 24 new)
+- [x] Documented heuristic decisions pending real-data validation (keyterm priority, skip terms, abbreviation detection, upcoming parser decisions)
+- [x] 366 total tests passing (306 Phase 1a + 60 new)
 
-**Remaining:**
-- [ ] Pranav brings researched exercise JSON (deeper aliases, expert-level common_errors)
-- [ ] Swap into exercise_db.json, run tests, verify
+#### Day 2: Claude Parser — Tool Schema + Core Parsing ✅ COMPLETE
 
-#### Day 2: Claude Parser — Tool Schema + Core Parsing
+**Mode:** Collaborative (first AI-heavy day, Pranav learned tool_use end-to-end).
 
-**Mode:** Collaborative (first AI-heavy day, Pranav learns tool_use).
+Built `services/parser.py` incrementally — concept-by-concept with Pranav making design decisions. Two tool schemas (`record_exercise_card` + `record_observation_card`) where the tool name IS the classification. 10-rule system prompt. Frozen dataclasses (`ParsedSet`, `ParsedExerciseCard`, `ParsedObservationCard`, `ParserResult`). Created `concepts/2026-02-24.md` — comprehensive learning document covering tool_use, token generation, vertical AI moat, intelligence split, mocking patterns. Audit agent found 4 real issues (malformed set KeyError, untested mixed fields, unknown tool names, flag_reason gap). Staff engineer review found 2 more (unused imports, missing edge case test).
 
-- Design tool_use schema matching SessionEntry model (exercise_card + observation_card tools)
-- Write system prompt for the parser
-- Build `services/parser.py` — sends transcript to Claude with tool_use, returns structured data
-- Core parsing: single exercises, basic set/rep/weight extraction
-- Add `anthropic` to requirements.txt
-- Tests: parser unit tests with mocked Claude responses
+**Result:** 396 total tests (366 existing + 30 new parser tests), all green.
 
-#### Day 3: Parser — Intent Classification + Additive Parsing + Context
+#### Day 3: Parser — Intent Classification + Additive Parsing + Context ✅ COMPLETE
 
 **Mode:** Collaborative.
 
-- Intent classification: new exercise vs additive info ("actually that was RPE 8") vs observation vs correction ("no wait, 80 not 85")
-- Additive parsing: "also, sets 2 through 4 were at RPE 8" modifies existing card
-- Session context: phone sends prior entries, parser uses them to resolve references ("same weight", "dropped to 75")
-- Tests: intent classification tests, additive parsing tests
+Built session context formatting (`format_session_context()` + helpers) — prior entries formatted as numbered readable text ([1], [2]) in user message. Added `modify_exercise_card` as third tool — target_entry_id for referencing context entries, action ("add"/"correct") for merge behavior, target_sets for set-level targeting. Five new system prompt rules (11-15) covering intent routing, no modify without context, ambiguity handling, modify scope, conservative correction. Pranav contributed key edge cases: trainer re-statement (records sets individually then summarizes), conservative replace (don't overwrite unless explicitly correcting). Product decision logged for Day 5: parser ambiguity flags must not become observation cards — return as `clarifications_needed` in API response instead.
 
-#### Day 4: Validation Layer
+**Result:** 433 total tests (396 existing + 37 new), all green.
+
+#### Day 4: Validation Layer ✅ COMPLETE
 
 **Mode:** Independent.
 
-- `services/validation.py` — fuzzy matching exercise names to canonical DB (rapidfuzz)
-- Weight normalization: "185 pounds" → 83.9 kg, "80 kilos" → 80.0 kg, bare numbers default to context
-- Set expansion: "3 sets of 10 at 80" → 3 individual set records
-- Pain extraction: detect pain/injury mentions, map body parts, extract severity
-- Add `rapidfuzz` to requirements.txt
-- Tests: fuzzy matching, weight conversion, set expansion, pain extraction
+Built `services/validation.py` in two passes. First pass: exercise fuzzy matching (rapidfuzz WRatio against 142-exercise DB with 3,466 aliases), weight normalization (lbs→kg), set validation, pain extraction (keyword + body part + severity mapping), card validators, and orchestration. Second pass: hardening for real trainer speech — word-boundary regex (eliminated "pulldown"/"reached" false positives), 30 new pain keywords (sounds, states, colloquial, sensations), 33 new body parts (spine, muscles, joints, digits), 10 new severity modifiers, negation handling ("no knee pain" skipped), comma clause splitting, suspicious value warnings. Added `preferred_weight_unit` to Client model (Literal["kg", "lbs"], default "kg") for per-client weight unit defaults — trainers with clients in different countries need this.
 
-#### Day 5: Voice Clip Endpoint + Integration Tests
+- [x] `services/validation.py` — fuzzy match, weight normalization, pain extraction, card validators
+- [x] Validation hardening — word boundary regex, negation, comma splitting, expanded keywords/body parts/modifiers, suspicious value warnings
+- [x] Per-client `preferred_weight_unit` — model column, schema fields, migration, 4 client tests
+- [x] Add `rapidfuzz` to requirements.txt
+- [x] 119 validation tests + 4 client tests = 552 total tests passing
+
+**Result:** 552 total tests (433 existing + 115 validation + 4 client), all green.
+
+#### Day 5: Voice Clip Endpoint + Integration Tests ✅ COMPLETE
 
 **Mode:** Independent, Pranav reviews.
 
-- `api/voice.py` — `POST /api/v1/sessions/{session_id}/voice-clip`
-- Wire Deepgram → parser → validation into single endpoint
-- Return structured entry + timing breakdown (transcription_ms, parsing_ms, validation_ms)
-- Register router in main.py
-- Integration tests: full pipeline with mocked external APIs
+Built `services/voice.py` (orchestration service) and `api/voice.py` (endpoint). Pipeline: audio upload → Deepgram transcription → Claude parser → validation → DB persistence. Returns structured entries + timing breakdown. Clarification handling: yellow-flagged observations returned as `clarifications_needed` (not persisted). Added `VoiceClipResponse`, `TimingBreakdownResponse`, `ClarificationItem`, `ValidationWarningResponse` schemas. Registered voice router in main.py. Added `python-multipart` dependency.
+
+42 tests (15 integration + 27 hardening): happy path, modification updates, clarifications not persisted, non-yellow observations persisted, 404/422 error paths, empty transcript, timing fields, warnings propagation, fuzzy match. Hardening: 12 helper unit tests (_entry_to_context_dict, _validated_set_to_db_format, _build_modification_kwargs), 3 weight unit tests (lbs→kg conversion, kg passthrough, None defaults), 6 modification edge cases (targeting observation, form_notes/cues append, target_sets subset, out-of-range, weight correction), 3 mixed content clips (exercise+observation, exercise+clarification, exercise+modification), 3 data integrity (sequence_order, volume, canonical match).
+
+**Result:** 594 total tests (552 existing + 42 new), all green.
 
 #### Day 15 Golden Audit (Days 1-5 Checkpoint) ✅ COMPLETE
 
@@ -241,6 +237,29 @@ Three audit agents read every Phase 1b source and test file (~5,000 lines). Most
 - Complete test suite: 30-40 tests total
 - End-of-phase audit: re-read every file, adversarial review, full suite green
 - Update seed.py with expanded exercise database
+
+### Decisions Pending Real-Data Validation
+
+These are heuristic/judgment calls that are reasonable but can only be confirmed with real trainer audio. When something in the pipeline isn't working, check these first.
+
+| Decision | Where | What we assumed | How we'd know it's wrong | What to do |
+|----------|-------|-----------------|--------------------------|------------|
+| Keyterm priority order | `transcription.py:build_keyterm_list()` | Gym jargon > abbreviations > multi-word names is the right priority for 100 Deepgram keyterm slots | Deepgram consistently mangles a multi-word exercise name that got bumped off the list by a low-value abbreviation | Re-order priorities or add frequency weighting based on which exercises trainers actually say most |
+| Skip terms list | `transcription.py:_SKIP_TERMS` | Common single words (squat, bench, curl, fly, etc.) don't need keyterm help | Deepgram misrecognizes one of these words in context (e.g., "fly" → "fry") | Remove from skip list, give it a keyterm slot |
+| Abbreviation detection | `transcription.py:_is_abbreviation()` | All-caps + ≤6 chars catches all abbreviations worth prompting | A trainer uses an abbreviation that's lowercase or >6 chars and Deepgram misses it | Expand the heuristic or add explicit aliases to the exercise DB |
+| Gym jargon list | `transcription.py:GYM_TERMS` | 19 hardcoded terms (RPE, AMRAP, superset, etc.) are the most important gym vocabulary | A trainer regularly uses a jargon term we missed (e.g., "myo-reps", "cluster set") and Deepgram mangles it | Add to GYM_TERMS list |
+
+**Upcoming (Days 2-7) — add to this table as we build:**
+
+| Decision | Day | What to watch for |
+|----------|-----|-------------------|
+| Claude parser prompt wording | Day 2-3 | How we instruct Claude to parse transcripts. The biggest heuristic in the project. Tuned on Day 6 with real transcripts. |
+| Intent classification logic | Day 3 | How Claude decides "new exercise" vs "additive info" vs "correction" vs "observation." Could be fragile with ambiguous speech. |
+| Fuzzy match threshold | Day 4 | What similarity score cutoff we use for exercise name matching. Too low = false matches, too high = misses. |
+| Weight unit detection | Day 4 | How we decide if a bare number like "80" means kg or lbs. Context-dependent heuristic. |
+| Exercise alias coverage | Ongoing | Trainers might use phrases not in our 3,466 aliases. Only real usage reveals gaps. Extra aliases don't hurt — missing ones do. |
+
+**When to check this table:** After Day 6 (real transcript testing), and whenever the pipeline produces unexpected results.
 
 ### Key Concepts
 
