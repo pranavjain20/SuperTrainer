@@ -55,6 +55,18 @@ Updated after every correction.
 
 - **"Done" means committed.** On Day 5, declared golden audit complete and ready for Day 6 while 18 files of changes sat uncommitted. Pranav had to ask "have you committed?" — that should never happen. The rule: if it's not committed, it's not done. Before saying "done" or "clean" or "ready to move on," the checklist is: (1) tests pass, (2) changes committed, (3) nothing left hanging. This is what separates a co-architect from someone who needs micromanaging. Big statements ("everything is clean") require big verification.
 
+## Day 2 (Phase 1b)
+
+- **The audit is STILL not automatic.** Day 2 Phase 1b: wrote parser.py + test_parser.py, ran the audit agent, fixed the audit findings, and was about to say "done" — without doing the staff engineer review myself. Pranav had to ask "have we done the staff engineer check?" That's the FOURTH time (Days 1, 4, 5, and now Day 2 Phase 1b). The audit agent is step 1. The personal staff engineer re-read is step 2. Both must happen, automatically, before ANY mention of "done" or "wrapping up." Found: 6 unused imports in test file, missing "all sets malformed" edge case test. Both real issues that would have shipped unnoticed.
+
+- **Save important reflections immediately — don't trust the context window.** Pranav gave a deep, important reflection about the tension between AI-assisted learning speed and depth of understanding. He explicitly said "this is golden, very important stuff for me to remember." It got lost when the context compacted. The rule: when Pranav shares something he calls important, write it to a scratch file (`devlog/scratch-YYYY-MM-DD.md`) immediately. Don't wait for the devlog. Context compaction is unpredictable. If it matters, save it now.
+
+## Day 5 (Phase 1b) — Testing Workflow
+
+- **Treat testing as its own task, not a subtask of implementation.** AI defaults to "build the thing and test as I go." A human nudging "now step back and think about testing separately" produces meaningfully better coverage. On Day 5, the implementation plan produced 15 integration tests — solid, but standard. When Pranav pushed for a dedicated testing pass, the result was a separate plan that explored the codebase specifically for coverage gaps, found 7 categories of missing tests, and produced 27 targeted additions. Two plans instead of one. Without the nudge, a vacuous assertion that hid a real guard failure would have shipped. The pattern: always create a dedicated testing plan as a separate task after implementation is done. Don't fold testing into the build plan.
+
+- **Vacuous assertion detection.** When testing guards/normalization, always use values where raw ≠ normalized. If `weight=85, weight_unit="kg"` is used for both input and expected output, the test passes regardless of whether the guard works. Use lbs values (raw=185, normalized=83.9) so a broken guard produces a visibly wrong result.
+
 ## Context Window Management
 
 - **Proactively flag context window issues.** Failed TWICE now — Day 5/6 boundary and Day 9/10 boundary. Both times Pranav had to ask "new terminal?" instead of me telling him first. This is in MEMORY.md as a non-negotiable. The rule: BEFORE the user finishes a day or asks what's next, check if context is heavy. If it is, say "heads up, context is full — start a fresh terminal for Day X" BEFORE they have to ask. No more misses on this.
