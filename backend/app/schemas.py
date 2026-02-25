@@ -1,6 +1,6 @@
 import uuid
 from datetime import date, datetime
-from typing import Generic, TypeVar
+from typing import Generic, Literal, TypeVar
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
@@ -72,6 +72,7 @@ class ClientCreate(BaseModel):
     training_start_date: date | None = None
     goals: list[str] | None = None
     injury_history: str | None = None
+    preferred_weight_unit: Literal["kg", "lbs"] | None = "kg"
 
 
 class ClientUpdate(BaseModel):
@@ -82,6 +83,7 @@ class ClientUpdate(BaseModel):
     training_start_date: date | None = None
     goals: list[str] | None = None
     injury_history: str | None = None
+    preferred_weight_unit: Literal["kg", "lbs"] | None = None
     archived: bool | None = None
 
 
@@ -97,6 +99,7 @@ class ClientResponse(BaseModel):
     training_start_date: date | None
     goals: list[str] | None
     injury_history: str | None
+    preferred_weight_unit: Literal["kg", "lbs"] | None
     archived: bool
     created_at: datetime
 
@@ -418,6 +421,41 @@ class BrainConversationResponse(BaseModel):
 class BrainConversationListResponse(BaseModel):
     data: list[BrainConversationResponse]
     meta: PaginationMeta = PaginationMeta()
+
+
+# --- BrainMessage ---
+
+
+# --- Voice Clip ---
+
+
+class TimingBreakdownResponse(BaseModel):
+    transcription_ms: int
+    parsing_ms: int
+    validation_ms: int
+    persistence_ms: int
+    total_ms: int
+
+
+class ClarificationItem(BaseModel):
+    observation_text: str
+    flag_reason: str | None = None
+
+
+class ValidationWarningResponse(BaseModel):
+    field: str
+    code: str
+    message: str
+
+
+class VoiceClipResponse(BaseModel):
+    entries_created: list[SessionEntryResponse]
+    entries_modified: list[SessionEntryResponse]
+    clarifications_needed: list[ClarificationItem]
+    warnings: list[ValidationWarningResponse]
+    transcript: str
+    confidence: float
+    timing: TimingBreakdownResponse
 
 
 # --- BrainMessage ---

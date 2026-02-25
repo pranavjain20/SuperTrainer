@@ -88,6 +88,7 @@ class Client(Base):
     training_start_date: Mapped[date | None] = mapped_column(Date)
     goals: Mapped[list[str] | None] = mapped_column(ARRAY(String))
     injury_history: Mapped[str | None] = mapped_column(Text)
+    preferred_weight_unit: Mapped[str | None] = mapped_column(String(10), default="kg")
     archived: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 

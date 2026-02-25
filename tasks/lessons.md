@@ -67,6 +67,10 @@ Updated after every correction.
 
 - **Vacuous assertion detection.** When testing guards/normalization, always use values where raw ≠ normalized. If `weight=85, weight_unit="kg"` is used for both input and expected output, the test passes regardless of whether the guard works. Use lbs values (raw=185, normalized=83.9) so a broken guard produces a visibly wrong result.
 
+## Git Workflow
+
+- **Docs go on master, code goes on feature branch.** STATUS.md, README.md, devlogs, and other documentation updates must be committed and pushed to master — not the feature branch. Code changes go on the feature branch. This was established in the workflow but I kept putting everything on the feature branch. Cherry-picking after the fact causes merge conflicts. Do it right the first time.
+
 ## Context Window Management
 
 - **Proactively flag context window issues.** Failed TWICE now — Day 5/6 boundary and Day 9/10 boundary. Both times Pranav had to ask "new terminal?" instead of me telling him first. This is in MEMORY.md as a non-negotiable. The rule: BEFORE the user finishes a day or asks what's next, check if context is heavy. If it is, say "heads up, context is full — start a fresh terminal for Day X" BEFORE they have to ask. No more misses on this.

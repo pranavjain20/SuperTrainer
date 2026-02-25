@@ -22,6 +22,7 @@ from app.models import (
     SessionPlan,
     Trainer,
 )
+from app.services.transcription import load_exercise_db
 
 
 def _utcnow() -> datetime:
@@ -42,164 +43,22 @@ def _compute_volume(sets: list[dict]) -> float:
 # ---------------------------------------------------------------------------
 
 def _seed_exercises(db: AsyncSession) -> list[Exercise]:
-    exercises_data = [
-        {
-            "canonical_name": "Barbell Back Squat",
-            "aliases": ["back squat", "squat", "barbell squat"],
-            "category": "compound",
-            "primary_muscles": ["quadriceps", "glutes", "hamstrings"],
-            "equipment": ["barbell", "squat rack"],
-            "difficulty": "intermediate",
-        },
-        {
-            "canonical_name": "Barbell Bench Press",
-            "aliases": ["bench press", "bench", "flat bench"],
-            "category": "compound",
-            "primary_muscles": ["chest", "triceps", "anterior deltoid"],
-            "equipment": ["barbell", "bench"],
-            "difficulty": "intermediate",
-        },
-        {
-            "canonical_name": "Deadlift",
-            "aliases": ["conventional deadlift", "dead lift"],
-            "category": "compound",
-            "primary_muscles": ["hamstrings", "glutes", "erectors", "traps"],
-            "equipment": ["barbell"],
-            "difficulty": "intermediate",
-        },
-        {
-            "canonical_name": "Overhead Press",
-            "aliases": ["OHP", "military press", "shoulder press"],
-            "category": "compound",
-            "primary_muscles": ["anterior deltoid", "triceps", "upper chest"],
-            "equipment": ["barbell"],
-            "difficulty": "intermediate",
-        },
-        {
-            "canonical_name": "Barbell Row",
-            "aliases": ["bent-over row", "BB row", "pendlay row"],
-            "category": "compound",
-            "primary_muscles": ["lats", "rhomboids", "biceps"],
-            "equipment": ["barbell"],
-            "difficulty": "intermediate",
-        },
-        {
-            "canonical_name": "Goblet Squat",
-            "aliases": ["goblet", "KB squat"],
-            "category": "compound",
-            "primary_muscles": ["quadriceps", "glutes"],
-            "equipment": ["dumbbell", "kettlebell"],
-            "difficulty": "beginner",
-        },
-        {
-            "canonical_name": "Front Squat",
-            "aliases": ["front squat", "FS"],
-            "category": "compound",
-            "primary_muscles": ["quadriceps", "core", "glutes"],
-            "equipment": ["barbell", "squat rack"],
-            "difficulty": "advanced",
-        },
-        {
-            "canonical_name": "Leg Press",
-            "aliases": ["leg press machine", "LP"],
-            "category": "compound",
-            "primary_muscles": ["quadriceps", "glutes"],
-            "equipment": ["leg press machine"],
-            "difficulty": "beginner",
-        },
-        {
-            "canonical_name": "Lat Pulldown",
-            "aliases": ["pulldown", "lat pull"],
-            "category": "pull",
-            "primary_muscles": ["lats", "biceps", "rear deltoid"],
-            "equipment": ["cable machine"],
-            "difficulty": "beginner",
-        },
-        {
-            "canonical_name": "Seated Row",
-            "aliases": ["cable row", "seated cable row"],
-            "category": "pull",
-            "primary_muscles": ["lats", "rhomboids", "biceps"],
-            "equipment": ["cable machine"],
-            "difficulty": "beginner",
-        },
-        {
-            "canonical_name": "Pull-Up",
-            "aliases": ["pullup", "chin-up", "chinup"],
-            "category": "pull",
-            "primary_muscles": ["lats", "biceps", "forearms"],
-            "equipment": ["pull-up bar"],
-            "difficulty": "intermediate",
-        },
-        {
-            "canonical_name": "Romanian Deadlift",
-            "aliases": ["RDL", "stiff-leg deadlift"],
-            "category": "compound",
-            "primary_muscles": ["hamstrings", "glutes", "erectors"],
-            "equipment": ["barbell", "dumbbells"],
-            "difficulty": "intermediate",
-        },
-        {
-            "canonical_name": "Lunges",
-            "aliases": ["walking lunges", "forward lunges", "reverse lunges"],
-            "category": "compound",
-            "primary_muscles": ["quadriceps", "glutes"],
-            "equipment": ["dumbbells", "bodyweight"],
-            "difficulty": "beginner",
-        },
-        {
-            "canonical_name": "Step-Ups",
-            "aliases": ["box step-up", "step up"],
-            "category": "compound",
-            "primary_muscles": ["quadriceps", "glutes"],
-            "equipment": ["box", "dumbbells"],
-            "difficulty": "beginner",
-        },
-        {
-            "canonical_name": "Lateral Raise",
-            "aliases": ["side raise", "DB lateral raise"],
-            "category": "isolation",
-            "primary_muscles": ["lateral deltoid"],
-            "equipment": ["dumbbells"],
-            "difficulty": "beginner",
-        },
-        {
-            "canonical_name": "Dead Bug",
-            "aliases": ["dead bugs"],
-            "category": "core",
-            "primary_muscles": ["transverse abdominis", "rectus abdominis"],
-            "equipment": ["bodyweight"],
-            "difficulty": "beginner",
-        },
-        {
-            "canonical_name": "Plank",
-            "aliases": ["front plank", "forearm plank"],
-            "category": "core",
-            "primary_muscles": ["transverse abdominis", "rectus abdominis", "obliques"],
-            "equipment": ["bodyweight"],
-            "difficulty": "beginner",
-        },
-        {
-            "canonical_name": "Bird Dog",
-            "aliases": ["bird-dog"],
-            "category": "core",
-            "primary_muscles": ["erectors", "glutes", "core"],
-            "equipment": ["bodyweight"],
-            "difficulty": "beginner",
-        },
-        {
-            "canonical_name": "Band Pull-Apart",
-            "aliases": ["pull-apart", "band pull apart"],
-            "category": "accessory",
-            "primary_muscles": ["rear deltoid", "rhomboids"],
-            "equipment": ["resistance band"],
-            "difficulty": "beginner",
-        },
-    ]
+    """Seed exercises from the canonical exercise_db.json file."""
+    exercises_data = load_exercise_db()
+
+    # Only pass fields that the Exercise model actually has as columns.
+    # This lets the JSON carry extra data (secondary_muscles, research_notes)
+    # without breaking the seed.
+    from sqlalchemy import inspect as sa_inspect
+
+    model_columns = {c.key for c in sa_inspect(Exercise).mapper.column_attrs}
+    auto_fields = {"id", "created_at"}  # set by DB, not from JSON
+    accepted_fields = model_columns - auto_fields
 
     exercises = []
     for data in exercises_data:
-        ex = Exercise(**data)
+        filtered = {k: v for k, v in data.items() if k in accepted_fields}
+        ex = Exercise(**filtered)
         db.add(ex)
         exercises.append(ex)
     return exercises

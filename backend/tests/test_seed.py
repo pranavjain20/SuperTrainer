@@ -54,10 +54,13 @@ async def test_entity_counts(seeded_db):
 
 
 async def test_exercise_table_populated(seeded_db):
-    """Exercise reference table has correct count."""
+    """Exercise reference table matches exercise_db.json count."""
     db = seeded_db
+    from app.services.transcription import load_exercise_db
+
+    expected_count = len(load_exercise_db())
     count = (await db.execute(select(func.count()).select_from(Exercise))).scalar_one()
-    assert count == 19
+    assert count == expected_count
 
 
 async def test_session_entry_count_and_types(seeded_db):
@@ -175,7 +178,9 @@ async def test_idempotent_seed_twice(seeded_db):
     assert trainer_count == 1
     assert client_count == 5
     assert session_count == 34
-    assert exercise_count == 19
+    from app.services.transcription import load_exercise_db
+
+    assert exercise_count == len(load_exercise_db())
     assert injury_count == 4
 
 

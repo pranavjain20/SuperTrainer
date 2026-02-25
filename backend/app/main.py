@@ -12,6 +12,7 @@ from app.api.entries import router as entries_router
 from app.api.injury_flags import router as injury_flags_router
 from app.api.plans import router as plans_router
 from app.api.sessions import router as sessions_router
+from app.api.voice import router as voice_router
 
 logger = logging.getLogger("supertrainer")
 
@@ -75,6 +76,7 @@ app.include_router(sessions_router, prefix="/api/v1")
 app.include_router(entries_router, prefix="/api/v1")
 app.include_router(injury_flags_router, prefix="/api/v1")
 app.include_router(plans_router, prefix="/api/v1")
+app.include_router(voice_router, prefix="/api/v1")
 
 
 @app.get("/api/v1/health")

@@ -2,41 +2,54 @@
 
 ## Phase 1b: Voice Pipeline (Week 3-4)
 
-### Day 1: Exercise Database + Deepgram Service
-- [ ] Expand exercises from 19 → ~100 (aliases, categories, muscles, equipment)
-- [ ] Select top 100 keyterms for Deepgram prompting (API limit: 100)
-- [ ] Create `services/transcription.py` — Deepgram STT integration (async, error handling)
-- [ ] Add `deepgram-sdk` to requirements.txt
-- [ ] Unit tests: Deepgram service with mocked API responses
+### Day 1: Exercise Database + Deepgram Service ✅ COMPLETE
+- [x] Expand exercises from 19 → 142 (3,466 aliases, specific anatomy, expert common_errors)
+- [x] Select top 100 keyterms for Deepgram prompting (priority algorithm: gym jargon > abbreviations > multi-word)
+- [x] Create `services/transcription.py` — Deepgram STT integration (async, error handling)
+- [x] Add `deepgram-sdk` to requirements.txt
+- [x] Unit tests: Deepgram service with mocked API responses (24 tests)
+- [x] Comprehensive exercise DB test suite — comparative metrics, trainer speech recognition, structural quality, keyterm coverage (36 tests)
+- [x] Document heuristic decisions pending real-data validation in STATUS.md
+- [x] 366 total tests passing
 
-### Day 2: Claude Parser — Tool Schema + Core Parsing
-- [ ] Design tool_use schema matching SessionEntry model (exercise_card + observation_card tools)
-- [ ] Write system prompt for parser
-- [ ] Create `services/parser.py` — Claude transcript → structured data via tool_use
-- [ ] Core parsing: single exercises, basic set/rep/weight extraction
-- [ ] Add `anthropic` to requirements.txt
-- [ ] Unit tests: parser with mocked Claude responses
+### Day 2: Claude Parser — Tool Schema + Core Parsing ✅ COMPLETE
+- [x] Design tool_use schema matching SessionEntry model (exercise_card + observation_card tools)
+- [x] Write system prompt for parser (10 rules)
+- [x] Create `services/parser.py` — Claude transcript → structured data via tool_use
+- [x] Core parsing: single exercises, basic set/rep/weight extraction
+- [x] Add `anthropic` to requirements.txt
+- [x] Unit tests: parser with mocked Claude responses (30 tests)
+- [x] Created `concepts/2026-02-24.md` — tool_use learning document
+- [x] 396 total tests passing
 
-### Day 3: Parser — Intent Classification + Additive Parsing + Context
-- [ ] Intent classification: new exercise vs additive vs observation vs correction
-- [ ] Additive parsing: "also, sets 2 through 4 were at RPE 8" modifies existing card
-- [ ] Session context: resolve references ("same weight", "dropped to 75") using prior entries
-- [ ] Tests: intent classification, additive parsing, context resolution
+### Day 3: Parser — Intent Classification + Additive Parsing + Context ✅ COMPLETE
+- [x] Session context formatting: `format_session_context()` with numbered entry IDs
+- [x] `parse_transcript()` accepts `session_context` parameter (backward compatible)
+- [x] `modify_exercise_card` tool schema (target_entry_id, action, target_sets, updates)
+- [x] `ParsedModification` dataclass + wiring in `_extract_parser_result()`
+- [x] System prompt rules 11-15 (intent routing, ambiguity handling, conservative correction)
+- [x] Integration tests: intent classification, edge cases, backward compatibility
+- [x] 433 total tests passing (37 new)
 
-### Day 4: Validation Layer
-- [ ] Create `services/validation.py` — fuzzy match exercise names to canonical DB (rapidfuzz)
-- [ ] Weight normalization: "185 pounds" → 83.9 kg, "80 kilos" → 80.0 kg
-- [ ] Set expansion: "3 sets of 10 at 80" → 3 individual set records
-- [ ] Pain extraction: detect pain/injury mentions, map body parts, extract severity
-- [ ] Add `rapidfuzz` to requirements.txt
-- [ ] Tests: fuzzy matching, weight conversion, set expansion, pain extraction
+### Day 4: Validation Layer ✅ COMPLETE
+- [x] Create `services/validation.py` — fuzzy match exercise names to canonical DB (rapidfuzz)
+- [x] Weight normalization: "185 pounds" → 83.9 kg, "80 kilos" → 80.0 kg
+- [x] **Per-client weight unit default:** `preferred_weight_unit` column on Client (Literal["kg", "lbs"], default "kg"), migration, 4 client tests
+- [x] ~~Set expansion: "3 sets of 10 at 80" → 3 individual set records~~ *(handled by parser, not validation)*
+- [x] Pain extraction: detect pain/injury mentions, map body parts, extract severity
+- [x] Validation hardening: word-boundary regex, 30 new pain keywords, 33 new body parts, 10 severity modifiers, negation handling, comma clause splitting, suspicious value warnings
+- [x] Add `rapidfuzz` to requirements.txt
+- [x] Tests: 115 validation tests + 4 client tests, 552 total passing
 
-### Day 5: Voice Clip Endpoint + Integration Tests
-- [ ] Create `api/voice.py` — `POST /api/v1/sessions/{session_id}/voice-clip`
-- [ ] Wire Deepgram → parser → validation pipeline
-- [ ] Return structured entry + timing breakdown (transcription_ms, parsing_ms, validation_ms)
-- [ ] Register voice router in main.py
-- [ ] Integration tests: full pipeline with mocked external APIs
+### Day 5: Voice Clip Endpoint + Integration Tests ✅ COMPLETE
+- [x] Create `api/voice.py` — `POST /api/v1/sessions/{session_id}/voice-clip`
+- [x] Wire Deepgram → parser → validation pipeline via `services/voice.py`
+- [x] Return structured entry + timing breakdown (transcription_ms, parsing_ms, validation_ms, persistence_ms)
+- [x] **Clarification handling:** Yellow-flagged observations returned as `clarifications_needed` (not persisted as entries)
+- [x] Register voice router in main.py
+- [x] Integration tests: 15 pipeline tests with mocked Deepgram + Claude
+- [x] Test hardening: 27 additional tests (helpers, weight units, modification edge cases, mixed content, data integrity)
+- [x] 594 total tests passing
 
 ### Day 6: Real Transcript Testing + Prompt Tuning
 - [ ] Pranav writes 5-10 sample transcripts of real trainer speech

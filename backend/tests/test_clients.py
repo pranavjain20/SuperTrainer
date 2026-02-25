@@ -81,6 +81,7 @@ async def test_create_client_all_fields(client, trainer_for_api):
         "phone": "555-1234",
         "goals": ["strength", "flexibility"],
         "injury_history": "ACL tear 2024",
+        "preferred_weight_unit": "lbs",
     })
     assert response.status_code == 201
     data = response.json()["data"]
@@ -89,6 +90,7 @@ async def test_create_client_all_fields(client, trainer_for_api):
     assert data["phone"] == "555-1234"
     assert data["goals"] == ["strength", "flexibility"]
     assert data["injury_history"] == "ACL tear 2024"
+    assert data["preferred_weight_unit"] == "lbs"
     assert data["archived"] is False
     assert "id" in data
 
@@ -101,6 +103,7 @@ async def test_create_client_minimal(client, trainer_for_api):
     assert data["email"] is None
     assert data["phone"] is None
     assert data["goals"] is None
+    assert data["preferred_weight_unit"] == "kg"  # default
 
 
 async def test_create_client_empty_goals(client, trainer_for_api):
@@ -194,6 +197,56 @@ async def test_update_client_empty_name_422(client, trainer_for_api):
     client_id = create_resp.json()["data"]["id"]
 
     response = await client.patch(f"/api/v1/clients/{client_id}", json={"name": ""})
+    assert response.status_code == 422
+
+
+# --- Preferred Weight Unit ---
+
+
+async def test_update_preferred_weight_unit(client, trainer_for_api):
+    create_resp = await client.post("/api/v1/clients", json={"name": "Unit Test"})
+    client_id = create_resp.json()["data"]["id"]
+    assert create_resp.json()["data"]["preferred_weight_unit"] == "kg"
+
+    response = await client.patch(
+        f"/api/v1/clients/{client_id}", json={"preferred_weight_unit": "lbs"},
+    )
+    assert response.status_code == 200
+    assert response.json()["data"]["preferred_weight_unit"] == "lbs"
+
+
+async def test_update_preferred_weight_unit_preserves_other_fields(client, trainer_for_api):
+    create_resp = await client.post("/api/v1/clients", json={
+        "name": "Keep My Name",
+        "email": "keep@test.com",
+    })
+    client_id = create_resp.json()["data"]["id"]
+
+    response = await client.patch(
+        f"/api/v1/clients/{client_id}", json={"preferred_weight_unit": "lbs"},
+    )
+    assert response.status_code == 200
+    data = response.json()["data"]
+    assert data["preferred_weight_unit"] == "lbs"
+    assert data["name"] == "Keep My Name"
+    assert data["email"] == "keep@test.com"
+
+
+async def test_create_client_invalid_weight_unit_422(client, trainer_for_api):
+    response = await client.post("/api/v1/clients", json={
+        "name": "Bad Unit",
+        "preferred_weight_unit": "stones",
+    })
+    assert response.status_code == 422
+
+
+async def test_update_client_invalid_weight_unit_422(client, trainer_for_api):
+    create_resp = await client.post("/api/v1/clients", json={"name": "Bad Update"})
+    client_id = create_resp.json()["data"]["id"]
+
+    response = await client.patch(
+        f"/api/v1/clients/{client_id}", json={"preferred_weight_unit": "stones"},
+    )
     assert response.status_code == 422
 
 
