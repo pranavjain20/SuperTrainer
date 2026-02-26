@@ -1,8 +1,26 @@
 # SuperTrainer — Current Status
 
 **Last updated:** Feb 25, 2026
-**Current phase:** Phase 1b complete. Phase 2 planning next.
-**Next action:** Phase 2 planning. Walkthrough complete — guides at `docs/guides/phase-1a.md` and `docs/guides/phase-1b.md`.
+**Current phase:** Phase 2 — Mobile App. Day 1 complete.
+**Next action:** Phase 2 Day 2 — API client + TypeScript types.
+
+---
+
+## Phase 2: Mobile App — IN PROGRESS
+
+### Pre-Work: Backend Addition ✅ COMPLETE
+
+Added `GET /api/v1/sessions` — trainer-level session listing with optional `scheduled_for_date` query param. Filters by `scheduled_for` OR `started_at` matching the date (so ad-hoc sessions without `scheduled_for` still appear). 8 new tests, 691 total backend tests passing.
+
+### Day 1: Project Setup + Tab Navigation ✅ COMPLETE
+
+**SDK:** Expo SDK 54 (SDK 55 too new for Expo Go on App Store). React 19.1, RN 0.81.5, Reanimated v4, Expo Router v6.
+**Styling:** NativeWind v4 (Tailwind for RN) — configured and working, no issues.
+**Dependencies:** TanStack Query v5, Zustand v5, expo-av (audio), expo-haptics.
+**Navigation:** Four-tab layout (Home, Clients, Brain, Session). Clients and Session tabs have their own stack navigators for nested navigation.
+**Root layout:** QueryClientProvider wrapping entire app, splash screen handling, font loading.
+**Verified:** App runs on physical phone via Expo Go. Fast Refresh working — edit file, save, phone updates in ~1 second.
+**Concepts doc:** `concepts/phase-2-day-1.md` — React, React Native, Expo, file-based routing, NativeWind, TanStack Query, Zustand.
 
 ---
 

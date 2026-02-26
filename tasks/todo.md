@@ -1,5 +1,77 @@
 # SuperTrainer — Task Tracker
 
+## Phase 2: Mobile App
+
+### Pre-Work: Backend Addition ✅ COMPLETE
+- [x] `GET /api/v1/sessions` — trainer-level session listing with date filter
+- [x] `list_sessions_by_trainer()` service function
+- [x] 8 new tests (all-sessions, date filter scheduled_for, date filter started_at, no results, no filter, pagination, cross-trainer exclusion, ordering)
+- [x] 691 total backend tests passing
+
+### Day 1: Project Setup + Tab Navigation ✅ COMPLETE
+- [x] Create Expo project (SDK 54)
+- [x] Install dependencies: TanStack Query, Zustand, expo-av, expo-haptics
+- [x] NativeWind v4 setup (tailwind.config, metro.config, babel.config, global.css)
+- [x] Four-tab navigation: Home, Clients, Brain, Session
+- [x] Clients + Session tabs have stack layouts for nested navigation
+- [x] Root layout with QueryClientProvider, splash screen, font loading
+- [x] Color palette (`src/constants/colors.ts`) + API config (`src/constants/config.ts`)
+- [x] App runs on physical phone via Expo Go
+- [x] Fast Refresh verified
+- [x] Concepts doc: `concepts/phase-2-day-1.md`
+
+### Day 2: API Client + TypeScript Types
+- [ ] `src/api/types.ts` — All TypeScript interfaces mirroring backend schemas
+- [ ] `src/api/client.ts` — Fetch wrapper (GET/POST/PATCH/DELETE/upload)
+- [ ] `src/api/clients.ts`, `sessions.ts`, `entries.ts`, `plans.ts`, `voice.ts` — endpoint functions
+- [ ] `src/constants/config.ts` — Update with correct local IP
+
+### Day 3: Home Screen + Client List
+- [ ] `src/hooks/useClients.ts` — TanStack Query hooks
+- [ ] `src/hooks/useSessions.ts` — Today's sessions hook
+- [ ] Home screen: today's sessions list, empty state
+- [ ] Clients screen: search, alphabetical FlatList, pull-to-refresh
+- [ ] ClientRow, SessionRow, EmptyState, LoadingState components
+
+### Day 4: Client Profile
+- [ ] `app/(tabs)/clients/[id].tsx` — Client profile screen
+- [ ] Header, goals tags, injury history, session history list
+- [ ] Dynamic route navigation from client list
+
+### Day 5: Session Screen + Record Button
+- [ ] Session screen layout (header, timeline, record button)
+- [ ] RecordButton with animation (Reanimated) and haptics
+- [ ] `useVoiceRecorder` hook wrapping expo-av
+- [ ] Audio permissions
+
+### Day 6: Voice Pipeline Integration + Live Timeline
+- [ ] Voice clip upload to backend
+- [ ] Zustand session store
+- [ ] Timeline component with ExerciseCard + ObservationCard
+- [ ] End-to-end flow: speak → upload → cards appear
+
+### Day 7: Inline Editing + Card Polish
+- [ ] Tap-to-edit on exercise/observation cards
+- [ ] Optimistic mutations via TanStack Query
+- [ ] Visual polish: shadows, spacing, flag indicators
+
+### Day 8: End Session Flow + Plan Dictation
+- [ ] Summary screen with session stats
+- [ ] Plan dictation (mini recorder or text input)
+- [ ] Cache invalidation after save
+
+### Day 9: Integration Testing + Bug Fixing + Audit
+- [ ] Full E2E flow on physical phone
+- [ ] Edge cases: empty session, rapid taps, network errors, backgrounding
+- [ ] Full test suite, staff engineer audit
+
+---
+
+## Phase 1b: Voice Pipeline — COMPLETE (683 tests)
+
+<details>
+<summary>Phase 1b completed tasks (click to expand)</summary>
+
 ## Phase 1b: Voice Pipeline (Week 3-4)
 
 ### Day 1: Exercise Database + Deepgram Service ✅ COMPLETE
@@ -74,6 +146,8 @@
 - [x] Response time ≤5s per parser call (avg 2.9s) — **96% (24/25)**
 - [x] 683 total tests, all green
 - [x] End-of-phase audit completed
+
+</details>
 
 ---
 
