@@ -42,10 +42,16 @@
 - [x] Splash screen switched to solid brand blue
 - [x] TypeScript clean, lint clean, staff engineer audit passed
 
-### Day 4: Client Profile
-- [ ] `app/(tabs)/clients/[id].tsx` — Client profile screen
-- [ ] Header, goals tags, injury history, session history list
-- [ ] Dynamic route navigation from client list
+### Day 4: Client Profile ✅ COMPLETE
+- [x] `app/(tabs)/clients/[id].tsx` — Tabbed profile (Overview / Sessions / Plans)
+- [x] Header with initials avatar, name, member-since
+- [x] Overview: goal pills + injury history pills
+- [x] Sessions: expandable cards with lazy-loaded entries (exercise tables + observation cards)
+- [x] Plans: plan cards with date headers and numbered items
+- [x] `src/hooks/useClient.ts` — useClient, useClientSessions, useClientPlans
+- [x] `src/utils/initials.ts`, `src/constants/styles.ts` — shared utilities
+- [x] Seed data: rewrote Sarah with per-set notes + observation cards between exercises
+- [x] Audit + staff review: clean
 
 ### Day 5: Session Screen + Record Button
 - [ ] Session screen layout (header, timeline, record button)

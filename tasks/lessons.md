@@ -71,6 +71,10 @@ Updated after every correction.
 
 - **Docs go on master, code goes on feature branch.** STATUS.md, README.md, devlogs, and other documentation updates must be committed and pushed to master — not the feature branch. Code changes go on the feature branch. This was established in the workflow but I kept putting everything on the feature branch. Cherry-picking after the fact causes merge conflicts. Do it right the first time.
 
+## Phase 2a — Frontend Must Match Backend Data
+
+- **Always read backend schemas/services BEFORE building frontend display code.** On Day 4, built the session entry display using the TypeScript `SetData` interface (which had `set_number`, `weight_kg`) — but the actual backend data uses different keys. Seed data uses `"set"` (not `"set_number"`) and `"weight_kg"`. Voice pipeline uses `"weight"` (not `"weight_kg"`) and has NO set number key at all. Two different formats, neither matching the TypeScript type. The rule: before displaying any backend data, read (1) the Pydantic response schema, (2) the service that creates the data (seed.py, voice.py), and (3) the actual DB format. Build the frontend from what the backend ACTUALLY returns, not from what the TypeScript type says it should be. The TypeScript types are aspirational — the JSONB `sets` field is `list[dict]` with no enforced schema.
+
 ## Context Window Management
 
 - **Proactively flag context window issues.** Failed TWICE now — Day 5/6 boundary and Day 9/10 boundary. Both times Pranav had to ask "new terminal?" instead of me telling him first. This is in MEMORY.md as a non-negotiable. The rule: BEFORE the user finishes a day or asks what's next, check if context is heavy. If it is, say "heads up, context is full — start a fresh terminal for Day X" BEFORE they have to ask. No more misses on this.

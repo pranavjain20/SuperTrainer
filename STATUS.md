@@ -1,8 +1,8 @@
 # SuperTrainer — Current Status
 
-**Last updated:** Feb 25, 2026
-**Current phase:** Phase 2a — Mobile App. Days 1-3 complete.
-**Next action:** Phase 2a Day 4 — Client Profile screen.
+**Last updated:** Feb 26, 2026
+**Current phase:** Phase 2a — Mobile App. Days 1-4 complete.
+**Next action:** Phase 2a Day 5 — Session screen + Record button.
 
 ---
 
@@ -37,6 +37,17 @@ Two working screens pulling live data from the backend. Home tab fetches today's
 Supporting infrastructure: date formatting utils (`formatTime`, `formatDayHeader`, `toISODateString` with local timezone), `useClients` + `useClientMap` hooks with 5min cache, `useTodaySessions` hook with client name join, three shared state components (Empty/Loading/Error). All four tabs use consistent custom headers with safe area insets. Splash screen switched from invisible Expo placeholder to solid brand blue.
 
 12 files created, 10 modified. TypeScript clean, lint clean.
+
+### Day 4: Client Profile Screen ✅ COMPLETE
+
+**Tabbed profile:** Three tabs (Overview, Sessions, Plans) with animated underline indicator. Header with large initials avatar, client name, member-since date.
+**Overview tab:** Goals as colored pills, injury history as red pills (split by sentence).
+**Sessions tab:** Expandable session cards — tap to lazy-load entries via `useQuery` with `enabled: expanded`. Entries render in `sequence_order`: exercise cards show set table (Set/Reps/Weight/RPE/Notes), observation cards render as left-border-accented cards between exercises.
+**Plans tab:** Plan cards with date header and numbered line items.
+**Data display:** Notes column only appears when at least one set has per-set notes. No form_notes or cues_given displayed. Observation cards appear between exercises based on sequence_order (not just at the end).
+**Hooks:** `src/hooks/useClient.ts` — `useClient(id)`, `useClientSessions(id)`, `useClientPlans(id)`.
+**Seed data:** Rewrote Sarah Chen's session with realistic data — pre-session observation ("hasn't slept much, energy below baseline"), per-set notes ("left glute felt tight", "rounding at bottom"), mid-session observation between exercises ("energy levels even lower after goblet squat and Romanian deadlift").
+**Utilities:** `src/utils/initials.ts`, `src/constants/styles.ts`, `formatMemberSince()` in dates.ts.
 
 ---
 
