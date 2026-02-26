@@ -1,8 +1,8 @@
 # SuperTrainer — Current Status
 
 **Last updated:** Feb 25, 2026
-**Current phase:** Phase 2 — Mobile App. Day 1 complete.
-**Next action:** Phase 2 Day 2 — API client + TypeScript types.
+**Current phase:** Phase 2 — Mobile App. Days 1-2 complete (setup + API layer).
+**Next action:** Phase 2 Day 3 — Home screen + client list (TanStack Query hooks, FlatList, pull-to-refresh). First real screens fetching data from the backend.
 
 ---
 
@@ -21,6 +21,14 @@ Added `GET /api/v1/sessions` — trainer-level session listing with optional `sc
 **Root layout:** QueryClientProvider wrapping entire app, splash screen handling, font loading.
 **Verified:** App runs on physical phone via Expo Go. Fast Refresh working — edit file, save, phone updates in ~1 second.
 **Concepts doc:** `concepts/phase-2-day-1.md` — React, React Native, Expo, file-based routing, NativeWind, TanStack Query, Zustand.
+
+### Day 2: API Client + TypeScript Types ✅ COMPLETE
+
+**Types:** 23 TypeScript interfaces + 6 type aliases in `src/api/types.ts`, mirroring every backend Pydantic schema (Client, Session, SessionEntry, SessionPlan, InjuryFlag, VoiceClipResponse, etc.). String literal unions for enums. UUIDs and datetimes as strings (JSON serialization).
+**Fetch wrapper:** `src/api/client.ts` — `apiGet`, `apiPost`, `apiPatch`, `apiDelete`, `apiUpload` (multipart). Typed `ApiError` class with status code and error code. Extracts errors from our `{ error: { code, message } }` envelope.
+**Endpoint modules:** 5 files covering all backend routes — clients (4 functions), sessions (6), entries (6), plans (5), voice (1). Every URL verified against actual backend router definitions.
+**Dev tooling:** ESLint 8 + eslint-config-expo + Prettier. Format-on-save in VS Code. npm scripts: `lint`, `lint:fix`, `format`, `typecheck`.
+**Audit finding:** Initial implementation assumed fully nested REST routes (e.g., `/clients/:id/sessions/:id`). Backend uses mixed nesting — lists are nested, single-resource CRUD is flat. 11 routes fixed before commit.
 
 ---
 

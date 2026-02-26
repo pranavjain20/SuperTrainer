@@ -20,11 +20,14 @@
 - [x] Fast Refresh verified
 - [x] Concepts doc: `concepts/phase-2-day-1.md`
 
-### Day 2: API Client + TypeScript Types
-- [ ] `src/api/types.ts` — All TypeScript interfaces mirroring backend schemas
-- [ ] `src/api/client.ts` — Fetch wrapper (GET/POST/PATCH/DELETE/upload)
-- [ ] `src/api/clients.ts`, `sessions.ts`, `entries.ts`, `plans.ts`, `voice.ts` — endpoint functions
-- [ ] `src/constants/config.ts` — Update with correct local IP
+### Day 2: API Client + TypeScript Types ✅ COMPLETE
+- [x] `src/api/types.ts` — 23 TypeScript interfaces + 6 type aliases mirroring all backend schemas
+- [x] `src/api/client.ts` — Fetch wrapper (GET/POST/PATCH/DELETE/upload) with typed errors
+- [x] `src/api/clients.ts`, `sessions.ts`, `entries.ts`, `plans.ts`, `voice.ts` — endpoint functions
+- [x] `src/constants/config.ts` — Updated with correct local IP
+- [x] ESLint 8 + Prettier + VS Code workspace settings + npm scripts
+- [x] Staff engineer audit: caught 11 route mismatches (all fixed), 3 medium issues (all fixed)
+- [x] Zero TypeScript errors, zero lint warnings
 
 ### Day 3: Home Screen + Client List
 - [ ] `src/hooks/useClients.ts` — TanStack Query hooks
