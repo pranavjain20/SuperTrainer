@@ -1,8 +1,8 @@
 # SuperTrainer — Current Status
 
 **Last updated:** Feb 25, 2026
-**Current phase:** Phase 1b — Voice Pipeline — Day 7 complete (PHASE COMPLETE)
-**Next action:** Phase 1b walkthrough with Pranav, then Phase 2 planning.
+**Current phase:** Phase 1b complete. Phase 2 planning next.
+**Next action:** Phase 2 planning. Walkthrough complete — guides at `docs/guides/phase-1a.md` and `docs/guides/phase-1b.md`.
 
 ---
 

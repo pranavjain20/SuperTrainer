@@ -76,7 +76,9 @@ supertrainer/
 │   ├── PRD.md                   # Product requirements
 │   ├── BUILD_PLAN.md            # Build plan
 │   ├── TECH_STACK.md            # Technology choices
-│   ├── WALKTHROUGH.md           # System walkthrough
+│   ├── guides/                  # Per-phase learning guides
+│   │   ├── phase-1a.md          # Backend foundation walkthrough
+│   │   └── phase-1b.md          # Voice pipeline walkthrough
 │   └── WORKFLOW.md              # Collaboration process
 ├── reference/                   # Historical documents
 │   ├── PRD_v1.md

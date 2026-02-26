@@ -394,24 +394,6 @@ Instead, we trace the chain. To check if you own an entry, we check if you own t
 
 ---
 
-## What's Coming Next
-
-Phase 1a gave us the data foundation. Here's what plugs into it:
-
-**Phase 2 (Mobile)**: React Native app that talks to these endpoints. Client list screen, session recording screen, entry timeline view.
-
-**Phase 3 (Voice + Intelligence)**: This is where it gets interesting.
-- Deepgram transcribes voice → Claude parses transcript into structured entries
-- Pre-session briefings generated from client history (using the data we're storing now)
-- The Brain — a conversational agent that can answer "how has Elena's squat progressed?" by querying the actual session entries
-- Embeddings stored in those pgvector columns for semantic search
-
-**Phase 4 (Auth + Multi-tenant)**: Replace `TEMP_TRAINER_ID` with real Supabase authentication. Each trainer logs in and only sees their data. The ownership validation layer is already built — we just need to plug in the real identity.
-
-The reason Phase 1a matters: every AI feature in Phase 3 reads from and writes to the models, schemas, and endpoints we built. If the foundation is shaky — missing validations, inconsistent data shapes, untested cascades — every AI feature built on top would be fragile. The foundation is solid. 306 tests prove it.
-
----
-
 ## Quick Reference
 
 ### Files and What They Do
