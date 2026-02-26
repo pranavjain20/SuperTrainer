@@ -29,12 +29,18 @@
 - [x] Staff engineer audit: caught 11 route mismatches (all fixed), 3 medium issues (all fixed)
 - [x] Zero TypeScript errors, zero lint warnings
 
-### Day 3: Home Screen + Client List
-- [ ] `src/hooks/useClients.ts` — TanStack Query hooks
-- [ ] `src/hooks/useSessions.ts` — Today's sessions hook
-- [ ] Home screen: today's sessions list, empty state
-- [ ] Clients screen: search, alphabetical FlatList, pull-to-refresh
-- [ ] ClientRow, SessionRow, EmptyState, LoadingState components
+### Day 3: Home Screen + Client List ✅ COMPLETE
+- [x] `src/utils/dates.ts` — formatTime, formatDayHeader, toISODateString (local timezone)
+- [x] `src/hooks/useClients.ts` — useClients + useClientMap TanStack Query hooks (5min cache)
+- [x] `src/hooks/useSessions.ts` — useTodaySessions with client-side join, parallel queries
+- [x] Home screen: today's sessions with smart status pills (Done/In Progress/countdown)
+- [x] Clients screen: search, alphabetical SectionList, pull-to-refresh, client count
+- [x] ClientRow (colored initials, bold name), SessionRow (time, name, status pill)
+- [x] EmptyState, LoadingState, ErrorState shared components
+- [x] `app/(tabs)/clients/[id].tsx` — placeholder detail screen for Day 4
+- [x] Consistent custom headers with safe area insets across all 4 tabs
+- [x] Splash screen switched to solid brand blue
+- [x] TypeScript clean, lint clean, staff engineer audit passed
 
 ### Day 4: Client Profile
 - [ ] `app/(tabs)/clients/[id].tsx` — Client profile screen

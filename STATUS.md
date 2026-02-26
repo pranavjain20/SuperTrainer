@@ -1,8 +1,8 @@
 # SuperTrainer — Current Status
 
 **Last updated:** Feb 25, 2026
-**Current phase:** Phase 2 — Mobile App. Days 1-2 complete (setup + API layer).
-**Next action:** Phase 2 Day 3 — Home screen + client list (TanStack Query hooks, FlatList, pull-to-refresh). First real screens fetching data from the backend.
+**Current phase:** Phase 2a — Mobile App. Days 1-3 complete.
+**Next action:** Phase 2a Day 4 — Client Profile screen.
 
 ---
 
@@ -29,6 +29,14 @@ Added `GET /api/v1/sessions` — trainer-level session listing with optional `sc
 **Endpoint modules:** 5 files covering all backend routes — clients (4 functions), sessions (6), entries (6), plans (5), voice (1). Every URL verified against actual backend router definitions.
 **Dev tooling:** ESLint 8 + eslint-config-expo + Prettier. Format-on-save in VS Code. npm scripts: `lint`, `lint:fix`, `format`, `typecheck`.
 **Audit finding:** Initial implementation assumed fully nested REST routes (e.g., `/clients/:id/sessions/:id`). Backend uses mixed nesting — lists are nested, single-resource CRUD is flat. 11 routes fixed before commit.
+
+### Day 3: Home Screen + Client List ✅ COMPLETE
+
+Two working screens pulling live data from the backend. Home tab fetches today's sessions, shows cards with client names (resolved via client-side join), time, and smart status pills (Done / In Progress / countdown like "In 45 min"). Both queries fire in parallel; loading spinner covers until both resolve. Clients tab fetches all active clients, displays alphabetically in a searchable section list with deterministic colored initials, pull-to-refresh. Tap navigates to placeholder detail screen (Day 4).
+
+Supporting infrastructure: date formatting utils (`formatTime`, `formatDayHeader`, `toISODateString` with local timezone), `useClients` + `useClientMap` hooks with 5min cache, `useTodaySessions` hook with client name join, three shared state components (Empty/Loading/Error). All four tabs use consistent custom headers with safe area insets. Splash screen switched from invisible Expo placeholder to solid brand blue.
+
+12 files created, 10 modified. TypeScript clean, lint clean.
 
 ---
 
