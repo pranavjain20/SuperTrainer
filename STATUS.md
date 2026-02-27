@@ -1,8 +1,8 @@
 # SuperTrainer — Current Status
 
 **Last updated:** Feb 27, 2026
-**Current phase:** Phase 2a — Mobile App. Day 7 complete.
-**Next action:** Phase 2a Day 8 — Session creation flow (start sessions from client profile).
+**Current phase:** Phase 2a — Mobile App. Day 8 complete.
+**Next action:** Phase 2a Day 9 — End session flow + polish.
 
 ---
 
@@ -65,6 +65,22 @@ Supporting infrastructure: date formatting utils (`formatTime`, `formatDayHeader
 `ExerciseEditModal` — bottom sheet with editable exercise name + per-set reps/weight/RPE/notes. `ObservationEditModal` — text area + flag color picker (green/yellow/red). `useEntryMutations` with `setQueryData` for instant cache updates (no flicker). `useEditableEntries` shared hook used by both Timeline and client profile's ExpandableSessionCard. Exercise numbering (1, 2, 3...) on cards. `PressableCard` wrapper, `strings.ts` utilities (DRY extractions).
 
 **Backend fixes:** Parser rules hardened (never hallucinate content, never assume bodyweight). `entry_service.update_entry` now recalculates `total_volume_kg` when sets change. `getSetWeight` reads `weight` before `weight_kg` (voice format priority). 3 new backend tests. **694 total backend tests passing.**
+
+### Day 8: Cross-Tab Navigation + Session Flow Polish ✅ COMPLETE
+
+**Recording screen moved to root level.** Previously lived inside Session tab's stack — tapping a session from Home pushed into the Session tab, so "back" walked through that tab's history instead of returning to Home. Now at `/recording/[sessionId]` above all tabs. `router.back()` returns to wherever you came from (Home, Sessions, Client profile). Tab bar hidden during recording — focused experience.
+
+**Swipe-back with recording guard.** Swipe gesture dynamically disabled while recording (via `useRecordingStore` in root layout). When not recording, swipe works freely. Back button uses `beforeRemove` navigation event to intercept all exit attempts during recording — shows confirmation, discards the interrupted clip (partial audio from swipe isn't useful), and navigates. Intentional stop (mic button tap) still uploads normally.
+
+**Session list UX overhaul.** Removed confirmation dialog from session list — all sessions already exist, tapping opens directly. In-progress sessions show green "IN PROGRESS" pill + blue "CONTINUE SESSION" button (bottom-right). Future-scheduled sessions show amber countdown ("IN 45 MIN") or gray ("IN 2H 30M"). Completed sessions show green "DONE" + duration. Color system: green = active, amber = soon, gray = far out.
+
+**Visual consistency pass.** Custom back buttons on all screens (FontAwesome chevron + bold text in primary blue, 20px). Replaced native stack header on client detail with custom header matching recording screen. Card visual hierarchy fixed — status/action labels at 11px all-caps, clearly subordinate to 20px client name. `ConfirmSheet` component with dimmed backdrop + `onRequestClose` for Android. Tab renamed "Sessions" (plural).
+
+**Timeline scroll fix.** `Timeline.tsx` auto-scroll only triggers when new entries are added during recording (prevEntryCount ref tracking), not on initial data load. Long sessions now start at the top.
+
+**Audit findings fixed.** `stopRecording()` returns URI directly (not just via state) — prevents data loss when component unmounts before upload effect fires. `ConfirmSheet` backdrop dimming + Android back button support. Indentation cleanup in client detail.
+
+**Files changed:** 14 files (3 created, 1 deleted, 10 edited). **694 backend tests passing.**
 
 ---
 

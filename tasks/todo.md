@@ -78,10 +78,21 @@
 - [x] 3 new backend tests (694 total), TypeScript clean
 - [x] Full audit: all issues fixed
 
-### Day 8: Session Creation Flow
-- [ ] Plan the session creation feature (start sessions from client profile)
-- [ ] Build and wire up the feature
-- [ ] Test on phone
+### Day 8: Cross-Tab Navigation + Session Flow Polish ✅ COMPLETE
+- [x] Recording screen moved to root level (`/recording/[sessionId]`) — back returns to origin
+- [x] Swipe-back: enabled when not recording, disabled during recording (dynamic `gestureEnabled`)
+- [x] `beforeRemove` navigation guard — intercepts all back attempts during recording, discards partial clip
+- [x] Removed confirmation dialog from session list — all sessions open directly
+- [x] In-progress sessions: green "IN PROGRESS" + blue "CONTINUE SESSION" button
+- [x] Future sessions: amber countdown (<1h) or gray (>1h), no Continue button
+- [x] Custom back buttons on all screens (20px, primary blue, FontAwesome chevron)
+- [x] Client detail: native header replaced with custom back button matching recording screen
+- [x] Timeline scroll fix: auto-scroll only on new entries, not initial load
+- [x] `ConfirmSheet` component: dimmed backdrop, `onRequestClose` for Android
+- [x] `stopRecording()` returns URI directly — prevents clip loss on unmount
+- [x] Tab renamed "Sessions" (plural), recording guard applied uniformly to all tabs
+- [x] Staff engineer + UX audit: all critical/medium issues fixed
+- [x] 694 backend tests passing, TypeScript clean
 
 ### Day 9: End Session Flow + Polish
 - [ ] Summary screen with session stats
