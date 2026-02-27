@@ -53,29 +53,41 @@
 - [x] Seed data: rewrote Sarah with per-set notes + observation cards between exercises
 - [x] Audit + staff review: clean
 
-### Day 5: Session Screen + Record Button
-- [ ] Session screen layout (header, timeline, record button)
-- [ ] RecordButton with animation (Reanimated) and haptics
-- [ ] `useVoiceRecorder` hook wrapping expo-av
-- [ ] Audio permissions
+### Day 5: Session Screen + Record Button ✅ COMPLETE
+- [x] `[sessionId].tsx` — recording screen (header, timeline, record bar)
+- [x] `RecordButton.tsx` — 64px FAB with animated pulse, haptics, MM:SS duration
+- [x] `useVoiceRecorder.ts` — expo-av recording lifecycle
+- [x] `recordingStore.ts` — Zustand for cross-component recording state
+- [x] Recording navigation guards (tab interception, back button confirmation)
+- [x] Session list on session tab index
 
-### Day 6: Voice Pipeline Integration + Live Timeline
-- [ ] Voice clip upload to backend
-- [ ] Zustand session store
-- [ ] Timeline component with ExerciseCard + ObservationCard
-- [ ] End-to-end flow: speak → upload → cards appear
+### Days 6-7: Voice Pipeline + Inline Editing ✅ COMPLETE
+- [x] `sessionStore.ts` — Zustand for processing state + error tracking
+- [x] `useVoiceClipUpload.ts` — recording → backend upload → cache invalidation
+- [x] `useSessionEntries.ts` — live timeline query hook
+- [x] `Timeline.tsx` — auto-scroll, processing indicator, error retry
+- [x] `ExerciseCard.tsx`, `ObservationCard.tsx`, `EntryCard.tsx` — standalone card components
+- [x] `ExerciseEditModal.tsx` — bottom sheet: exercise name + per-set fields
+- [x] `ObservationEditModal.tsx` — text area + flag color picker (green/yellow/red)
+- [x] `useEntryMutations.ts` — setQueryData for instant cache updates
+- [x] `useEditableEntries.tsx` — shared edit hook (Timeline + client profile)
+- [x] `PressableCard.tsx`, `strings.ts` — DRY extractions
+- [x] Exercise numbering on cards, weight_kg→weight format normalization
+- [x] Parser hardening: no hallucination, no bodyweight assumption, short flag_reason
+- [x] `entry_service.update_entry` recalculates total_volume_kg on sets change
+- [x] 3 new backend tests (694 total), TypeScript clean
+- [x] Full audit: all issues fixed
 
-### Day 7: Inline Editing + Card Polish
-- [ ] Tap-to-edit on exercise/observation cards
-- [ ] Optimistic mutations via TanStack Query
-- [ ] Visual polish: shadows, spacing, flag indicators
+### Day 8: Session Creation Flow
+- [ ] Plan the session creation feature (start sessions from client profile)
+- [ ] Build and wire up the feature
+- [ ] Test on phone
 
-### Day 8: End Session Flow + Plan Dictation
+### Day 9: End Session Flow + Polish
 - [ ] Summary screen with session stats
 - [ ] Plan dictation (mini recorder or text input)
-- [ ] Cache invalidation after save
 
-### Day 9: Integration Testing + Bug Fixing + Audit
+### Day 10: Integration Testing + Bug Fixing + Audit
 - [ ] Full E2E flow on physical phone
 - [ ] Edge cases: empty session, rapid taps, network errors, backgrounding
 - [ ] Full test suite, staff engineer audit

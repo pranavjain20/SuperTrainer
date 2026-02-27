@@ -1,8 +1,8 @@
 # SuperTrainer — Current Status
 
-**Last updated:** Feb 26, 2026
-**Current phase:** Phase 2a — Mobile App. Days 1-4 complete.
-**Next action:** Phase 2a Day 5 — Session screen + Record button.
+**Last updated:** Feb 27, 2026
+**Current phase:** Phase 2a — Mobile App. Day 7 complete.
+**Next action:** Phase 2a Day 8 — Session creation flow (start sessions from client profile).
 
 ---
 
@@ -48,6 +48,23 @@ Supporting infrastructure: date formatting utils (`formatTime`, `formatDayHeader
 **Hooks:** `src/hooks/useClient.ts` — `useClient(id)`, `useClientSessions(id)`, `useClientPlans(id)`.
 **Seed data:** Rewrote Sarah Chen's session with realistic data — pre-session observation ("hasn't slept much, energy below baseline"), per-set notes ("left glute felt tight", "rounding at bottom"), mid-session observation between exercises ("energy levels even lower after goblet squat and Romanian deadlift").
 **Utilities:** `src/utils/initials.ts`, `src/constants/styles.ts`, `formatMemberSince()` in dates.ts.
+
+### Day 5: Session Screen + Record Button ✅ COMPLETE
+
+**Session recording workspace** — the core UX where trainers record voice clips during sessions.
+**New files (5):** `useSession.ts`, `useVoiceRecorder.ts`, `RecordButton.tsx` (64px animated FAB with pulse ring, haptic feedback, MM:SS duration), `[sessionId].tsx` (recording screen: header, timeline placeholder, bottom record bar), `recordingStore.ts` (Zustand store for cross-component recording state).
+**Recording navigation guards:** Zustand store shares isRecording + stopRecording across components. Back button shows Alert confirmation. Tab layout intercepts all non-session tab presses when recording is active.
+**Animation:** RN built-in Animated API. Button springs to 1.25x, pulse ring loops at 2x scale.
+
+### Days 6-7: Voice Pipeline + Inline Editing ✅ COMPLETE
+
+**Day 6 — Voice clip upload pipeline:**
+`sessionStore.ts` (Zustand) for processing state + error tracking. `useVoiceClipUpload` hook wiring expo-av recording → backend voice endpoint → TanStack Query cache invalidation. `useSessionEntries` hook for live timeline updates. `Timeline` component with auto-scroll, processing indicator, error retry row. Cards split into standalone components: `ExerciseCard` (set table with headers), `ObservationCard` (flag-colored accent), `EntryCard` (type-based dispatch).
+
+**Day 7 — Tap-to-edit on any card:**
+`ExerciseEditModal` — bottom sheet with editable exercise name + per-set reps/weight/RPE/notes. `ObservationEditModal` — text area + flag color picker (green/yellow/red). `useEntryMutations` with `setQueryData` for instant cache updates (no flicker). `useEditableEntries` shared hook used by both Timeline and client profile's ExpandableSessionCard. Exercise numbering (1, 2, 3...) on cards. `PressableCard` wrapper, `strings.ts` utilities (DRY extractions).
+
+**Backend fixes:** Parser rules hardened (never hallucinate content, never assume bodyweight). `entry_service.update_entry` now recalculates `total_volume_kg` when sets change. `getSetWeight` reads `weight` before `weight_kg` (voice format priority). 3 new backend tests. **694 total backend tests passing.**
 
 ---
 
