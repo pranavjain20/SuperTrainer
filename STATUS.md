@@ -1,12 +1,12 @@
 # SuperTrainer — Current Status
 
 **Last updated:** Feb 28, 2026
-**Current phase:** Phase 2a — Mobile App. Day 11 complete. Phone testing passed.
-**Next action:** Day 12 — Planning discussion, "didn't catch that" UX, active session banner. Then merge to master.
+**Current phase:** Phase 2a — Mobile App. COMPLETE. Merged to master.
+**Next action:** Planning discussion — define minimum viable feature set, decide next phase.
 
 ---
 
-## Phase 2: Mobile App — IN PROGRESS
+## Phase 2a: Mobile App — COMPLETE
 
 ### Pre-Work: Backend Addition ✅ COMPLETE
 
@@ -101,10 +101,15 @@ All 7 test phases passed on physical iPhone via Expo Go. 12 UX fixes applied liv
 
 **727 backend tests passing.**
 
-**Queued for Day 12:**
-1. Planning discussion — minimum viable feature set, what to build next
-2. "Didn't catch that" UX — distinct system message card for failed voice clips
-3. Active session banner — persistent bar when session is active
+### Day 12: Final UX + Merge to Master ✅ COMPLETE
+
+**Active session banner:** `ActiveSessionBanner` component renders in tab layout when a session is recording — shows client name + elapsed time, taps to navigate back to recording screen. Persistent across all tab navigation.
+
+**Clarification UX:** `ClarificationModal` prompts trainer to confirm/correct when parser returns low-confidence results. `ManualEntryModal` for hand-typing exercises/observations when voice doesn't capture it. Timeline updated to render clarification prompts inline.
+
+**Voice pipeline backend:** Parser returns confidence metadata, voice service handles `clarification_needed` status, new schema fields. 207 lines of new backend tests.
+
+**Merge:** Squash merged 19 commits (Days 1-12) to master. 734 backend tests passing. 96 files, 21k lines added.
 
 ---
 
