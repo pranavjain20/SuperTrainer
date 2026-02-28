@@ -59,6 +59,19 @@ async def update_entry(db: AsyncSession, entry: SessionEntry, **kwargs) -> Sessi
     for key, value in kwargs.items():
         if value is not None:
             setattr(entry, key, value)
+
+    # Recalculate total_volume_kg whenever sets change
+    if "sets" in kwargs and kwargs["sets"] is not None:
+        total = 0.0
+        has_weight = False
+        for s in kwargs["sets"]:
+            w = s.get("weight") or s.get("weight_kg")
+            r = s.get("reps") or 0
+            if w is not None:
+                total += r * w
+                has_weight = True
+        entry.total_volume_kg = round(total, 1) if has_weight else None
+
     await db.commit()
     await db.refresh(entry)
     return entry

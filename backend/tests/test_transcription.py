@@ -252,7 +252,7 @@ class TestTranscribeAudio:
         mock_response = _make_mock_response()
         mock_async_rest = AsyncMock()
         mock_async_rest.transcribe_file.return_value = mock_response
-        mock_client_cls.return_value.listen.asyncrest = mock_async_rest
+        mock_client_cls.return_value.listen.asyncrest.v.return_value = mock_async_rest
 
         result = await transcribe_audio(b"fake-audio-bytes", keyterms=["squat"])
 
@@ -266,7 +266,7 @@ class TestTranscribeAudio:
         mock_response = _make_mock_response()
         mock_async_rest = AsyncMock()
         mock_async_rest.transcribe_file.return_value = mock_response
-        mock_client_cls.return_value.listen.asyncrest = mock_async_rest
+        mock_client_cls.return_value.listen.asyncrest.v.return_value = mock_async_rest
 
         result = await transcribe_audio(b"fake-audio-bytes", keyterms=["squat"])
 
@@ -283,7 +283,7 @@ class TestTranscribeAudio:
         mock_response = _make_mock_response()
         mock_async_rest = AsyncMock()
         mock_async_rest.transcribe_file.return_value = mock_response
-        mock_client_cls.return_value.listen.asyncrest = mock_async_rest
+        mock_client_cls.return_value.listen.asyncrest.v.return_value = mock_async_rest
 
         await transcribe_audio(b"fake-audio-bytes", keyterms=[])
 
@@ -297,7 +297,7 @@ class TestTranscribeAudio:
         mock_response = _make_mock_response()
         mock_async_rest = AsyncMock()
         mock_async_rest.transcribe_file.return_value = mock_response
-        mock_client_cls.return_value.listen.asyncrest = mock_async_rest
+        mock_client_cls.return_value.listen.asyncrest.v.return_value = mock_async_rest
 
         keyterms = ["Romanian Deadlift", "RDL", "RPE"]
         await transcribe_audio(b"fake-audio-bytes", keyterms=keyterms)
@@ -317,7 +317,7 @@ class TestTranscribeAudio:
         )
         mock_async_rest = AsyncMock()
         mock_async_rest.transcribe_file.return_value = mock_response
-        mock_client_cls.return_value.listen.asyncrest = mock_async_rest
+        mock_client_cls.return_value.listen.asyncrest.v.return_value = mock_async_rest
 
         result = await transcribe_audio(b"fake-silence-bytes", keyterms=[])
 
@@ -331,7 +331,7 @@ class TestTranscribeAudio:
         mock_response = _make_mock_response()
         mock_async_rest = AsyncMock()
         mock_async_rest.transcribe_file.return_value = mock_response
-        mock_client_cls.return_value.listen.asyncrest = mock_async_rest
+        mock_client_cls.return_value.listen.asyncrest.v.return_value = mock_async_rest
 
         await transcribe_audio(
             b"fake-audio-bytes",
@@ -356,7 +356,7 @@ class TestTranscribeAudio:
 
         mock_async_rest = AsyncMock()
         mock_async_rest.transcribe_file.return_value = mock_response
-        mock_client_cls.return_value.listen.asyncrest = mock_async_rest
+        mock_client_cls.return_value.listen.asyncrest.v.return_value = mock_async_rest
 
         result = await transcribe_audio(b"fake-audio-bytes", keyterms=[])
 

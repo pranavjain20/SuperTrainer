@@ -221,7 +221,7 @@ async def transcribe_audio(
         keyterm=keyterms,
     )
 
-    response = await client.listen.asyncrest.transcribe_file(
+    response = await client.listen.asyncrest.v("1").transcribe_file(
         {"buffer": audio_data, "mimetype": mime_type},
         options=options,
     )

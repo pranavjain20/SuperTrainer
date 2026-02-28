@@ -71,7 +71,7 @@ def _seed_exercises(db: AsyncSession) -> list[Exercise]:
 def _seed_sarah(
     db: AsyncSession, trainer: Trainer, client: Client,
 ) -> tuple[list[Session], list[SessionEntry]]:
-    """Sarah Chen — 1 session, assessment. 3-4 exercise cards + 1 observation."""
+    """Sarah Chen — 1 session, 4 exercises + 2 observations (before and between)."""
     sessions = []
     entries = []
 
@@ -87,73 +87,97 @@ def _seed_sarah(
     db.add(session)
     sessions.append(session)
 
-    # Exercise cards: movement screen
-    goblet_sets = [{"set": i, "weight_kg": 8.0, "reps": 8, "rpe": 5} for i in range(1, 4)]
+    # Pre-session observation: trainer asks how Sarah is feeling
     entries.append(SessionEntry(
-        session_id=None,  # linked after flush
+        session_id=None,
         client_id=client.id,
-        entry_type=EntryTypeEnum.exercise_card,
+        entry_type=EntryTypeEnum.observation_card,
         sequence_order=1,
-        exercise_name="Goblet Squat",
-        exercise_canonical="goblet_squat",
-        sets=goblet_sets,
-        total_volume_kg=_compute_volume(goblet_sets),
-        form_notes=["good depth", "slight knee cave on left side"],
-        cues_given=["push knees out", "chest up"],
+        observation_text="Sarah hasn't slept much, energy levels below baseline.",
+        flag_color="yellow",
+        flag_reason="Low Energy",
     ))
 
-    hinge_sets = [{"set": i, "weight_kg": 0, "reps": 10} for i in range(1, 4)]
+    # Goblet Squat — per-set notes where relevant
+    goblet_sets = [
+        {"set": 1, "weight_kg": 8.0, "reps": 8, "rpe": 5},
+        {"set": 2, "weight_kg": 8.0, "reps": 8, "rpe": 6, "notes": "left glute felt tight"},
+        {"set": 3, "weight_kg": 8.0, "reps": 8, "rpe": 6},
+    ]
     entries.append(SessionEntry(
         session_id=None,
         client_id=client.id,
         entry_type=EntryTypeEnum.exercise_card,
         sequence_order=2,
-        exercise_name="Romanian Deadlift",
-        exercise_canonical="romanian_deadlift",
-        sets=hinge_sets,
-        total_volume_kg=0,
-        form_notes=["hinge pattern needs work", "rounding at bottom"],
-        cues_given=["push hips back", "soft knees"],
+        exercise_name="Goblet Squat",
+        exercise_canonical="goblet_squat",
+        sets=goblet_sets,
+        total_volume_kg=_compute_volume(goblet_sets),
     ))
 
-    pushup_sets = [{"set": i, "reps": 8} for i in range(1, 4)]
+    # Romanian Deadlift — per-set notes
+    hinge_sets = [
+        {"set": 1, "weight_kg": 0, "reps": 10},
+        {"set": 2, "weight_kg": 0, "reps": 10, "notes": "rounding at bottom of rep"},
+        {"set": 3, "weight_kg": 0, "reps": 8, "notes": "cut short, felt dizzy"},
+    ]
     entries.append(SessionEntry(
         session_id=None,
         client_id=client.id,
         entry_type=EntryTypeEnum.exercise_card,
         sequence_order=3,
-        exercise_name="Push-Up",
-        exercise_canonical="push_up",
-        sets=pushup_sets,
+        exercise_name="Romanian Deadlift",
+        exercise_canonical="romanian_deadlift",
+        sets=hinge_sets,
         total_volume_kg=0,
-        form_notes=["good control", "elbows flaring slightly"],
-        cues_given=["tuck elbows", "brace core"],
     ))
 
-    plank_sets = [{"set": i, "duration_seconds": 30} for i in range(1, 4)]
-    entries.append(SessionEntry(
-        session_id=None,
-        client_id=client.id,
-        entry_type=EntryTypeEnum.exercise_card,
-        sequence_order=4,
-        exercise_name="Plank",
-        exercise_canonical="plank",
-        sets=plank_sets,
-        total_volume_kg=0,
-        form_notes=["held well", "slight hip sag at 25 seconds"],
-    ))
-
-    # Observation card
+    # Observation between exercises: energy dropping
     entries.append(SessionEntry(
         session_id=None,
         client_id=client.id,
         entry_type=EntryTypeEnum.observation_card,
-        sequence_order=5,
+        sequence_order=4,
         observation_text=(
-            "First session — movement screen complete. Good baseline mobility, "
-            "hinge pattern needs development. Motivated and coachable. "
-            "Plan to start with goblet squat progression and core work."
+            "After goblet squat and Romanian deadlift, "
+            "Sarah reported energy levels even lower. Slowing pace for remaining exercises."
         ),
+        flag_color="yellow",
+        flag_reason="Fatigue Warning",
+    ))
+
+    # Push-Up
+    pushup_sets = [
+        {"set": 1, "reps": 8, "rpe": 7},
+        {"set": 2, "reps": 6, "rpe": 8, "notes": "stopped early, arms shaking"},
+        {"set": 3, "reps": 5, "rpe": 9},
+    ]
+    entries.append(SessionEntry(
+        session_id=None,
+        client_id=client.id,
+        entry_type=EntryTypeEnum.exercise_card,
+        sequence_order=5,
+        exercise_name="Push-Up",
+        exercise_canonical="push_up",
+        sets=pushup_sets,
+        total_volume_kg=0,
+    ))
+
+    # Plank
+    plank_sets = [
+        {"set": 1, "duration_seconds": 30},
+        {"set": 2, "duration_seconds": 25, "notes": "hip sagging at 20s"},
+        {"set": 3, "duration_seconds": 20, "notes": "cut short, fatigued"},
+    ]
+    entries.append(SessionEntry(
+        session_id=None,
+        client_id=client.id,
+        entry_type=EntryTypeEnum.exercise_card,
+        sequence_order=6,
+        exercise_name="Plank",
+        exercise_canonical="plank",
+        sets=plank_sets,
+        total_volume_kg=0,
     ))
 
     return sessions, entries

@@ -1,6 +1,8 @@
 import uuid
+from datetime import date
 
-from sqlalchemy import select
+from sqlalchemy import cast, or_, select
+from sqlalchemy.dialects.postgresql import DATE
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models import Session
@@ -16,6 +18,30 @@ async def list_sessions_by_client(
 ) -> tuple[list[Session], bool]:
     """Return (sessions, has_more) for a client, newest first."""
     query = select(Session).where(Session.client_id == client_id)
+    return await paginate(db, query, Session, Session.started_at, cursor=cursor, limit=limit)
+
+
+async def list_sessions_by_trainer(
+    db: AsyncSession,
+    trainer_id: uuid.UUID,
+    *,
+    scheduled_for_date: date | None = None,
+    cursor: uuid.UUID | None = None,
+    limit: int = 20,
+) -> tuple[list[Session], bool]:
+    """Return (sessions, has_more) for a trainer, newest first.
+
+    When scheduled_for_date is provided, returns sessions where scheduled_for
+    or started_at falls on that date.
+    """
+    query = select(Session).where(Session.trainer_id == trainer_id)
+    if scheduled_for_date is not None:
+        query = query.where(
+            or_(
+                cast(Session.scheduled_for, DATE) == scheduled_for_date,
+                cast(Session.started_at, DATE) == scheduled_for_date,
+            )
+        )
     return await paginate(db, query, Session, Session.started_at, cursor=cursor, limit=limit)
 
 

@@ -126,6 +126,7 @@ class SessionUpdate(BaseModel):
     raw_transcript: str | None = None
     processing_status: ProcessingStatusEnum | None = None
     trainer_edited: bool | None = None
+    plan_id: uuid.UUID | None = None
 
 
 class SessionResponse(BaseModel):
@@ -426,7 +427,18 @@ class BrainConversationListResponse(BaseModel):
 # --- BrainMessage ---
 
 
+# --- Workout Classification ---
+
+
+class WorkoutClassificationResponse(BaseModel):
+    workout_type: str
+
+
 # --- Voice Clip ---
+
+
+class TextEntryRequest(BaseModel):
+    text: str = Field(..., min_length=1)
 
 
 class TimingBreakdownResponse(BaseModel):
@@ -446,6 +458,11 @@ class ValidationWarningResponse(BaseModel):
     field: str
     code: str
     message: str
+
+
+class TranscribeResponse(BaseModel):
+    transcript: str
+    confidence: float
 
 
 class VoiceClipResponse(BaseModel):

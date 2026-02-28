@@ -64,7 +64,10 @@ EXERCISE_CARD_TOOL: dict = {
                             "type": "number",
                             "description": (
                                 "Weight used, as spoken by the trainer. "
-                                "Do not convert units — record the raw number."
+                                "Do not convert units — record the raw number. "
+                                "OMIT this field entirely if the trainer did "
+                                "not mention a weight — never assume bodyweight "
+                                "or any default."
                             ),
                         },
                         "weight_unit": {
@@ -106,18 +109,21 @@ EXERCISE_CARD_TOOL: dict = {
                                 "(e.g., 'with a red band', 'added chains')."
                             ),
                         },
+                        "notes": {
+                            "type": "string",
+                            "description": (
+                                "Any trainer commentary about this set — "
+                                "form observations, technique notes, how "
+                                "the set felt, pain mentions, or coaching "
+                                "feedback (e.g., 'good depth', 'knees "
+                                "caving in', 'felt easy', 'left shoulder "
+                                "tight', 'grip slipped'). This is the "
+                                "primary place for all per-set commentary."
+                            ),
+                        },
                     },
                     "required": ["reps"],
                 },
-            },
-            "form_notes": {
-                "type": "array",
-                "items": {"type": "string"},
-                "description": (
-                    "Notes about exercise form or technique the trainer "
-                    "mentioned (e.g., 'good depth', 'knees caving in'). "
-                    "Each note is a separate string."
-                ),
             },
             "cues_given": {
                 "type": "array",
@@ -154,20 +160,24 @@ OBSERVATION_CARD_TOOL: dict = {
             },
             "flag_color": {
                 "type": "string",
-                "enum": ["red", "yellow", "green"],
+                "enum": ["red", "yellow", "green", "clarification"],
                 "description": (
-                    "Severity flag. Red: pain, injury, or safety concern. "
+                    "Severity flag — REQUIRED on every observation. "
+                    "Red: pain, injury, or safety concern. "
                     "Yellow: something to watch (fatigue, minor discomfort, "
                     "form degradation). Green: positive note (PR, good "
-                    "progress, milestone). Omit if neutral observation."
+                    "progress, milestone, neutral check-in). "
+                    "Clarification: the transcript is ambiguous or unclear "
+                    "and you cannot confidently extract structured data."
                 ),
             },
             "flag_reason": {
                 "type": "string",
                 "description": (
-                    "Brief reason for the flag (e.g., 'client reported "
-                    "sharp knee pain', 'new personal record'). Required "
-                    "if flag_color is set."
+                    "Short headline label for the flag — 2-4 words max "
+                    "(e.g., 'Knee Pain', 'Volume Spike', 'New PR', "
+                    "'Fatigue Warning', 'Form Breakdown'). "
+                    "Required if flag_color is set."
                 ),
             },
             "target_entry_id": {
@@ -191,7 +201,7 @@ OBSERVATION_CARD_TOOL: dict = {
                 ),
             },
         },
-        "required": ["observation_text"],
+        "required": ["observation_text", "flag_color", "flag_reason"],
     },
 }
 
@@ -275,12 +285,68 @@ MODIFY_EXERCISE_CARD_TOOL: dict = {
                             "(e.g., 'with a red band', 'added chains')."
                         ),
                     },
+                    "notes": {
+                        "type": "string",
+                        "description": (
+                            "Per-set note to add — form, technique, "
+                            "how it felt, pain mentions."
+                        ),
+                    },
                 },
             },
-            "form_notes": {
+            "add_sets": {
                 "type": "array",
-                "items": {"type": "string"},
-                "description": "Additional form notes to add to the entry.",
+                "description": (
+                    "New sets to APPEND to the existing entry. Use this when "
+                    "the trainer records additional sets for an exercise that "
+                    "was already logged (e.g., 'second set, 8 reps at 85'). "
+                    "These are added after the existing sets."
+                ),
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "reps": {
+                            "type": "integer",
+                            "description": "Number of repetitions in this set.",
+                        },
+                        "weight": {
+                            "type": "number",
+                            "description": (
+                                "Weight used, as spoken. OMIT entirely "
+                                "if no weight was mentioned."
+                            ),
+                        },
+                        "weight_unit": {
+                            "type": "string",
+                            "enum": ["kg", "lbs"],
+                            "description": "The unit the trainer used.",
+                        },
+                        "rpe": {
+                            "type": "number",
+                            "description": "Rate of perceived exertion (1-10).",
+                        },
+                        "rir": {
+                            "type": "number",
+                            "description": "Reps in Reserve.",
+                        },
+                        "duration_seconds": {
+                            "type": "integer",
+                            "description": "Duration in seconds for timed exercises.",
+                        },
+                        "equipment_note": {
+                            "type": "string",
+                            "description": "Equipment modification for this set.",
+                        },
+                        "notes": {
+                            "type": "string",
+                            "description": (
+                                "Any trainer commentary about this set — "
+                                "form, technique, how it felt, pain."
+                            ),
+                        },
+                    },
+                    "required": ["reps"],
+                },
             },
             "cues_given": {
                 "type": "array",
@@ -332,6 +398,8 @@ def _format_set_summary(sets: list[dict]) -> str:
             part += f" [{s['equipment_note']}]"
         if s.get("duration_seconds") is not None:
             part += f" ({s['duration_seconds']}s)"
+        if s.get("notes"):
+            part += f" — {s['notes']}"
         parts.append(part)
 
     if len(set(parts)) == 1:
@@ -416,11 +484,21 @@ You are a gym session transcript parser. A personal trainer has spoken \
 during a training session and their speech has been transcribed. Your job \
 is to extract structured data by calling the provided tools.
 
+CRITICAL — before creating any cards, assess whether the transcript contains \
+legitimate training content. If the words are clearly NOT exercise names, \
+set/rep data, coaching observations, or anything training-related, you MUST \
+create an observation card with flag_color="clarification" instead. Examples \
+of non-training content that MUST be flagged as clarification: "donkey kong", \
+"hello testing", "the weather is nice", random words, names of people/places, \
+mic tests. Do NOT create exercise cards for these — they are not exercises.
+
 Rules:
 1. Call record_exercise_card once per distinct exercise mentioned.
-2. Call record_observation_card for observations — both exercise-specific \
-(form notes about a particular exercise/set) and session-level (client mood, \
-energy, general notes). Use target_entry_id and attached_to_set when the \
+2. Call record_observation_card ONLY for standalone observations between \
+exercises — client mood, energy, session-level check-ins. Anything said \
+DURING an exercise (form, technique, how a set felt, pain, coaching \
+feedback) belongs as `notes` on the relevant set(s), NOT as a separate \
+observation card. Use target_entry_id and attached_to_set when the \
 observation is about a specific exercise or set in the context.
 3. Preserve the exercise name EXACTLY as the trainer said it. Do not \
 normalize, correct, or rephrase (e.g., keep "bench" as "bench", not \
@@ -430,11 +508,27 @@ becomes 3 set entries, each with reps=10, weight=80, weight_unit="kg".
 5. If a set range is given (e.g., "sets 2 through 4 at RPE 8"), create \
 individual set entries for each set in the range.
 6. Record weight exactly as spoken with the correct unit. Do not convert \
-between kg and lbs.
-7. Only include data the trainer actually said. Never invent reps, weight, \
-RPE, or other details not present in the transcript.
-8. If the transcript is ambiguous or unclear, create an observation card \
-with a yellow flag explaining what was unclear. Do not guess.
+between kg and lbs. If no weight is mentioned at all, OMIT the weight and \
+weight_unit fields entirely — do NOT assume "bodyweight", "BW", 0, or any \
+default. A missing weight means the trainer chose not to state one.
+7. NEVER invent, embellish, or add ANY information not explicitly stated in \
+the transcript. This applies to everything: reps, weight, RPE, exercise names, \
+observation text, flag reasons — all of it. If the trainer says "he feels \
+great today", record exactly that meaning. Do NOT add symptoms, history, or \
+context the trainer did not mention. EXCEPTION: when the trainer says "same", \
+"same thing", "everything the same", "same as before", or similar — look at \
+the session context and replicate the NUMERIC data from the previous set \
+(reps, weight, weight_unit, rpe, rir). Do NOT copy over `notes` — notes are \
+specific to the set they were recorded on. "Same" means same prescription, \
+not same notes.
+8. If the transcript is ambiguous, unclear, or contains no recognizable \
+training content, create an observation card with flag_color="clarification" \
+explaining what was unclear. Do NOT create exercise cards for words that are \
+obviously not exercises (e.g., random words, names, non-fitness phrases). A \
+valid exercise card requires a plausible exercise name — something that could \
+reasonably be a gym exercise, sport movement, or physical activity. When in \
+doubt between creating a dubious exercise card and flagging as clarification, \
+always flag as clarification.
 9. A single transcript may produce multiple tool calls — for example, one \
 exercise card and one observation card, or multiple exercise cards.
 10. Ignore filler words, false starts, and speech artifacts. Focus on the \
@@ -448,8 +542,9 @@ context is provided, always use record_exercise_card or \
 record_observation_card.
 13. When the transcript references an exercise but the reference is \
 ambiguous (e.g., context has two similar exercises and it is unclear which \
-one the trainer means), create an observation card with a yellow flag \
-explaining the ambiguity rather than guessing which entry to modify.
+one the trainer means), create an observation card with \
+flag_color="clarification" explaining the ambiguity rather than guessing \
+which entry to modify.
 14. modify_exercise_card only targets exercise cards. To update or amend an \
 observation, record a new observation card.
 15. Use action="correct" ONLY when the trainer explicitly signals a \
@@ -482,19 +577,37 @@ the trainer is recapping a single exercise, not separate exercises.
 21. "Intensity" is a trainer synonym for RPE. If the trainer says \
 "intensity seven" or "seven intensity", extract as rpe=7. Same for \
 "perceived exertion" or "effort level."
-22. Only set target_entry_id when the trainer EXPLICITLY names or clearly \
+22. When a trainer records additional sets for an already-logged exercise \
+(e.g., "second set, 8 reps at 85"), use modify_exercise_card with \
+action="add" and add_sets containing the new set(s). Do NOT create a new \
+exercise_card for the same exercise. Look at the session context — if the \
+exercise is already there, append to it.
+23. Only set target_entry_id when the trainer EXPLICITLY names or clearly \
 references a specific exercise in the same transcript (e.g., "left is \
 tougher than right on the clamshells", "form broke down on the deadlift \
 set 3"). Set attached_to_set when a specific set number is mentioned. \
 If the transcript is a standalone comment with no exercise name, leave \
 both fields empty — do not infer a connection from session context. If \
 no context is provided, always leave both fields empty.
-23. For session-level observations (no target_entry_id), include temporal \
+25. When the trainer mentions something about form, technique, or how a \
+set felt (e.g., "good depth", "felt easy", "knees caving in", "grip \
+slipped", "left shoulder tight"), put it as `notes` on the relevant \
+set(s). Per-set `notes` appear in the set table next to RPE — this is \
+the primary place for ALL commentary during an exercise. If the note \
+applies to all sets ("good depth overall"), put it on every set.
+26. For session-level observations (no target_entry_id), include temporal \
 context by referencing what exercises have been completed so far. Instead \
 of "energy levels are lower", write "energy levels dropping further after \
 clamshells and squats." This makes the observation self-explanatory — a \
 reader can see WHEN in the session it was noted without checking the \
-timeline. Only do this when session context is available.\
+timeline. Only do this when session context is available.
+27. Write observation text as clean clinical notes, not verbatim speech. \
+Strip filler words, self-references ("he's", "she mentioned", "that's \
+what he's saying"), and conversational framing. "He's complaining of \
+lower back pain" → "Lower back pain." "She said her knees feel weird" \
+→ "Knee discomfort reported." "Energy levels are even lower now" → \
+"Energy levels declining further." Write what a trainer would want to \
+read in their notes later — concise, third-person, clinical.\
 """
 
 # ---------------------------------------------------------------------------
@@ -517,6 +630,7 @@ class ParsedSet:
     duration_seconds: int | None = None
     rir: float | None = None
     equipment_note: str | None = None
+    notes: str | None = None
 
 
 @dataclass(frozen=True)
@@ -557,6 +671,7 @@ class ParsedModification:
     action: str  # "add" or "correct"
     target_sets: tuple[int, ...] | None = None  # None = all sets
     updates: dict | None = None  # partial set fields: {"rpe": 8}
+    add_sets: tuple[ParsedSet, ...] | None = None  # new sets to append
     form_notes: tuple[str, ...] = field(default_factory=tuple)
     cues_given: tuple[str, ...] = field(default_factory=tuple)
 
@@ -572,6 +687,7 @@ class ParserResult:
     exercise_cards: tuple[ParsedExerciseCard, ...]
     observation_cards: tuple[ParsedObservationCard, ...]
     modifications: tuple[ParsedModification, ...] = field(default_factory=tuple)
+    tool_call_order: tuple[str, ...] = field(default_factory=tuple)
     raw_tool_calls: tuple[dict, ...] = field(default_factory=tuple)
 
 
@@ -607,6 +723,7 @@ def _build_exercise_card(tool_input: dict) -> ParsedExerciseCard:
                     duration_seconds=s.get("duration_seconds"),
                     rir=s.get("rir"),
                     equipment_note=s.get("equipment_note"),
+                    notes=s.get("notes"),
                 )
             )
         sets = tuple(parsed_sets) if parsed_sets else None
@@ -636,11 +753,32 @@ def _build_modification(tool_input: dict) -> ParsedModification:
     if "target_sets" in tool_input and tool_input["target_sets"] is not None:
         target_sets = tuple(tool_input["target_sets"])
 
+    add_sets = None
+    if "add_sets" in tool_input and tool_input["add_sets"] is not None:
+        parsed_sets = []
+        for s in tool_input["add_sets"]:
+            if not isinstance(s, dict) or "reps" not in s:
+                continue
+            parsed_sets.append(
+                ParsedSet(
+                    reps=s["reps"],
+                    weight=s.get("weight"),
+                    weight_unit=s.get("weight_unit"),
+                    rpe=s.get("rpe"),
+                    duration_seconds=s.get("duration_seconds"),
+                    rir=s.get("rir"),
+                    equipment_note=s.get("equipment_note"),
+                    notes=s.get("notes"),
+                )
+            )
+        add_sets = tuple(parsed_sets) if parsed_sets else None
+
     return ParsedModification(
         target_entry_id=tool_input["target_entry_id"],
         action=tool_input["action"],
         target_sets=target_sets,
         updates=tool_input.get("updates"),
+        add_sets=add_sets,
         form_notes=tuple(tool_input.get("form_notes", [])),
         cues_given=tuple(tool_input.get("cues_given", [])),
     )
@@ -661,6 +799,7 @@ def _extract_parser_result(content_blocks: list[Any]) -> ParserResult:
     exercise_cards: list[ParsedExerciseCard] = []
     observation_cards: list[ParsedObservationCard] = []
     modifications: list[ParsedModification] = []
+    tool_call_order: list[str] = []
     raw_tool_calls: list[dict] = []
 
     for block in content_blocks:
@@ -672,10 +811,13 @@ def _extract_parser_result(content_blocks: list[Any]) -> ParserResult:
         try:
             if block.name == "record_exercise_card":
                 exercise_cards.append(_build_exercise_card(block.input))
+                tool_call_order.append("exercise")
             elif block.name == "record_observation_card":
                 observation_cards.append(_build_observation_card(block.input))
+                tool_call_order.append("observation")
             elif block.name == "modify_exercise_card":
                 modifications.append(_build_modification(block.input))
+                tool_call_order.append("modification")
         except (KeyError, TypeError):
             # Malformed tool input (e.g. empty dict missing required fields).
             # Skip the block — it's still captured in raw_tool_calls for debugging.
@@ -685,6 +827,7 @@ def _extract_parser_result(content_blocks: list[Any]) -> ParserResult:
         exercise_cards=tuple(exercise_cards),
         observation_cards=tuple(observation_cards),
         modifications=tuple(modifications),
+        tool_call_order=tuple(tool_call_order),
         raw_tool_calls=tuple(raw_tool_calls),
     )
 

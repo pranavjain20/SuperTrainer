@@ -663,6 +663,69 @@ async def test_update_sets_jsonb(client, trainer_client_session):
     assert len(response.json()["data"]["sets"]) == 2
 
 
+async def test_update_sets_recalculates_total_volume_kg(client, trainer_client_session):
+    """total_volume_kg must be recalculated when sets change via inline edit."""
+    _, _, session = trainer_client_session
+    create_resp = await client.post(
+        f"/api/v1/sessions/{session.id}/entries",
+        json=_exercise_card(
+            sets=[{"reps": 10, "weight": 80, "weight_unit": "kg"}],
+            total_volume_kg=800.0,
+        ),
+    )
+    entry_id = create_resp.json()["data"]["id"]
+    assert create_resp.json()["data"]["total_volume_kg"] == 800.0
+
+    # Change weight from 80 to 90 via inline edit
+    response = await client.patch(
+        f"/api/v1/entries/{entry_id}",
+        json={"sets": [{"reps": 10, "weight": 90, "weight_unit": "kg"}]},
+    )
+    assert response.status_code == 200
+    assert response.json()["data"]["total_volume_kg"] == 900.0
+
+
+async def test_update_sets_recalculates_with_weight_kg_format(client, trainer_client_session):
+    """total_volume_kg recalculation handles seed data format (weight_kg)."""
+    _, _, session = trainer_client_session
+    create_resp = await client.post(
+        f"/api/v1/sessions/{session.id}/entries",
+        json=_exercise_card(
+            sets=[{"reps": 8, "weight_kg": 60}],
+            total_volume_kg=480.0,
+        ),
+    )
+    entry_id = create_resp.json()["data"]["id"]
+
+    response = await client.patch(
+        f"/api/v1/entries/{entry_id}",
+        json={"sets": [{"reps": 8, "weight_kg": 70}]},
+    )
+    assert response.status_code == 200
+    assert response.json()["data"]["total_volume_kg"] == 560.0
+
+
+async def test_update_sets_no_weight_clears_total_volume(client, trainer_client_session):
+    """Bodyweight exercises (no weight field) should have total_volume_kg = None."""
+    _, _, session = trainer_client_session
+    create_resp = await client.post(
+        f"/api/v1/sessions/{session.id}/entries",
+        json=_exercise_card(
+            sets=[{"reps": 10, "weight": 80, "weight_unit": "kg"}],
+            total_volume_kg=800.0,
+        ),
+    )
+    entry_id = create_resp.json()["data"]["id"]
+
+    # Edit to remove weight (bodyweight exercise)
+    response = await client.patch(
+        f"/api/v1/entries/{entry_id}",
+        json={"sets": [{"reps": 10}]},
+    )
+    assert response.status_code == 200
+    assert response.json()["data"]["total_volume_kg"] is None
+
+
 async def test_update_sequence_order(client, trainer_client_session):
     _, _, session = trainer_client_session
     create_resp = await client.post(

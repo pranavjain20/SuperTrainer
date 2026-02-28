@@ -354,6 +354,7 @@ class ValidatedSet:
     duration_seconds: int | None = None
     rir: float | None = None
     equipment_note: str | None = None
+    notes: str | None = None
 
 
 @dataclass(frozen=True)
@@ -400,6 +401,7 @@ class ValidatedModification:
     action: str  # "add" or "correct"
     target_sets: tuple[int, ...] | None
     updates: dict | None
+    add_sets: tuple[ValidatedSet, ...] | None
     form_notes: tuple[str, ...]
     cues_given: tuple[str, ...]
     warnings: tuple[ValidationWarning, ...]
@@ -413,6 +415,7 @@ class ValidationResult:
     exercise_cards: tuple[ValidatedExerciseCard, ...]
     observation_cards: tuple[ValidatedObservationCard, ...]
     modifications: tuple[ValidatedModification, ...]
+    tool_call_order: tuple[str, ...]
     warnings: tuple[ValidationWarning, ...]
 
 
@@ -657,8 +660,9 @@ def validate_set(
             ))
             rpe = expected_rpe
 
-    # Equipment note: passthrough, no validation needed
+    # Equipment note and per-set notes: passthrough, no validation needed
     equipment_note = parsed_set.get("equipment_note")
+    notes = parsed_set.get("notes")
 
     # Duration validation
     duration = parsed_set.get("duration_seconds")
@@ -680,6 +684,7 @@ def validate_set(
         duration_seconds=duration,
         rir=rir,
         equipment_note=equipment_note,
+        notes=notes,
     ), warnings
 
 
@@ -884,6 +889,7 @@ def validate_exercise_card(
                 "duration_seconds": parsed_set.duration_seconds,
                 "rir": parsed_set.rir,
                 "equipment_note": parsed_set.equipment_note,
+                "notes": parsed_set.notes,
             }
             validated, set_warnings = validate_set(set_dict, default_weight_unit)
             validated_sets.append(validated)
@@ -1058,11 +1064,31 @@ def validate_modification(
                 ))
                 normalized_updates["rpe"] = expected_rpe
 
+    # Validate add_sets
+    validated_add_sets: list[ValidatedSet] | None = None
+    if mod.add_sets is not None:
+        validated_add_sets = []
+        for parsed_set in mod.add_sets:
+            set_dict = {
+                "reps": parsed_set.reps,
+                "weight": parsed_set.weight,
+                "weight_unit": parsed_set.weight_unit,
+                "rpe": parsed_set.rpe,
+                "duration_seconds": parsed_set.duration_seconds,
+                "rir": parsed_set.rir,
+                "equipment_note": parsed_set.equipment_note,
+                "notes": parsed_set.notes,
+            }
+            validated, set_warnings = validate_set(set_dict, default_weight_unit)
+            validated_add_sets.append(validated)
+            warnings.extend(set_warnings)
+
     return ValidatedModification(
         target_entry_id=mod.target_entry_id,
         action=mod.action,
         target_sets=mod.target_sets,
         updates=normalized_updates,
+        add_sets=tuple(validated_add_sets) if validated_add_sets else None,
         form_notes=mod.form_notes,
         cues_given=mod.cues_given,
         warnings=tuple(warnings),
@@ -1142,5 +1168,6 @@ def validate_parser_result(
         exercise_cards=tuple(validated_exercises),
         observation_cards=tuple(validated_observations),
         modifications=tuple(validated_modifications),
+        tool_call_order=parser_result.tool_call_order,
         warnings=tuple(all_warnings),
     )

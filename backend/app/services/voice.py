@@ -10,7 +10,7 @@ of HTTP concerns.
 import logging
 import time
 import uuid
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -37,7 +37,7 @@ from app.services.validation import (
 
 @dataclass(frozen=True)
 class ClarificationItem:
-    """A yellow-flagged observation that needs trainer clarification."""
+    """An unresolvable parser observation surfaced to the trainer for action."""
 
     observation_text: str
     flag_reason: str | None = None
@@ -106,6 +106,8 @@ def _validated_set_to_db_format(s: ValidatedSet) -> dict:
         d["rir"] = s.rir
     if s.equipment_note is not None:
         d["equipment_note"] = s.equipment_note
+    if s.notes is not None:
+        d["notes"] = s.notes
     return d
 
 
@@ -207,6 +209,12 @@ def _build_modification_kwargs(
 
         kwargs["sets"] = existing_sets
 
+    # Handle add_sets — append new sets to existing ones
+    if mod.add_sets:
+        existing_sets = list(kwargs.get("sets", existing_entry.sets or []))
+        new_sets = [_validated_set_to_db_format(s) for s in mod.add_sets]
+        kwargs["sets"] = existing_sets + new_sets
+
     # Handle form_notes — always append (even for "correct")
     if mod.form_notes:
         existing_notes = list(existing_entry.form_notes or [])
@@ -227,62 +235,31 @@ def _build_modification_kwargs(
 # ---------------------------------------------------------------------------
 
 
-async def process_voice_clip(
+async def _parse_and_persist(
     db: AsyncSession,
     session_id: uuid.UUID,
     client_id: uuid.UUID,
-    audio_data: bytes,
-    mime_type: str,
+    transcript: str,
     default_weight_unit: str = "kg",
 ) -> VoiceClipResult:
-    """Process a voice clip through the full pipeline.
+    """Shared pipeline: load context → parse → validate → persist.
 
-    Steps:
-    1. Transcribe audio via Deepgram
-    2. Load existing session entries for parser context
-    3. Parse transcript via Claude
-    4. Validate parser output (fuzzy match, weight normalization, etc.)
-    5. Persist results to DB
-
-    Args:
-        db: Database session.
-        session_id: The session this clip belongs to.
-        client_id: The client being trained.
-        audio_data: Raw audio bytes.
-        mime_type: MIME type of the audio.
-        default_weight_unit: Default weight unit for this client.
-
-    Returns:
-        VoiceClipResult with created/modified entries, clarifications, and timing.
+    Used by both voice clip processing (after transcription) and
+    text entry processing (user-typed text, no transcription needed).
+    Returns a VoiceClipResult with transcript and pipeline timing filled in;
+    callers add transcription-specific fields via dataclasses.replace().
     """
     all_warnings: list[ValidationWarning] = []
 
-    # Step 1: Transcribe
-    t0 = time.perf_counter()
-    try:
-        transcription = await transcribe_audio(audio_data, mime_type=mime_type)
-    except Exception:
-        logger.exception("Deepgram transcription failed for session %s", session_id)
-        raise
-    transcription_ms = int((time.perf_counter() - t0) * 1000)
-
-    # Empty transcript → return early (silence, background noise)
-    if not transcription.transcript.strip():
-        return VoiceClipResult(
-            transcript="",
-            confidence=transcription.confidence,
-            transcription_ms=transcription_ms,
-        )
-
-    # Step 2: Load context from DB
+    # Load context from DB
     existing_entries = await entry_service.list_entries_by_session(db, session_id)
     context_dicts = [_entry_to_context_dict(e) for e in existing_entries]
 
-    # Step 3: Parse
+    # Parse
     t1 = time.perf_counter()
     try:
         parser_result = await parse_transcript(
-            transcription.transcript,
+            transcript,
             session_context=context_dicts if context_dicts else None,
         )
     except Exception:
@@ -290,7 +267,7 @@ async def process_voice_clip(
         raise
     parsing_ms = int((time.perf_counter() - t1) * 1000)
 
-    # Step 4: Validate
+    # Validate
     t2 = time.perf_counter()
     validation_result = validate_parser_result(
         parser_result,
@@ -300,29 +277,34 @@ async def process_voice_clip(
     validation_ms = int((time.perf_counter() - t2) * 1000)
     all_warnings.extend(validation_result.warnings)
 
-    # Step 5: Persist
+    # Persist
     t3 = time.perf_counter()
     next_seq = await entry_service.get_next_sequence_order(db, session_id)
     created: list[SessionEntry] = []
     modified: list[SessionEntry] = []
     clarifications: list[ClarificationItem] = []
 
-    # Persist exercise cards
-    for card in validation_result.exercise_cards:
-        entry = await _persist_exercise_card(
-            db, card, session_id, client_id, next_seq,
-        )
-        created.append(entry)
-        next_seq += 1
-
-    # Persist observation cards (non-yellow) / collect clarifications (yellow)
-    for card in validation_result.observation_cards:
-        if card.flag_color == "yellow":
-            clarifications.append(ClarificationItem(
-                observation_text=card.observation_text,
-                flag_reason=card.flag_reason,
-            ))
-        else:
+    # Persist new cards in speech order (tool_call_order tracks the sequence
+    # Claude called tools — observation between two exercises stays between them)
+    exercise_iter = iter(validation_result.exercise_cards)
+    observation_iter = iter(validation_result.observation_cards)
+    for entry_type in validation_result.tool_call_order:
+        if entry_type == "exercise":
+            card = next(exercise_iter)
+            entry = await _persist_exercise_card(
+                db, card, session_id, client_id, next_seq,
+            )
+            created.append(entry)
+            next_seq += 1
+        elif entry_type == "observation":
+            card = next(observation_iter)
+            # Clarification observations → surface to trainer, don't persist
+            if card.flag_color == "clarification":
+                clarifications.append(ClarificationItem(
+                    observation_text=card.observation_text,
+                    flag_reason=card.flag_reason,
+                ))
+                continue
             entry = await _persist_observation_card(
                 db, card, session_id, client_id, next_seq,
             )
@@ -361,6 +343,17 @@ async def process_voice_clip(
 
         update_kwargs = _build_modification_kwargs(target_entry, mod)
         if update_kwargs:
+            # Recalculate total_volume_kg when sets change
+            if "sets" in update_kwargs:
+                total = 0.0
+                has_weight = False
+                for s in update_kwargs["sets"]:
+                    w = s.get("weight")
+                    r = s.get("reps", 0)
+                    if w is not None:
+                        total += r * w
+                        has_weight = True
+                update_kwargs["total_volume_kg"] = round(total, 1) if has_weight else None
             updated = await entry_service.update_entry(db, target_entry, **update_kwargs)
             modified.append(updated)
 
@@ -371,10 +364,86 @@ async def process_voice_clip(
         entries_modified=tuple(modified),
         clarifications=tuple(clarifications),
         warnings=tuple(all_warnings),
-        transcript=transcription.transcript,
-        confidence=transcription.confidence,
-        transcription_ms=transcription_ms,
+        transcript=transcript,
         parsing_ms=parsing_ms,
         validation_ms=validation_ms,
         persistence_ms=persistence_ms,
     )
+
+
+async def process_voice_clip(
+    db: AsyncSession,
+    session_id: uuid.UUID,
+    client_id: uuid.UUID,
+    audio_data: bytes,
+    mime_type: str,
+    default_weight_unit: str = "kg",
+) -> VoiceClipResult:
+    """Process a voice clip through the full pipeline.
+
+    Steps:
+    1. Transcribe audio via Deepgram
+    2. Load existing session entries for parser context
+    3. Parse transcript via Claude
+    4. Validate parser output (fuzzy match, weight normalization, etc.)
+    5. Persist results to DB
+
+    Args:
+        db: Database session.
+        session_id: The session this clip belongs to.
+        client_id: The client being trained.
+        audio_data: Raw audio bytes.
+        mime_type: MIME type of the audio.
+        default_weight_unit: Default weight unit for this client.
+
+    Returns:
+        VoiceClipResult with created/modified entries, clarifications, and timing.
+    """
+    # Step 1: Transcribe
+    t0 = time.perf_counter()
+    try:
+        transcription = await transcribe_audio(audio_data, mime_type=mime_type)
+    except Exception:
+        logger.exception("Deepgram transcription failed for session %s", session_id)
+        raise
+    transcription_ms = int((time.perf_counter() - t0) * 1000)
+
+    # Empty transcript → return early (silence, background noise)
+    if not transcription.transcript.strip():
+        return VoiceClipResult(
+            transcript="",
+            confidence=transcription.confidence,
+            transcription_ms=transcription_ms,
+        )
+
+    # Steps 2-5: Parse, validate, persist
+    result = await _parse_and_persist(
+        db, session_id, client_id,
+        transcription.transcript,
+        default_weight_unit,
+    )
+    return replace(result,
+        confidence=transcription.confidence,
+        transcription_ms=transcription_ms,
+    )
+
+
+async def process_text_entry(
+    db: AsyncSession,
+    session_id: uuid.UUID,
+    client_id: uuid.UUID,
+    text: str,
+    default_weight_unit: str = "kg",
+) -> VoiceClipResult:
+    """Process trainer-typed text through the parser pipeline.
+
+    Same as voice clip processing but skips Deepgram transcription.
+    Used when the trainer types an entry after a clarification prompt.
+    """
+    if not text.strip():
+        return VoiceClipResult(transcript="", confidence=1.0)
+
+    result = await _parse_and_persist(
+        db, session_id, client_id, text, default_weight_unit,
+    )
+    return replace(result, confidence=1.0)

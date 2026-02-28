@@ -77,9 +77,10 @@ def _patch_both(
             response = await client.post(...)
     """
     dg_response = _make_deepgram_mock(transcript, confidence, duration)
-    dg_mock = AsyncMock()
-    dg_mock.listen.asyncrest = AsyncMock()
-    dg_mock.listen.asyncrest.transcribe_file = AsyncMock(return_value=dg_response)
+    dg_mock = MagicMock()
+    dg_async_rest = AsyncMock()
+    dg_async_rest.transcribe_file = AsyncMock(return_value=dg_response)
+    dg_mock.listen.asyncrest.v.return_value = dg_async_rest
 
     claude_response = _make_claude_response(tool_calls or [])
     claude_mock = AsyncMock()
@@ -177,7 +178,7 @@ class TestVoiceClipEndpoint:
         assert data["confidence"] == 0.95
 
     async def test_observation_card(self, client, voice_fixtures):
-        """Yellow observation → clarification, not a persisted entry."""
+        """All observations are persisted — yellow flag is severity, not clarification."""
         _, _, session = voice_fixtures
         tool_calls = [
             _make_tool_use_block("record_observation_card", {
@@ -198,10 +199,10 @@ class TestVoiceClipEndpoint:
 
         assert response.status_code == 201
         data = response.json()["data"]
-        # Yellow observations are clarifications, not persisted entries
-        assert len(data["entries_created"]) == 0
-        assert len(data["clarifications_needed"]) == 1
-        assert data["clarifications_needed"][0]["observation_text"] == "Client seems tired today, low energy"
+        assert len(data["entries_created"]) == 1
+        entry = data["entries_created"][0]
+        assert entry["observation_text"] == "Client seems tired today, low energy"
+        assert entry["flag_color"] == "yellow"
 
     async def test_multiple_cards(self, client, voice_fixtures):
         """Two tool calls → two entries created."""
@@ -354,10 +355,10 @@ class TestVoiceClipEndpoint:
         assert modified["form_notes"] == ["good depth", "knees tracking well"]
         assert modified["cues_given"] == ["drive through heels"]
 
-    async def test_clarification_not_persisted(
+    async def test_yellow_observation_persisted(
         self, client, db_session, voice_fixtures,
     ):
-        """Yellow observation → in clarifications_needed, NOT persisted to DB."""
+        """Yellow observation is persisted like any other — flag_color is severity, not clarification."""
         _, _, session = voice_fixtures
 
         # Count entries before
@@ -385,15 +386,15 @@ class TestVoiceClipEndpoint:
 
         assert response.status_code == 201
         data = response.json()["data"]
-        assert len(data["clarifications_needed"]) == 1
-        assert len(data["entries_created"]) == 0
+        assert len(data["entries_created"]) == 1
+        assert data["entries_created"][0]["flag_color"] == "yellow"
 
-        # Verify nothing was persisted
+        # Verify it was persisted
         result = await db_session.execute(
             select(SessionEntry).where(SessionEntry.session_id == session.id)
         )
         entries_after = len(list(result.scalars().all()))
-        assert entries_after == entries_before
+        assert entries_after == entries_before + 1
 
     async def test_non_yellow_observation_persisted(self, client, voice_fixtures):
         """Non-yellow observation cards ARE persisted as entries."""
@@ -469,15 +470,6 @@ class TestVoiceClipEndpoint:
         _, _, session = voice_fixtures
         tool_calls = [
             _make_tool_use_block("record_observation_card", {
-                "observation_text": "Energy dropping mid-session",
-                "flag_color": "yellow",
-                "flag_reason": "fatigue",
-            }),
-        ]
-        # Yellow observations become clarifications, not persisted entries.
-        # Use a non-yellow observation for this test.
-        tool_calls_green = [
-            _make_tool_use_block("record_observation_card", {
                 "observation_text": "Good energy today",
                 "flag_color": "green",
                 "flag_reason": "positive session",
@@ -485,7 +477,7 @@ class TestVoiceClipEndpoint:
         ]
         with _patch_both(
             transcript="good energy today",
-            tool_calls=tool_calls_green,
+            tool_calls=tool_calls,
         ):
             response = await client.post(
                 f"/api/v1/sessions/{session.id}/voice-clip",
@@ -853,6 +845,7 @@ class TestVoiceHelpers:
             action="add",
             target_sets=None,
             updates={"rpe": 8},
+            add_sets=None,
             form_notes=(),
             cues_given=(),
             warnings=(),
@@ -896,6 +889,7 @@ class TestVoiceHelpers:
                 "weight_original": 185,
                 "weight_unit_original": "lbs",
             },
+            add_sets=None,
             form_notes=(),
             cues_given=(),
             warnings=(),
@@ -926,6 +920,7 @@ class TestVoiceHelpers:
             action="add",
             target_sets=None,
             updates=None,
+            add_sets=None,
             form_notes=("Good depth",),
             cues_given=(),
             warnings=(),
@@ -951,6 +946,7 @@ class TestVoiceHelpers:
             action="add",
             target_sets=None,
             updates=None,
+            add_sets=None,
             form_notes=(),
             cues_given=("Squeeze at top",),
             warnings=(),
@@ -980,6 +976,7 @@ class TestVoiceHelpers:
             action="add",
             target_sets=(2,),  # 1-indexed → targets set index 1
             updates={"rpe": 9},
+            add_sets=None,
             form_notes=(),
             cues_given=(),
             warnings=(),
@@ -1006,6 +1003,7 @@ class TestVoiceHelpers:
             action="add",
             target_sets=None,
             updates={"rpe": 8},
+            add_sets=None,
             form_notes=(),
             cues_given=(),
             warnings=(),
@@ -1468,10 +1466,10 @@ class TestMixedContentClips:
         assert "exercise_card" in types
         assert "observation_card" in types
 
-    async def test_exercise_plus_clarification_same_clip(
+    async def test_exercise_plus_yellow_observation_same_clip(
         self, client, voice_fixtures,
     ):
-        """record_exercise_card + yellow observation → exercise persisted, yellow in clarifications."""
+        """record_exercise_card + yellow observation → both persisted in speech order."""
         _, _, session = voice_fixtures
         tool_calls = [
             _make_tool_use_block("record_exercise_card", {
@@ -1496,11 +1494,10 @@ class TestMixedContentClips:
 
         assert response.status_code == 201
         data = response.json()["data"]
-        # Exercise persisted, yellow observation NOT persisted
-        assert len(data["entries_created"]) == 1
+        assert len(data["entries_created"]) == 2
         assert data["entries_created"][0]["entry_type"] == "exercise_card"
-        assert len(data["clarifications_needed"]) == 1
-        assert data["clarifications_needed"][0]["flag_reason"] == "ambiguous weight"
+        assert data["entries_created"][1]["entry_type"] == "observation_card"
+        assert data["entries_created"][1]["flag_color"] == "yellow"
 
     async def test_exercise_plus_modification_same_clip(
         self, client, db_session, voice_fixtures,
@@ -1553,6 +1550,123 @@ class TestMixedContentClips:
         assert data["entries_created"][0]["exercise_name"] == "leg curl"
         assert len(data["entries_modified"]) == 1
         assert data["entries_modified"][0]["sets"][0]["rpe"] == 7
+
+
+# ===================================================================
+# Step 4b: Clarification Routing
+# ===================================================================
+
+
+@pytest.mark.asyncio(loop_scope="session")
+class TestClarificationRouting:
+
+    async def test_clarification_not_persisted(
+        self, client, db_session, voice_fixtures,
+    ):
+        """flag_color="clarification" → not in DB, returned in clarifications_needed."""
+        _, _, session = voice_fixtures
+        tool_calls = [
+            _make_tool_use_block("record_observation_card", {
+                "observation_text": "Unclear reference — could not determine which exercise",
+                "flag_color": "clarification",
+                "flag_reason": "Ambiguous Reference",
+            }),
+        ]
+
+        with _patch_both(
+            transcript="mumbled something about sets",
+            tool_calls=tool_calls,
+        ):
+            response = await client.post(
+                f"/api/v1/sessions/{session.id}/voice-clip",
+                files={"audio": ("test.wav", b"fake-audio-data", "audio/wav")},
+            )
+
+        assert response.status_code == 201
+        data = response.json()["data"]
+        # Not persisted as an entry
+        assert len(data["entries_created"]) == 0
+        # Surfaced in clarifications_needed
+        assert len(data["clarifications_needed"]) == 1
+        clar = data["clarifications_needed"][0]
+        assert "could not determine" in clar["observation_text"]
+        assert clar["flag_reason"] == "Ambiguous Reference"
+
+        # Verify nothing in DB for this clip
+        entries = await db_session.execute(
+            select(SessionEntry).where(
+                SessionEntry.session_id == session.id,
+                SessionEntry.flag_color == "clarification",
+            )
+        )
+        assert entries.scalars().first() is None
+
+    async def test_clarification_with_exercise_in_same_clip(
+        self, client, voice_fixtures,
+    ):
+        """Exercise + clarification in one clip → exercise persisted, clarification extracted."""
+        _, _, session = voice_fixtures
+        tool_calls = [
+            _make_tool_use_block("record_exercise_card", {
+                "exercise_name": "hip thrust",
+                "sets": [{"reps": 12, "weight": 60, "weight_unit": "kg"}],
+            }),
+            _make_tool_use_block("record_observation_card", {
+                "observation_text": "Second part of speech unclear — could not parse",
+                "flag_color": "clarification",
+                "flag_reason": "Unclear Speech",
+            }),
+        ]
+
+        with _patch_both(
+            transcript="hip thrust twelve at 60, then something mumbled",
+            tool_calls=tool_calls,
+        ):
+            response = await client.post(
+                f"/api/v1/sessions/{session.id}/voice-clip",
+                files={"audio": ("test.wav", b"fake-audio-data", "audio/wav")},
+            )
+
+        assert response.status_code == 201
+        data = response.json()["data"]
+        # Exercise persisted
+        assert len(data["entries_created"]) == 1
+        assert data["entries_created"][0]["entry_type"] == "exercise_card"
+        assert data["entries_created"][0]["exercise_name"] == "hip thrust"
+        # Clarification extracted, not persisted
+        assert len(data["clarifications_needed"]) == 1
+        assert data["clarifications_needed"][0]["flag_reason"] == "Unclear Speech"
+
+    async def test_yellow_observation_still_persisted(
+        self, client, voice_fixtures,
+    ):
+        """Real yellow observation (not clarification) → persisted normally."""
+        _, _, session = voice_fixtures
+        tool_calls = [
+            _make_tool_use_block("record_observation_card", {
+                "observation_text": "Client showing signs of fatigue after squats",
+                "flag_color": "yellow",
+                "flag_reason": "Fatigue Warning",
+            }),
+        ]
+
+        with _patch_both(
+            transcript="he looks tired after those squats",
+            tool_calls=tool_calls,
+        ):
+            response = await client.post(
+                f"/api/v1/sessions/{session.id}/voice-clip",
+                files={"audio": ("test.wav", b"fake-audio-data", "audio/wav")},
+            )
+
+        assert response.status_code == 201
+        data = response.json()["data"]
+        # Yellow observation persisted as entry
+        assert len(data["entries_created"]) == 1
+        assert data["entries_created"][0]["entry_type"] == "observation_card"
+        assert data["entries_created"][0]["flag_color"] == "yellow"
+        # No clarifications
+        assert len(data["clarifications_needed"]) == 0
 
 
 # ===================================================================
@@ -1774,3 +1888,93 @@ class TestDataIntegrity:
         stored_set = modified_entry["sets"][0]
         assert stored_set["rir"] == 2
         assert stored_set["rpe"] == 8.0  # RIR 2 → RPE 8
+
+
+# ===================================================================
+# Step 7: Text Entry Endpoint
+# ===================================================================
+
+
+def _patch_claude_only(tool_calls: list[MagicMock] | None = None):
+    """Patch only Claude (no Deepgram) for text-entry tests."""
+    claude_response = _make_claude_response(tool_calls or [])
+    claude_mock = AsyncMock()
+    claude_mock.messages.create = AsyncMock(return_value=claude_response)
+
+    return patch(
+        "app.services.parser.anthropic.AsyncAnthropic",
+        return_value=claude_mock,
+    )
+
+
+@pytest.mark.asyncio(loop_scope="session")
+class TestTextEntryEndpoint:
+
+    async def test_text_entry_creates_exercise_card(self, client, voice_fixtures):
+        """Typed text → exercise card created via parser pipeline."""
+        _, _, session = voice_fixtures
+        tool_calls = [
+            _make_tool_use_block("record_exercise_card", {
+                "exercise_name": "squat",
+                "sets": [
+                    {"reps": 5, "weight": 100, "weight_unit": "kg"},
+                ],
+            })
+        ]
+
+        with _patch_claude_only(tool_calls):
+            resp = await client.post(
+                f"/api/v1/sessions/{session.id}/text-entry",
+                json={"text": "5 reps of squat at 100 kilos"},
+            )
+
+        assert resp.status_code == 201
+        data = resp.json()["data"]
+        assert len(data["entries_created"]) == 1
+        entry = data["entries_created"][0]
+        assert entry["exercise_name"] == "squat"
+        assert entry["sets"][0]["reps"] == 5
+        assert data["confidence"] == 1.0
+        assert data["timing"]["transcription_ms"] == 0
+
+    async def test_text_entry_empty_text_returns_422(self, client, voice_fixtures):
+        """Empty text string is rejected by schema validation."""
+        _, _, session = voice_fixtures
+
+        resp = await client.post(
+            f"/api/v1/sessions/{session.id}/text-entry",
+            json={"text": ""},
+        )
+        assert resp.status_code == 422
+
+    async def test_text_entry_returns_clarification(self, client, voice_fixtures):
+        """Clarification observation from typed text → not persisted, in response."""
+        _, _, session = voice_fixtures
+        tool_calls = [
+            _make_tool_use_block("record_observation_card", {
+                "observation_text": "unclear input",
+                "flag_color": "clarification",
+                "flag_reason": "Could not determine exercise from text",
+            })
+        ]
+
+        with _patch_claude_only(tool_calls):
+            resp = await client.post(
+                f"/api/v1/sessions/{session.id}/text-entry",
+                json={"text": "blah blah something"},
+            )
+
+        assert resp.status_code == 201
+        data = resp.json()["data"]
+        assert len(data["entries_created"]) == 0
+        assert len(data["clarifications_needed"]) == 1
+        assert data["clarifications_needed"][0]["flag_reason"] == "Could not determine exercise from text"
+
+    async def test_text_entry_session_not_found(self, client, voice_fixtures):
+        """Non-existent session → 404."""
+        fake_id = uuid.uuid4()
+        resp = await client.post(
+            f"/api/v1/sessions/{fake_id}/text-entry",
+            json={"text": "bench press 3x10"},
+        )
+        assert resp.status_code == 404
