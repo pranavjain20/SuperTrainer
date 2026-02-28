@@ -4,7 +4,7 @@ AI-powered coaching assistant for personal trainers. Trainers record sessions vi
 
 ## Status
 
-Phase 1b (Voice Pipeline) in progress — Days 1-5 complete, golden audit passed. Full pipeline working: audio upload → Deepgram STT → Claude tool_use parser → validation (fuzzy exercise matching, weight normalization, pain extraction) → structured session entries. 142-exercise DB with 3,466 aliases. 598 tests passing. Next: real transcript testing with prompt tuning.
+Phase 2a (Mobile App) in progress — Days 1-9 code complete, pending on-device testing. Full voice-to-timeline pipeline working on phone: record clip → Deepgram STT → Claude parser → validation → live timeline with inline editing. End-session flow with workout classification, plan dictation, session summary. Phase 1a (backend foundation, 306 tests) and Phase 1b (voice pipeline, 683 tests) complete and merged. 711 backend tests passing.
 
 ## Tech Stack
 
