@@ -21,106 +21,103 @@
 - [x] Concepts doc: `concepts/phase-2-day-1.md`
 
 ### Day 2: API Client + TypeScript Types ✅ COMPLETE
-- [x] `src/api/types.ts` — 23 TypeScript interfaces + 6 type aliases mirroring all backend schemas
-- [x] `src/api/client.ts` — Fetch wrapper (GET/POST/PATCH/DELETE/upload) with typed errors
-- [x] `src/api/clients.ts`, `sessions.ts`, `entries.ts`, `plans.ts`, `voice.ts` — endpoint functions
-- [x] `src/constants/config.ts` — Updated with correct local IP
-- [x] ESLint 8 + Prettier + VS Code workspace settings + npm scripts
-- [x] Staff engineer audit: caught 11 route mismatches (all fixed), 3 medium issues (all fixed)
-- [x] Zero TypeScript errors, zero lint warnings
+- [x] `src/api/types.ts` — All TypeScript interfaces mirroring backend schemas (enums, generic wrappers, all 10 models, create/update variants, SetData union type)
+- [x] `src/api/client.ts` — Fetch wrapper (apiGet/apiPost/apiPatch/apiDelete/apiUpload) with custom ApiError class
+- [x] `src/api/clients.ts`, `sessions.ts`, `entries.ts`, `plans.ts`, `voice.ts` — endpoint functions for all CRUD operations
+- [x] `src/constants/config.ts` — API_BASE_URL with dev IP (192.168.1.160:8000)
 
 ### Day 3: Home Screen + Client List ✅ COMPLETE
-- [x] `src/utils/dates.ts` — formatTime, formatDayHeader, toISODateString (local timezone)
-- [x] `src/hooks/useClients.ts` — useClients + useClientMap TanStack Query hooks (5min cache)
-- [x] `src/hooks/useSessions.ts` — useTodaySessions with client-side join, parallel queries
-- [x] Home screen: today's sessions with smart status pills (Done/In Progress/countdown)
-- [x] Clients screen: search, alphabetical SectionList, pull-to-refresh, client count
-- [x] ClientRow (colored initials, bold name), SessionRow (time, name, status pill)
-- [x] EmptyState, LoadingState, ErrorState shared components
-- [x] `app/(tabs)/clients/[id].tsx` — placeholder detail screen for Day 4
-- [x] Consistent custom headers with safe area insets across all 4 tabs
-- [x] Splash screen switched to solid brand blue
-- [x] TypeScript clean, lint clean, staff engineer audit passed
+- [x] `src/hooks/useClients.ts` — useClients (sorted A-Z, 200 limit) + useClientMap (O(1) lookups)
+- [x] `src/hooks/useSessions.ts` — useTodaySessions with client enrichment (joins client names onto sessions)
+- [x] Home screen: today's sessions with time/status/duration, pull-to-refresh, empty state ("Enjoy your rest day!")
+- [x] Clients screen: search (real-time, case-insensitive), alphabetical grouping by first letter, active count, pull-to-refresh
+- [x] Components: ClientRow (initials avatar + deterministic color), SessionRow (status badge), EmptyState, LoadingState, ErrorState
+- [x] `src/utils/dates.ts` — formatTime, formatDayHeader, formatMemberSince, toISODateString
+- [x] `src/utils/initials.ts` — deterministic initials + color hash from name
+- [x] `src/constants/styles.ts` — shared cardShadow
 
 ### Day 4: Client Profile ✅ COMPLETE
-- [x] `app/(tabs)/clients/[id].tsx` — Tabbed profile (Overview / Sessions / Plans)
-- [x] Header with initials avatar, name, member-since
-- [x] Overview: goal pills + injury history pills
-- [x] Sessions: expandable cards with lazy-loaded entries (exercise tables + observation cards)
-- [x] Plans: plan cards with date headers and numbered items
-- [x] `src/hooks/useClient.ts` — useClient, useClientSessions, useClientPlans
-- [x] `src/utils/initials.ts`, `src/constants/styles.ts` — shared utilities
-- [x] Seed data: rewrote Sarah with per-set notes + observation cards between exercises
-- [x] Audit + staff review: clean
+- [x] `app/(tabs)/clients/[id].tsx` — Client profile screen (491 lines)
+- [x] Header: initials avatar, name, "Training since" date
+- [x] Three-tab layout: Overview (goals pills + injury history), Sessions (expandable cards with entries), Plans (numbered plan text)
+- [x] `src/hooks/useClient.ts` — useClient, useClientSessions (2min stale), useClientPlans
+- [x] Expandable session cards: on-demand entry loading via TanStack Query, cached by session ID
+- [x] ExerciseCard: set table with reps/weight/RPE/notes, handles both seed and voice pipeline data formats
+- [x] ObservationCard: colored left border by flag_color, flag reason header
+- [x] Dynamic route navigation from client list
 
 ### Day 5: Session Screen + Record Button ✅ COMPLETE
-- [x] `[sessionId].tsx` — recording screen (header, timeline, record bar)
-- [x] `RecordButton.tsx` — 64px FAB with animated pulse, haptics, MM:SS duration
-- [x] `useVoiceRecorder.ts` — expo-av recording lifecycle
-- [x] `recordingStore.ts` — Zustand for cross-component recording state
-- [x] Recording navigation guards (tab interception, back button confirmation)
-- [x] Session list on session tab index
+- [x] `useSession.ts` — single session query hook (60s stale)
+- [x] `useVoiceRecorder.ts` — expo-av recording lifecycle (permission → record → stop → URI)
+- [x] `recordingStore.ts` — Zustand store for cross-component recording state
+- [x] `RecordButton.tsx` — animated button (80px, 1.25x recording scale, pulse ring, haptics)
+- [x] `[sessionId].tsx` — recording screen (header, empty timeline, bottom record bar)
+- [x] `session/index.tsx` — replaced placeholder with session list
+- [x] `session/_layout.tsx` — registered [sessionId] route
+- [x] `(tabs)/index.tsx` — wired home screen session navigation
+- [x] `(tabs)/_layout.tsx` — recording navigation guards on all tabs
+- [x] Audit: disabled button for completed sessions, fixed useCallback deps
 
 ### Days 6-7: Voice Pipeline + Inline Editing ✅ COMPLETE
-- [x] `sessionStore.ts` — Zustand for processing state + error tracking
-- [x] `useVoiceClipUpload.ts` — recording → backend upload → cache invalidation
-- [x] `useSessionEntries.ts` — live timeline query hook
-- [x] `Timeline.tsx` — auto-scroll, processing indicator, error retry
-- [x] `ExerciseCard.tsx`, `ObservationCard.tsx`, `EntryCard.tsx` — standalone card components
-- [x] `ExerciseEditModal.tsx` — bottom sheet: exercise name + per-set fields
-- [x] `ObservationEditModal.tsx` — text area + flag color picker (green/yellow/red)
-- [x] `useEntryMutations.ts` — setQueryData for instant cache updates
-- [x] `useEditableEntries.tsx` — shared edit hook (Timeline + client profile)
-- [x] `PressableCard.tsx`, `strings.ts` — DRY extractions
-- [x] Exercise numbering on cards, weight_kg→weight format normalization
-- [x] Parser hardening: no hallucination, no bodyweight assumption, short flag_reason
-- [x] `entry_service.update_entry` recalculates total_volume_kg on sets change
-- [x] 3 new backend tests (694 total), TypeScript clean
-- [x] Full audit: all issues fixed
+- [x] Voice clip upload pipeline (sessionStore, useVoiceClipUpload, Timeline)
+- [x] Tap-to-edit modals (ExerciseEditModal, ObservationEditModal)
+- [x] Optimistic cache updates via setQueryData
+- [x] useEditableEntries shared hook
+- [x] 694 backend tests passing
 
 ### Day 8: Cross-Tab Navigation + Session Flow Polish ✅ COMPLETE
-- [x] Recording screen moved to root level (`/recording/[sessionId]`) — back returns to origin
-- [x] Swipe-back: enabled when not recording, disabled during recording (dynamic `gestureEnabled`)
-- [x] `beforeRemove` navigation guard — intercepts all back attempts during recording, discards partial clip
-- [x] Removed confirmation dialog from session list — all sessions open directly
-- [x] In-progress sessions: green "IN PROGRESS" + blue "CONTINUE SESSION" button
-- [x] Future sessions: amber countdown (<1h) or gray (>1h), no Continue button
-- [x] Custom back buttons on all screens (20px, primary blue, FontAwesome chevron)
-- [x] Client detail: native header replaced with custom back button matching recording screen
-- [x] Timeline scroll fix: auto-scroll only on new entries, not initial load
-- [x] `ConfirmSheet` component: dimmed backdrop, `onRequestClose` for Android
-- [x] `stopRecording()` returns URI directly — prevents clip loss on unmount
-- [x] Tab renamed "Sessions" (plural), recording guard applied uniformly to all tabs
-- [x] Staff engineer + UX audit: all critical/medium issues fixed
-- [x] 694 backend tests passing, TypeScript clean
+- [x] Recording screen at root level (above tabs)
+- [x] Swipe-back guard during recording
+- [x] Session list UX (status pills, continue button, countdown)
+- [x] Custom back buttons, ConfirmSheet, timeline scroll fix
 
 ### Day 9: End Session Flow + UX Polish ✅ COMPLETE
-- [x] Backend: server-side duration computation (ended_at - started_at)
-- [x] Backend: plan-session FK linking with ownership validation
-- [x] Backend: classify endpoint integration tests (14 new, 725 total)
-- [x] Backend: pinned greenlet <3.2 (3.3+ breaks SQLAlchemy)
-- [x] Removed PlanInput — trainers plan the night before, not right after
-- [x] SessionSummary rebalanced: workout type 17px, stats 14px
-- [x] Workout details grouped in single container card with section header
-- [x] Done button always visible (no longer gated on plan)
-- [x] Client profile: structured SUMMARY block (type/duration/exercises/sets)
-- [x] Client profile: exercises in bordered container with 6px dividers
-- [x] Client profile: classify query on expand (cached forever)
-- [x] Systematic typography hierarchy across all card components
-- [x] Timed exercises show duration ("60s", "2m 30s") via getSetReps()
-- [x] Duration formatting: <2min shows seconds, formatDurationMinutes utility
-- [x] ExerciseCard/ObservationCard support contained mode
-- [x] Observation card spacing in contained mode
-- [x] Dead code cleanup: PlanInput, createPlan, transcribeAudio, getKeyObservations
-- [x] ObservationCard DRY fix (shared content variable)
-- [x] useEndSession simplified to endSession + classify
-- [x] End-of-day audit: all findings fixed, 725 tests green
+- [x] Server-side duration computation
+- [x] Summary card + Workout Details + Done button
+- [x] Client profile session summaries with workout type
+- [x] Dead code cleanup, typography hierarchy
+- [x] 725 backend tests passing
 
-### Day 10: Integration Testing + Bug Fixing + 5-Day Golden Audit
-- [ ] Full E2E flow on physical phone (all paths)
-- [ ] Edge cases: empty session, rapid taps, network errors, backgrounding
-- [ ] 5-day golden audit (Days 6-10)
-- [ ] Full test suite, staff engineer audit
+### Day 10: Golden Audit (Days 6-10) — Pending Phone Testing
+- [x] BUG: Remove ended session filter in useSessions.ts
+- [x] TYPE SAFETY: Add null to SessionEntryUpdate, remove unsafe cast
+- [x] DRY: Extract numberExercises utility (3 call sites)
+- [x] DRY: Extract SessionHeader component
+- [x] TEST GAP: Threshold boundary tests for workout classifier
+- [x] Dependency fix: lines-and-columns added to package.json
+- [x] 727 backend tests passing
+- [x] Phone testing checklist (10 core flows + 5 edge cases) — Day 11, all passed
+- [x] Fix anything that fails — 12 UX fixes applied live
+
+### Day 12: Final UX + Merge
+
+- [ ] **"Didn't catch that" UX for failed voice clips**
+  The problem: When the AI parser can't understand a voice clip (mumbled speech, too much background noise, ambiguous reference), it currently creates a yellow-flagged observation card in the timeline. This is wrong because:
+  1. The trainer is mid-session coaching a client — they glance at their phone and see a yellow card with text like "Unclear reference — could not determine which exercise was mentioned." They don't know what that means. Their brain is on their client, not on debugging AI output.
+  2. It looks identical to a real observation (e.g., "Knee pain reported"). The trainer can't instantly tell the difference between "something about my client" and "the system didn't understand me."
+  3. Yellow observation cards have meaning — they're "something to watch" flags (fatigue, minor discomfort). Using the same visual for "I didn't understand" dilutes that meaning.
+
+  What it should be instead: A visually distinct "system message" card in the timeline — clearly not a client observation. Something like a muted/grey card with an icon and simple text: "Couldn't understand that clip" with a "Tap to retry" or "Tap to type it manually" action. The trainer should instantly know: (a) this is the app talking to me, not a note about my client, and (b) I need to re-record or type it.
+
+  Backend context: The parser already handles this correctly — Rule 8 in `parser.py` creates a yellow observation card for ambiguous/unclear input. The voice endpoint (`api/voice.py`) separates these into `clarifications_needed` (not persisted as entries). The fix is frontend: instead of rendering clarifications as observation cards, render them as a distinct "system message" component in the timeline.
+
+  Files to look at: `mobile/src/hooks/useVoiceClipUpload.ts` (where clarifications come back from the API), `mobile/src/components/Timeline.tsx` (where cards render), `mobile/src/components/ObservationCard.tsx` (current yellow card), `backend/app/api/voice.py` (clarifications_needed response field).
+
+- [ ] **Active session banner — always-visible return path**
+  The problem: When a trainer is mid-session recording and navigates away (taps back, checks another client, goes to Home), there's no obvious way to get back to the active session. The back button takes them to wherever they came from (e.g., client profile), not back to the session. The only way back is to go to the Home tab and tap "Continue Session" — but the trainer doesn't know that. They're confused and disoriented mid-session.
+
+  What it should be: A persistent banner visible on every screen when there's an active (in-progress) session. Something like a small bar: "Recording with Jake Morrison · 12:34" that taps to return to the recording screen. Similar to how Uber shows your active ride across all screens, or how phone apps show an active call banner. The trainer should never lose track of their active session regardless of where they navigate.
+
+  Implementation notes: This lives in the root layout (`app/_layout.tsx` or `app/(tabs)/_layout.tsx`), needs to read from a global store (Zustand — possibly extend `recordingStore.ts` or `sessionStore.ts`) to know if there's an active session, and renders above/below the tab bar. The banner should show client name, elapsed time, and navigate to `recording/[sessionId]` on tap. It should disappear when the session is ended.
+
+  Files to look at: `mobile/app/_layout.tsx` (root layout), `mobile/app/(tabs)/_layout.tsx` (tab layout where banner would render), `mobile/src/stores/sessionStore.ts` (active session state), `mobile/src/stores/recordingStore.ts` (recording state), `mobile/app/recording/[sessionId].tsx` (recording screen to navigate to).
+
+- [ ] **Phone test items 2 and 3** on device
+- [ ] **Merge `feat/phase-2a-mobile` to master** — Phase 2a COMPLETE
+
+### Post-Merge: Planning Discussion
+
+- [ ] **Planning discussion:** Define the minimum feature set a trainer needs to actually use this app, where every piece is production-grade. Decide what to build next — brain first (for credibility/wow factor) or production polish first (auth, onboarding, client creation) so a real trainer can use it. Key principle: whatever ships must be flawless, even if not everything ships yet.
 
 ---
 

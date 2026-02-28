@@ -1,8 +1,8 @@
 # SuperTrainer — Current Status
 
-**Last updated:** Feb 27, 2026
-**Current phase:** Phase 2a — Mobile App. Day 9 complete.
-**Next action:** Phase 2a Day 10 — Integration testing, bug fixing, 5-day golden audit.
+**Last updated:** Feb 28, 2026
+**Current phase:** Phase 2a — Mobile App. Day 11 complete. Phone testing passed.
+**Next action:** Day 12 — Planning discussion, "didn't catch that" UX, active session banner. Then merge to master.
 
 ---
 
@@ -24,37 +24,30 @@ Added `GET /api/v1/sessions` — trainer-level session listing with optional `sc
 
 ### Day 2: API Client + TypeScript Types ✅ COMPLETE
 
-**Types:** 23 TypeScript interfaces + 6 type aliases in `src/api/types.ts`, mirroring every backend Pydantic schema (Client, Session, SessionEntry, SessionPlan, InjuryFlag, VoiceClipResponse, etc.). String literal unions for enums. UUIDs and datetimes as strings (JSON serialization).
-**Fetch wrapper:** `src/api/client.ts` — `apiGet`, `apiPost`, `apiPatch`, `apiDelete`, `apiUpload` (multipart). Typed `ApiError` class with status code and error code. Extracts errors from our `{ error: { code, message } }` envelope.
-**Endpoint modules:** 5 files covering all backend routes — clients (4 functions), sessions (6), entries (6), plans (5), voice (1). Every URL verified against actual backend router definitions.
-**Dev tooling:** ESLint 8 + eslint-config-expo + Prettier. Format-on-save in VS Code. npm scripts: `lint`, `lint:fix`, `format`, `typecheck`.
-**Audit finding:** Initial implementation assumed fully nested REST routes (e.g., `/clients/:id/sessions/:id`). Backend uses mixed nesting — lists are nested, single-resource CRUD is flat. 11 routes fixed before commit.
+Full API layer mirroring backend. `src/api/types.ts` — all TypeScript interfaces (enums, generic wrappers, all 10 models, create/update variants, SetData union handling both seed and voice pipeline formats). `src/api/client.ts` — fetch wrapper with apiGet/apiPost/apiPatch/apiDelete/apiUpload and custom ApiError class. Five endpoint modules: `clients.ts`, `sessions.ts`, `entries.ts`, `plans.ts`, `voice.ts`. Config updated with dev machine IP.
 
 ### Day 3: Home Screen + Client List ✅ COMPLETE
 
-Two working screens pulling live data from the backend. Home tab fetches today's sessions, shows cards with client names (resolved via client-side join), time, and smart status pills (Done / In Progress / countdown like "In 45 min"). Both queries fire in parallel; loading spinner covers until both resolve. Clients tab fetches all active clients, displays alphabetically in a searchable section list with deterministic colored initials, pull-to-refresh. Tap navigates to placeholder detail screen (Day 4).
+**Home screen:** Today's sessions with time, client name (enriched client-side via useClientMap), status badge (Done/In Progress/Countdown/Upcoming), duration. Pull-to-refresh. Empty state: "No sessions today — Enjoy your rest day!"
+**Clients screen:** Full client list grouped alphabetically by first letter. Real-time search (case-insensitive). Active client count. Pull-to-refresh.
+**Components:** ClientRow (initials avatar with deterministic color hash), SessionRow (status badge logic), LoadingState, ErrorState (with retry), EmptyState.
+**Hooks:** useClients (sorted A-Z, 200 limit, 5min stale), useClientMap (O(1) lookups from same cache), useTodaySessions (client enrichment, time sorting).
+**Utils:** `dates.ts` (formatTime, formatDayHeader, formatMemberSince, toISODateString), `initials.ts` (deterministic initials + color from name).
 
-Supporting infrastructure: date formatting utils (`formatTime`, `formatDayHeader`, `toISODateString` with local timezone), `useClients` + `useClientMap` hooks with 5min cache, `useTodaySessions` hook with client name join, three shared state components (Empty/Loading/Error). All four tabs use consistent custom headers with safe area insets. Splash screen switched from invisible Expo placeholder to solid brand blue.
+### Day 4: Client Profile ✅ COMPLETE
 
-12 files created, 10 modified. TypeScript clean, lint clean.
-
-### Day 4: Client Profile Screen ✅ COMPLETE
-
-**Tabbed profile:** Three tabs (Overview, Sessions, Plans) with animated underline indicator. Header with large initials avatar, client name, member-since date.
-**Overview tab:** Goals as colored pills, injury history as red pills (split by sentence).
-**Sessions tab:** Expandable session cards — tap to lazy-load entries via `useQuery` with `enabled: expanded`. Entries render in `sequence_order`: exercise cards show set table (Set/Reps/Weight/RPE/Notes), observation cards render as left-border-accented cards between exercises.
-**Plans tab:** Plan cards with date header and numbered line items.
-**Data display:** Notes column only appears when at least one set has per-set notes. No form_notes or cues_given displayed. Observation cards appear between exercises based on sequence_order (not just at the end).
-**Hooks:** `src/hooks/useClient.ts` — `useClient(id)`, `useClientSessions(id)`, `useClientPlans(id)`.
-**Seed data:** Rewrote Sarah Chen's session with realistic data — pre-session observation ("hasn't slept much, energy below baseline"), per-set notes ("left glute felt tight", "rounding at bottom"), mid-session observation between exercises ("energy levels even lower after goblet squat and Romanian deadlift").
-**Utilities:** `src/utils/initials.ts`, `src/constants/styles.ts`, `formatMemberSince()` in dates.ts.
+`app/(tabs)/clients/[id].tsx` — 491-line client profile screen with three-tab layout. **Header:** initials avatar, name, "Training since" date. **Overview tab:** goals (styled pills) + injury history (split on periods). **Sessions tab:** expandable session cards — tap to reveal all entries (exercises + observations), loaded on-demand via TanStack Query, cached by session ID. ExerciseCard shows set table (reps/weight/RPE/notes), handles both seed format (`weight_kg`) and voice pipeline format (`weight`). ObservationCard shows colored left border by flag_color with flag reason header. **Plans tab:** plan cards with date header and numbered lines.
+**Hooks:** useClient (single client, 5min stale), useClientSessions (limit 20, 2min stale), useClientPlans (limit 20, 5min stale).
 
 ### Day 5: Session Screen + Record Button ✅ COMPLETE
 
 **Session recording workspace** — the core UX where trainers record voice clips during sessions.
-**New files (5):** `useSession.ts`, `useVoiceRecorder.ts`, `RecordButton.tsx` (64px animated FAB with pulse ring, haptic feedback, MM:SS duration), `[sessionId].tsx` (recording screen: header, timeline placeholder, bottom record bar), `recordingStore.ts` (Zustand store for cross-component recording state).
-**Recording navigation guards:** Zustand store shares isRecording + stopRecording across components. Back button shows Alert confirmation. Tab layout intercepts all non-session tab presses when recording is active.
-**Animation:** RN built-in Animated API. Button springs to 1.25x, pulse ring loops at 2x scale.
+**New files (5):** `useSession.ts` (single session query, 60s stale), `useVoiceRecorder.ts` (expo-av recording lifecycle: permission → record → stop → URI, cleanup on unmount), `RecordButton.tsx` (80px animated button with pulse ring, haptic feedback, MM:SS duration display), `[sessionId].tsx` (recording screen: header with client name/time/status, empty timeline placeholder, bottom record bar), `recordingStore.ts` (Zustand store for cross-component recording state).
+**Modified files (3):** `session/index.tsx` (replaced placeholder with session list using useTodaySessions), `session/_layout.tsx` (registered [sessionId] route), `(tabs)/index.tsx` (wired home screen session tap → recording screen).
+**Recording navigation guards:** Zustand store shares isRecording + stopRecording across components. Back button shows Alert confirmation. Tab layout intercepts all non-session tab presses when recording is active — "Keep Recording" or "Stop & Leave" (stops recording, then navigates). Session tab unguarded.
+**Animation:** RN built-in Animated API (not Reanimated — version mismatch with Expo Go). Button springs to 1.25x via `Easing.out(Easing.back(1.4))`. Pulse ring loops at 2x scale, 0.5→0 opacity, 1400ms, with 0-duration reset step.
+**Audit fixes:** Record button disabled for completed sessions, missing `setGlobalRecording` deps in useCallback arrays.
+**Note:** Recording only — Day 6 wires `processVoiceClip()` to send audio to backend.
 
 ### Days 6-7: Voice Pipeline + Inline Editing ✅ COMPLETE
 
@@ -68,33 +61,50 @@ Supporting infrastructure: date formatting utils (`formatTime`, `formatDayHeader
 
 ### Day 8: Cross-Tab Navigation + Session Flow Polish ✅ COMPLETE
 
-**Recording screen moved to root level.** Previously lived inside Session tab's stack — tapping a session from Home pushed into the Session tab, so "back" walked through that tab's history instead of returning to Home. Now at `/recording/[sessionId]` above all tabs. `router.back()` returns to wherever you came from (Home, Sessions, Client profile). Tab bar hidden during recording — focused experience.
-
-**Swipe-back with recording guard.** Swipe gesture dynamically disabled while recording (via `useRecordingStore` in root layout). When not recording, swipe works freely. Back button uses `beforeRemove` navigation event to intercept all exit attempts during recording — shows confirmation, discards the interrupted clip (partial audio from swipe isn't useful), and navigates. Intentional stop (mic button tap) still uploads normally.
-
-**Session list UX overhaul.** Removed confirmation dialog from session list — all sessions already exist, tapping opens directly. In-progress sessions show green "IN PROGRESS" pill + blue "CONTINUE SESSION" button (bottom-right). Future-scheduled sessions show amber countdown ("IN 45 MIN") or gray ("IN 2H 30M"). Completed sessions show green "DONE" + duration. Color system: green = active, amber = soon, gray = far out.
-
-**Visual consistency pass.** Custom back buttons on all screens (FontAwesome chevron + bold text in primary blue, 20px). Replaced native stack header on client detail with custom header matching recording screen. Card visual hierarchy fixed — status/action labels at 11px all-caps, clearly subordinate to 20px client name. `ConfirmSheet` component with dimmed backdrop + `onRequestClose` for Android. Tab renamed "Sessions" (plural).
-
-**Timeline scroll fix.** `Timeline.tsx` auto-scroll only triggers when new entries are added during recording (prevEntryCount ref tracking), not on initial data load. Long sessions now start at the top.
-
-**Audit findings fixed.** `stopRecording()` returns URI directly (not just via state) — prevents data loss when component unmounts before upload effect fires. `ConfirmSheet` backdrop dimming + Android back button support. Indentation cleanup in client detail.
+Recording screen moved to root level (`/recording/[sessionId]` above all tabs) — `router.back()` returns to wherever you came from. Tab bar hidden during recording. Swipe-back dynamically disabled while recording (via `useRecordingStore` in root layout). Session list UX overhaul: in-progress sessions show green pill + blue "CONTINUE SESSION" button, future sessions show countdown, completed sessions show "DONE" + duration. Custom back buttons on all screens. `ConfirmSheet` component. Timeline auto-scroll fix (only on new entries, not initial load).
 
 **Files changed:** 14 files (3 created, 1 deleted, 10 edited). **694 backend tests passing.**
 
 ### Day 9: End Session Flow + UX Polish ✅ COMPLETE
 
-**Backend hardening.** Server-side duration computation — `ended_at - started_at` replaces client-side `Date.now()`, eliminating device clock drift risk. Plan-session FK linking with ownership validation on PATCH. 14 new integration tests for classify endpoint + plan linking + duration edge cases. Pinned greenlet <3.2 (3.3+ breaks SQLAlchemy). **725 total backend tests.**
+Server-side duration computation (`ended_at - started_at`). Post-session flow: summary card + Workout Details container card + Done button. `useEndSession` hook. Client profile expandable sessions now show workout type (classify on expand, cached forever). Structured SUMMARY block with TYPE/DURATION/EXERCISES/SETS. Systematic typography hierarchy. Dead code cleanup (deleted PlanInput.tsx, unused functions).
 
-**Post-session flow simplified.** Removed PlanInput entirely — trainers won't dictate notes right after a session, they'll plan the night before. Done button always visible. Summary card + Workout Details container card. `useEndSession` hook stripped to two concerns: endSession + classifyWorkout.
+**Backend:** Plan-session FK linking with ownership validation. 14 new integration tests. **725 total backend tests.**
 
-**Client profile sessions now show summaries.** Expandable session cards fire a classify query on expand (cached forever). Structured SUMMARY block: TYPE / DURATION / EXERCISES / SETS as labeled stat columns. Exercises grouped in a bordered container with 6px dividers. Observations get padding/spacing in contained mode.
+### Day 10: Golden Audit (Days 6-10) ✅ COMPLETE
 
-**Systematic typography hierarchy.** Session date (16px/700) > exercise name (17px/700) > table data (14px/600). ExerciseCard + ObservationCard support `contained` mode (no individual card wrappers) for embedding inside parent containers. Timed exercises (planks, wall sits) show duration ("60s", "2m 30s") via `getSetReps()`. Duration formatting: <2min shows seconds, `formatDurationMinutes` utility for integer display.
+**5 audit findings fixed:**
+1. **BUG — Completed sessions hidden:** `useSessions.ts` filtered out ended sessions. Removed the filter — completed sessions now show with "Done" pill.
+2. **TYPE SAFETY — ObservationEditModal unsafe cast:** `SessionEntryUpdate` didn't allow `null` for `observation_text`, `flag_color`, `flag_reason`. Added `| null` to the type, removed `Record<string, unknown>` cast.
+3. **DRY — Exercise numbering repeated 3x:** Same `let exerciseCount = 0; entries.map(...)` pattern in Timeline, recording screen, client profile. Extracted `numberExercises(entries)` utility returning `Map<string, number>`.
+4. **DRY — Session header duplicated:** ~80% identical header in ended vs active recording screen. Extracted `SessionHeader` component with optional END SESSION button.
+5. **TEST GAP — Classifier threshold boundary:** No test at exactly 70% (boundary) or below. Added `test_at_threshold_boundary` (7/10 = 70% → classifies) and `test_below_threshold` (2/3 = 67% → Full Body).
 
-**Dead code cleanup.** Deleted PlanInput.tsx, removed unused `createPlan`, `transcribeAudio`, `getKeyObservations`. ObservationCard DRY fix (shared content variable for both render paths).
+**Dependency fix:** `lines-and-columns` added to package.json (required by `sucrase` via NativeWind/Tailwind — was missing after node_modules rebuild).
 
-**Files changed:** 18 files (1 deleted, 17 edited). **725 backend tests passing.**
+**Verification:** 727 backend tests passing (725 + 2 new). TypeScript clean (only pre-existing @expo/vector-icons module declaration from Expo bundler). Staff engineer re-read of all changed files.
+
+### Day 11: Phone Testing + UX Fixes ✅ COMPLETE
+
+All 7 test phases passed on physical iPhone via Expo Go. 12 UX fixes applied live during testing:
+- Workout classifier bug: `goblet_squat` vs `Goblet Squat` underscore mismatch (one-line fix in `workout_classifier.py`)
+- Dropped "Sets" from session summary, "Summary" → "Workout Summary"
+- Exercise name sizing 17px/700 → 15px/600
+- Removed yellow highlighting on set notes
+- Goal/injury pill capitalization
+- Observations now require flag_color (green/yellow/red, no null) — parser schema + prompt updated
+- Seed data observations for Sarah Chen flagged yellow
+- Empty session shows "No exercises recorded"
+- In Progress pill orange (was green, same as Done)
+- Status pill sizing matched to Continue Session button
+- Record button 400ms debounce
+
+**727 backend tests passing.**
+
+**Queued for Day 12:**
+1. Planning discussion — minimum viable feature set, what to build next
+2. "Didn't catch that" UX — distinct system message card for failed voice clips
+3. Active session banner — persistent bar when session is active
 
 ---
 
