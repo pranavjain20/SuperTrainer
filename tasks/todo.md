@@ -94,14 +94,49 @@
 - [x] Staff engineer + UX audit: all critical/medium issues fixed
 - [x] 694 backend tests passing, TypeScript clean
 
-### Day 9: End Session Flow + Polish
-- [ ] Summary screen with session stats
-- [ ] Plan dictation (mini recorder or text input)
+### Day 9: End Session Flow + Polish — CODE COMPLETE, PENDING DEVICE TEST
+- [x] `workout_classifier.py` — classify workout by muscle group (push/pull/legs/core/full body)
+- [x] `POST /sessions/{id}/classify` endpoint
+- [x] `POST /transcribe` endpoint — transcribe-only, no persistence (for plan dictation)
+- [x] `WorkoutClassificationResponse` + `TranscribeResponse` schemas
+- [x] 17 new backend tests (12 classifier + 5 transcribe), 711 total passing
+- [x] `SessionSummary.tsx` — green banner, workout type, stats, key observations
+- [x] `PlanInput.tsx` — dictation mic + manual text input, Save/Skip
+- [x] `useEndSession.ts` — orchestrates end/classify/transcribe/save-plan mutations
+- [x] Recording screen: 3-state refactor (active → summary → workout details)
+- [x] `ExerciseCard` + `ObservationCard` visual polish
+- [x] `computeSessionStats`, `formatSessionDuration`, `getKeyObservations` utils
+- [x] Home screen filters ended sessions from today's list
+- [x] Committed + pushed to `feat/phase-2a-mobile` (WIP)
+- [ ] **ON-DEVICE TEST** — see checklist below
 
-### Day 10: Integration Testing + Bug Fixing + Audit
-- [ ] Full E2E flow on physical phone
-- [ ] Edge cases: empty session, rapid taps, network errors, backgrounding
-- [ ] Full test suite, staff engineer audit
+### ⚡ FIRST THING TOMORROW — On-Device Testing for Day 9
+Start backend (`uvicorn app.main:app --reload --host 0.0.0.0`) and Expo (`npx expo start`).
+Open on phone via Expo Go (same Wi-Fi, IP 192.168.1.160 already configured).
+
+**Test checklist:**
+- [ ] Open Sessions tab → tap a session → recording screen loads
+- [ ] Record 2-3 voice clips (real trainer phrases: "bench press 3 sets of 10 at 135 pounds")
+- [ ] Verify clips appear in timeline with correct exercise cards
+- [ ] Tap "End Session" button (top-right, red) → confirm in sheet
+- [ ] Session Summary appears: green banner, workout type label, stat pills, observations
+- [ ] Tap mic icon in PlanInput → dictate notes → text appears after transcription
+- [ ] Edit text manually → Save button enables → tap Save
+- [ ] Plan text shows in summary, Done button appears
+- [ ] Tap Done → returns to previous screen
+- [ ] Re-open ended session from Sessions tab → should show summary + details (not recording)
+- [ ] Tap any entry card → edit modal opens → make a change → card updates instantly
+- [ ] Check Home screen → ended session no longer shows in today's list
+
+**If anything breaks:** note the step, take a screenshot, fix in Day 10.
+
+### Day 10: Integration Testing + Bug Fixing + 5-Day Golden Audit
+- [ ] Fix any issues found in Day 9 device testing
+- [ ] Edge cases: empty session (end with no clips), rapid taps, network errors, backgrounding
+- [ ] Full backend test suite (711+ tests)
+- [ ] 5-day golden audit (Days 5-10): re-read every file, check for drift/DRY/naming
+- [ ] Staff engineer + UX review
+- [ ] Commit Day 9 final (replace WIP commit) + Day 10 work
 
 ---
 
