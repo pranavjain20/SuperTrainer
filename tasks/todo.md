@@ -99,7 +99,7 @@
 
 ### Next Session: Planning Discussion (FIRST TASK)
 
-- [ ] **Planning discussion:** Define the minimum feature set a trainer needs to actually use this app, where every piece is production-grade. Decide what to build next — brain first (for credibility/wow factor) or production polish first (auth, onboarding, client creation) so a real trainer can use it. Key principle: whatever ships must be flawless, even if not everything ships yet.
+- [ ] **Planning discussion:** Phase 2b exists in `docs/BUILD_PLAN.md` (session detail view, AI flag system, swipe navigation, onboarding flow). Much of it was already built during 2a (session history, flags on entries, client profile). Diff what's done vs what's left. Then decide: finish remaining 2b items, jump to Phase 3 (Brain/RAG/patterns), or something else? Goal: by end of next phase, a complete v1 a trainer could use with confidence. Key principle: whatever ships must be flawless, even if not everything ships yet.
 
 ---
 
