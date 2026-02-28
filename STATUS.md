@@ -1,8 +1,8 @@
 # SuperTrainer — Current Status
 
 **Last updated:** Feb 27, 2026
-**Current phase:** Phase 2a — Mobile App. Day 9 code complete, pending on-device testing.
-**Next action:** Test Day 9 end-session flow on phone, then Day 10 integration testing + golden audit.
+**Current phase:** Phase 2a — Mobile App. Day 9 complete.
+**Next action:** Phase 2a Day 10 — Integration testing, bug fixing, 5-day golden audit.
 
 ---
 
@@ -82,20 +82,19 @@ Supporting infrastructure: date formatting utils (`formatTime`, `formatDayHeader
 
 **Files changed:** 14 files (3 created, 1 deleted, 10 edited). **694 backend tests passing.**
 
-### Day 9: End Session Flow — CODE COMPLETE, PENDING ON-DEVICE TESTING
+### Day 9: End Session Flow + UX Polish ✅ COMPLETE
 
-**Backend: Workout classifier + transcribe-only endpoint.** `services/workout_classifier.py` classifies workouts by exercise composition — maps exercises to muscle regions (push/pull/legs/core), returns human-readable labels ("Upper Body Push", "Lower Body", "Full Body", etc.). `POST /sessions/{id}/classify` endpoint wires classifier to session entry data. `POST /transcribe` endpoint provides transcribe-only audio processing (no DB persistence) — used for plan dictation on mobile. Two new Pydantic response schemas: `WorkoutClassificationResponse`, `TranscribeResponse`. **17 new backend tests (12 classifier + 5 transcribe). 711 total passing.**
+**Backend hardening.** Server-side duration computation — `ended_at - started_at` replaces client-side `Date.now()`, eliminating device clock drift risk. Plan-session FK linking with ownership validation on PATCH. 14 new integration tests for classify endpoint + plan linking + duration edge cases. Pinned greenlet <3.2 (3.3+ breaks SQLAlchemy). **725 total backend tests.**
 
-**Mobile: Three-state recording screen.** Recording screen refactored from single state into three phases:
-1. **Active Recording** — timeline + record button (existing), plus new red "End Session" button (top-right, hidden during recording/processing). `ConfirmSheet` with destructive styling for end confirmation.
-2. **Session Summary** — `SessionSummary.tsx` shows green "Session Complete" banner with duration, bold workout type label (auto-classified), stat pills (exercises, sets), top 3 observations sorted by flag priority. `PlanInput.tsx` embedded inside summary — mic button for dictation (uses `/transcribe` endpoint), manual text editing, Save/Skip buttons.
-3. **Workout Details** — scrollable view with summary card at top, full entry list below. Inline editing modals still work on tap.
+**Post-session flow simplified.** Removed PlanInput entirely — trainers won't dictate notes right after a session, they'll plan the night before. Done button always visible. Summary card + Workout Details container card. `useEndSession` hook stripped to two concerns: endSession + classifyWorkout.
 
-**New hooks + utilities.** `useEndSession.ts` orchestrates four mutations: PATCH session (ended_at + duration), POST plan, transcribe audio, classify workout. Auto-triggers classification when session ends. `computeSessionStats()`, `formatSessionDuration()`, `getKeyObservations()` in `sessions.ts`. Home screen filters out ended sessions.
+**Client profile sessions now show summaries.** Expandable session cards fire a classify query on expand (cached forever). Structured SUMMARY block: TYPE / DURATION / EXERCISES / SETS as labeled stat columns. Exercises grouped in a bordered container with 6px dividers. Observations get padding/spacing in contained mode.
 
-**Visual polish.** `ExerciseCard` — exercise number in colored circle, set table with blue header row, rows with notes get warning tint. `ObservationCard` — exclamation icon for red/orange flags, larger fonts, better spacing.
+**Systematic typography hierarchy.** Session date (16px/700) > exercise name (17px/700) > table data (14px/600). ExerciseCard + ObservationCard support `contained` mode (no individual card wrappers) for embedding inside parent containers. Timed exercises (planks, wall sits) show duration ("60s", "2m 30s") via `getSetReps()`. Duration formatting: <2min shows seconds, `formatDurationMinutes` utility for integer display.
 
-**Files changed:** 21 files (6 created, 15 modified). Committed as WIP — **on-device testing pending.**
+**Dead code cleanup.** Deleted PlanInput.tsx, removed unused `createPlan`, `transcribeAudio`, `getKeyObservations`. ObservationCard DRY fix (shared content variable for both render paths).
+
+**Files changed:** 18 files (1 deleted, 17 edited). **725 backend tests passing.**
 
 ---
 
