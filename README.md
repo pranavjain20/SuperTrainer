@@ -4,7 +4,11 @@ AI-powered coaching assistant for personal trainers. Trainers record sessions vi
 
 ## Status
 
-Phase 2a (Mobile App) in progress — Days 1-9 code complete, pending on-device testing. Full voice-to-timeline pipeline working on phone: record clip → Deepgram STT → Claude parser → validation → live timeline with inline editing. End-session flow with workout classification, plan dictation, session summary. Phase 1a (backend foundation, 306 tests) and Phase 1b (voice pipeline, 683 tests) complete and merged. 711 backend tests passing.
+Phase 1a (backend foundation), Phase 1b (voice pipeline), and Phase 2a (mobile app) complete and merged. Design system polish done. 734 backend tests passing.
+
+Full voice-to-timeline pipeline working on phone: record clip → Deepgram STT → Claude parser → validation → live timeline with inline editing. End-session flow with workout classification, session summary. Centralized design token system with Inter + JetBrains Mono typography.
+
+Next: planning discussion for remaining Phase 2b items and Phase 3 (Brain/RAG/patterns).
 
 ## Tech Stack
 
@@ -21,19 +25,20 @@ Phase 2a (Mobile App) in progress — Days 1-9 code complete, pending on-device 
 # Start PostgreSQL (dev on 5434, test on 5433)
 docker compose up -d
 
-# Set up backend
+# Backend
 cd backend
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-
-# Run migrations
 alembic upgrade head
+uvicorn app.main:app --reload --host 0.0.0.0
 
-# Start dev server
-uvicorn app.main:app --reload
-
-# Run tests
+# Tests
 pytest tests/ -x -v
+
+# Mobile
+cd mobile
+npm ci
+npx expo start
 ```
 
 ## Project Docs
