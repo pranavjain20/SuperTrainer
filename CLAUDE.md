@@ -4,9 +4,10 @@
 AI-powered coaching assistant for personal trainers. Trainers record sessions via voice (per-clip, real-time), AI transcribes + structures data into a live session timeline (exercise cards + observation cards). Generates adaptive pre-session briefings with pattern detection and risk alerts. Conversational AI agent ("The Brain") answers any question about any client, creates and modifies session plans.
 
 ## Current Status
-**Phase: PRD v3 Rebuild — Documentation complete, starting Week 1-2 backend.**
+**Phase 1a (backend), 1b (voice pipeline), 2a (mobile app) COMPLETE. Design system polish done. 734 tests.**
 - See STATUS.md for current task state.
 - See docs/PRD.md for full product requirements.
+- Next: planning discussion — define remaining work before Phase 3.
 
 ## Key Documents
 - `docs/PRD.md` — Product requirements, features, build phases, data model
@@ -148,6 +149,15 @@ The goal is code that a great engineer would enjoy reading. Not clever code, not
 - **Files stay cohesive.** One domain per file. When a file starts feeling like it covers too many concerns, split by responsibility — not by arbitrary size.
 - **Type hints on all function signatures.** Including return types. This is a typed codebase.
 - **Tests read like specs.** Name describes the behavior (`test_injury_flag_rejects_pain_level_above_10`), one logical assertion per test, arrange-act-assert flow.
+
+## Mobile Design System
+
+All mobile UI must use the centralized design token system. No ad-hoc colors, font sizes, or spacing values.
+
+- **Colors:** Import from `src/constants/tokens.ts` (`colors.bg.*`, `colors.text.*`, `colors.border.*`, `colors.blue.*`, etc.). Never use raw hex strings.
+- **Typography:** Use `<ThemedText variant="...">` from `src/components/ThemedText.tsx`. Variants: `display`, `title-1`, `title-2`, `title-3`, `body`, `body-medium`, `body-small`, `caption`, `data`, `data-bold`. Never use raw `<Text>` with inline font styles.
+- **Fonts:** Inter (Regular/Medium/SemiBold/Bold) for UI text, JetBrains Mono (Regular/Bold) for data/numbers.
+- **Spacing:** Use Tailwind classes (`px-4`, `mt-3`, `mb-2`) or token values. Keep spacing consistent with existing components.
 
 ## Build Discipline
 
