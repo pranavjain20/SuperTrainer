@@ -120,7 +120,7 @@ What a trainer actually wants in the pre-session AI summary:
 2. **Progression trends at multiple windows** — how has progression been over 3 weeks, 6 weeks, 9 weeks, 12 weeks? Not just "trending up" — specific windows.
 3. **Recurring pain detection with time windows** — any recurring pain over last year, 6 months, 3 months, 6 weeks, 3 weeks? The time window matters — a pain that shows up across 3 months is different from one that appeared last week.
 4. **Training gap detection** — for today's muscle group (e.g. legs), what body parts/muscle groups *haven't* been trained? Not "do this exercise" — "this part of the body hasn't been hit." The AI needs to understand muscle group coverage within a workout type, not just list exercises.
-5. **Session summary line** — when browsing past sessions, the trainer wants a 2-3 line AI summary: what happened + anything that stuck out (new pain, concern, PR, form issue). Not just "Push day" — something like "Push — bench 80kg PR, shoulder discomfort set 3." The workout type alone isn't enough. This was initially deferred as nice-to-have but the trainer specifically asked for it — validates it as a real need, not a feature we invented.
+5. **Session summary (2-3 sentences)** — when browsing past sessions, the trainer wants a real summary, not a label. Three lines covering: what was done, how it went, and anything that stuck out (new pain, concern, PR, form breakdown, something worth remembering). The workout type alone is useless for recall — the trainer needs to read 3 sentences and immediately remember the session. This was initially deferred as nice-to-have but the trainer independently asked for exactly this — validates it as a core need.
 
 ---
 
