@@ -1,8 +1,23 @@
 # SuperTrainer — Current Status
 
-**Last updated:** Feb 28, 2026
-**Current phase:** Phase 2a — Mobile App. COMPLETE. Merged to master.
+**Last updated:** Mar 1, 2026
+**Current phase:** Phase 2a — Mobile App. COMPLETE. Design system polish done.
 **Next action:** Planning discussion — define minimum viable feature set, decide next phase.
+
+---
+
+## Design System Polish — COMPLETE (Mar 1, 2026)
+
+Centralized the entire mobile app's visual language before moving to the next phase. Replaced ad-hoc color strings and inline font styles with a token system + ThemedText component. All 40+ components migrated. Key improvements:
+- **tokens.ts:** semantic color palette, typography scale (display → caption), spacing primitives
+- **ThemedText:** variant-based text component replacing raw Text + inline styles
+- **Inter + JetBrains Mono** font family (6 files) replacing SpaceMono
+- **SessionRow density:** 3-line ~130px → 2-line ~80px compact layout, client name as hero
+- **Section headings:** "Workout Summary" / "Workout Details" bumped from caption to title-3
+- **Home screen spacing:** consistent padding above and below session card list
+- **EndTimePickerSheet:** extracted to its own component
+- **Backend:** timezone-aware date filtering for session list endpoint
+- 734 backend tests passing, phone-tested all core flows
 
 ---
 

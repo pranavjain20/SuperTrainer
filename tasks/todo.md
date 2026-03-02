@@ -97,6 +97,18 @@
 - [x] **Phone tested** — all flows pass
 - [x] **Merge `feat/phase-2a-mobile` to master** — 19 commits squash merged, 734 backend tests green
 
+### Design System Polish ✅ COMPLETE (Mar 1)
+- [x] Centralized token system (tokens.ts) — semantic colors, typography scale, spacing
+- [x] ThemedText component — variant-based, replaces raw Text + inline styles
+- [x] Inter + JetBrains Mono fonts (6 files), replaced SpaceMono
+- [x] Migrated all 40+ components to token system
+- [x] SessionRow: compact 2-line layout (~80px vs ~130px), client name as hero
+- [x] Section headings (Workout Summary/Details): caption → title-3
+- [x] Home screen spacing consistency
+- [x] EndTimePickerSheet extracted to own component
+- [x] Backend: timezone-aware date filtering for session list
+- [x] 734 backend tests passing, phone-tested
+
 ### Next Session: Planning Discussion (FIRST TASK)
 
 - [ ] **Planning discussion:** Phase 2b exists in `docs/BUILD_PLAN.md` (session detail view, AI flag system, swipe navigation, onboarding flow). Much of it was already built during 2a (session history, flags on entries, client profile). Diff what's done vs what's left. Then decide: finish remaining 2b items, jump to Phase 3 (Brain/RAG/patterns), or something else? Goal: by end of next phase, a complete v1 a trainer could use with confidence. Key principle: whatever ships must be flawless, even if not everything ships yet.
