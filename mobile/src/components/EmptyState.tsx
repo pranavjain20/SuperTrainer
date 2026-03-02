@@ -1,8 +1,9 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { ComponentProps } from "react";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 
-import { colors } from "@/src/constants/colors";
+import { ThemedText } from "@/src/components/ThemedText";
+import { colors } from "@/src/constants/tokens";
 
 interface EmptyStateProps {
   icon: ComponentProps<typeof FontAwesome>["name"];
@@ -13,10 +14,12 @@ interface EmptyStateProps {
 export function EmptyState({ icon, title, subtitle }: EmptyStateProps) {
   return (
     <View className="flex-1 items-center justify-center px-10">
-      <FontAwesome name={icon} size={64} color={colors.textTertiary} />
-      <Text className="text-2xl font-bold text-gray-900 mt-5 text-center">{title}</Text>
+      <FontAwesome name={icon} size={64} color={colors.text.tertiary} />
+      <ThemedText variant="title-2" style={{ marginTop: 20, textAlign: "center" }}>{title}</ThemedText>
       {subtitle && (
-        <Text className="text-base text-gray-500 mt-2 text-center">{subtitle}</Text>
+        <ThemedText variant="body" color={colors.text.secondary} style={{ marginTop: 8, textAlign: "center" }}>
+          {subtitle}
+        </ThemedText>
       )}
     </View>
   );

@@ -1,10 +1,11 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 
 import type { SessionEntry, SetData } from "@/src/api/types";
 import { PressableCard } from "@/src/components/PressableCard";
-import { colors } from "@/src/constants/colors";
-import { cardShadow } from "@/src/constants/styles";
+import { ThemedText } from "@/src/components/ThemedText";
+import { colors } from "@/src/constants/tokens";
+import { cardBorder } from "@/src/constants/styles";
 import { getSetNumber, getSetReps, getSetWeight } from "@/src/utils/sets";
 import { capitalizeFirst, capitalizeWords } from "@/src/utils/strings";
 
@@ -17,14 +18,6 @@ interface ExerciseCardProps {
 }
 
 const COL = { set: 32, reps: 44, weight: 64, rpe: 40 };
-
-const headerStyle = {
-  fontSize: 11,
-  fontWeight: "700" as const,
-  color: colors.primary,
-  textTransform: "uppercase" as const,
-  letterSpacing: 0.8,
-};
 
 export function ExerciseCard({ entry, exerciseNumber, onPress, contained }: ExerciseCardProps) {
   const sets = entry.sets ?? [];
@@ -43,19 +36,19 @@ export function ExerciseCard({ entry, exerciseNumber, onPress, contained }: Exer
               width: 28,
               height: 28,
               borderRadius: 14,
-              backgroundColor: colors.primary,
+              backgroundColor: colors.blue[500],
             }}
           >
-            <Text style={{ fontSize: 13, fontWeight: "700", color: "#FFFFFF" }}>
+            <ThemedText variant="caption" color={colors.text.inverse} style={{ fontSize: 13, letterSpacing: 0 }}>
               {exerciseNumber}
-            </Text>
+            </ThemedText>
           </View>
         )}
-        <Text className="flex-1" style={{ fontSize: 15, fontWeight: "600", color: colors.text }}>
+        <ThemedText variant="title-2" style={{ flex: 1 }}>
           {name}
-        </Text>
+        </ThemedText>
         {onPress && (
-          <FontAwesome name="pencil" size={13} color={colors.textTertiary} style={{ marginLeft: 8 }} />
+          <FontAwesome name="pencil" size={13} color={colors.text.tertiary} style={{ marginLeft: 8 }} />
         )}
       </View>
 
@@ -65,13 +58,13 @@ export function ExerciseCard({ entry, exerciseNumber, onPress, contained }: Exer
           {/* Header */}
           <View
             className="flex-row px-4 py-2"
-            style={{ backgroundColor: colors.primary + "08" }}
+            style={{ backgroundColor: colors.blue.alpha12 }}
           >
-            <Text style={{ ...headerStyle, width: COL.set }}>Set</Text>
-            <Text style={{ ...headerStyle, width: COL.reps }}>Reps</Text>
-            <Text style={{ ...headerStyle, width: COL.weight }}>Weight</Text>
-            <Text style={{ ...headerStyle, width: COL.rpe }}>RPE</Text>
-            <Text style={{ ...headerStyle, flex: 1 }}>Notes</Text>
+            <ThemedText variant="caption" color={colors.text.secondary} style={{ width: COL.set }}>Set</ThemedText>
+            <ThemedText variant="caption" color={colors.text.secondary} style={{ width: COL.reps }}>Reps</ThemedText>
+            <ThemedText variant="caption" color={colors.text.secondary} style={{ width: COL.weight }}>Weight</ThemedText>
+            <ThemedText variant="caption" color={colors.text.secondary} style={{ width: COL.rpe }}>RPE</ThemedText>
+            <ThemedText variant="caption" color={colors.text.secondary} style={{ flex: 1 }}>Notes</ThemedText>
           </View>
 
           {/* Rows */}
@@ -83,25 +76,21 @@ export function ExerciseCard({ entry, exerciseNumber, onPress, contained }: Exer
                 className="flex-row items-center px-4 py-2.5"
                 style={{
                   borderTopWidth: 1,
-                  borderTopColor: colors.borderLight,
-                  backgroundColor: undefined,
+                  borderTopColor: colors.border.subtle,
                 }}
               >
-                <Text style={{ fontSize: 13, fontWeight: "600", color: colors.textTertiary, width: COL.set }}>{getSetNumber(set, i)}</Text>
-                <Text style={{ fontSize: 14, fontWeight: "600", color: colors.text, width: COL.reps }}>{getSetReps(set)}</Text>
-                <Text style={{ fontSize: 14, fontWeight: "600", color: colors.text, width: COL.weight }}>{getSetWeight(set)}</Text>
-                <Text style={{ fontSize: 14, fontWeight: "600", color: colors.text, width: COL.rpe }}>{set.rpe ?? "—"}</Text>
-                <Text
-                  style={{
-                    fontSize: 13,
-                    fontWeight: hasNote ? "600" : "400",
-                    color: hasNote ? colors.text : colors.textTertiary,
-                    flex: 1,
-                  }}
+                <ThemedText variant="data" color={colors.text.secondary} style={{ width: COL.set, fontSize: 13 }}>{getSetNumber(set, i)}</ThemedText>
+                <ThemedText variant="data" style={{ width: COL.reps }}>{getSetReps(set)}</ThemedText>
+                <ThemedText variant="data" style={{ width: COL.weight }}>{getSetWeight(set)}</ThemedText>
+                <ThemedText variant="data" style={{ width: COL.rpe }}>{set.rpe ?? "—"}</ThemedText>
+                <ThemedText
+                  variant="body-small"
+                  color={hasNote ? colors.text.primary : colors.text.tertiary}
+                  style={{ flex: 1 }}
                   numberOfLines={2}
                 >
                   {set.notes ? capitalizeFirst(set.notes) : "—"}
-                </Text>
+                </ThemedText>
               </View>
             );
           })}
@@ -116,7 +105,10 @@ export function ExerciseCard({ entry, exerciseNumber, onPress, contained }: Exer
 
   return (
     <PressableCard onPress={onPress}>
-      <View className="mx-4 mb-3 rounded-xl bg-white overflow-hidden" style={cardShadow}>
+      <View
+        className="mx-4 mb-3 rounded-xl overflow-hidden"
+        style={{ backgroundColor: colors.bg.surface1, ...cardBorder }}
+      >
         {content}
       </View>
     </PressableCard>

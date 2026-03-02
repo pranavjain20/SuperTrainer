@@ -12,16 +12,16 @@ import {
   Modal,
   Platform,
   Pressable,
-  Text,
   TextInput,
   View,
 } from "react-native";
 
 import type { SessionEntry, SessionEntryUpdate } from "@/src/api/types";
-import { colors, FLAG_COLORS } from "@/src/constants/colors";
+import { ThemedText } from "@/src/components/ThemedText";
+import { colors, FLAG_COLORS } from "@/src/constants/tokens";
 
 const FLAG_OPTIONS = [
-  { key: null, label: "None", color: colors.textTertiary },
+  { key: null, label: "None", color: colors.text.tertiary },
   { key: "green", label: "Green", color: FLAG_COLORS.green },
   { key: "yellow", label: "Yellow", color: FLAG_COLORS.yellow },
   { key: "red", label: "Red", color: FLAG_COLORS.red },
@@ -74,33 +74,37 @@ export function ObservationEditModal({
         className="flex-1 justify-end"
       >
         {/* Backdrop */}
-        <Pressable className="flex-1" onPress={isSaving ? undefined : onClose} />
+        <Pressable
+          className="flex-1"
+          onPress={isSaving ? undefined : onClose}
+          style={{ backgroundColor: "rgba(0, 0, 0, 0.6)" }}
+        />
 
         {/* Sheet */}
-        <View className="bg-white rounded-t-3xl">
+        <View className="rounded-t-3xl" style={{ backgroundColor: colors.bg.surface1 }}>
           {/* Header */}
-          <View className="px-5 pt-5 pb-3 border-b border-gray-100">
-            <Text className="text-lg font-bold text-gray-900">Edit Observation</Text>
+          <View className="px-5 pt-5 pb-3" style={{ borderBottomWidth: 1, borderBottomColor: colors.border.subtle }}>
+            <ThemedText variant="title-2">Edit Observation</ThemedText>
           </View>
 
           <View className="px-5 pt-4">
             {/* Observation text */}
             <TextInput
-              className="bg-gray-50 rounded-xl px-4 py-3 text-sm text-gray-900 font-medium mb-5"
+              className="rounded-xl px-4 py-3 mb-5"
+              style={{ backgroundColor: colors.bg.surface2, fontSize: 14, fontFamily: "Inter-Medium", color: colors.text.primary, minHeight: 100 }}
               value={observationText}
               onChangeText={setObservationText}
               placeholder="What did you observe?"
-              placeholderTextColor={colors.textTertiary}
+              placeholderTextColor={colors.text.tertiary}
               multiline
               numberOfLines={4}
               textAlignVertical="top"
-              style={{ minHeight: 100 }}
             />
 
             {/* Flag color picker */}
-            <Text className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">
+            <ThemedText variant="caption" color={colors.text.tertiary} style={{ marginBottom: 12 }}>
               Flag
-            </Text>
+            </ThemedText>
             <View className="flex-row gap-3 mb-5">
               {FLAG_OPTIONS.map((opt) => {
                 const isSelected = flagColor === opt.key;
@@ -113,9 +117,9 @@ export function ObservationEditModal({
                     <View
                       className="w-9 h-9 rounded-full items-center justify-center"
                       style={{
-                        backgroundColor: opt.color + (opt.key ? "20" : "10"),
+                        backgroundColor: opt.color + (opt.key ? "30" : "15"),
                         borderWidth: isSelected ? 2.5 : 1,
-                        borderColor: isSelected ? opt.color : opt.color + "40",
+                        borderColor: isSelected ? opt.color : opt.color + "50",
                       }}
                     >
                       <View
@@ -123,12 +127,13 @@ export function ObservationEditModal({
                         style={{ backgroundColor: opt.color }}
                       />
                     </View>
-                    <Text
-                      className="text-[10px] mt-1 font-medium"
-                      style={{ color: isSelected ? opt.color : colors.textTertiary }}
+                    <ThemedText
+                      variant="small"
+                      color={isSelected ? opt.color : colors.text.tertiary}
+                      style={{ marginTop: 4, fontSize: 10 }}
                     >
                       {opt.label}
-                    </Text>
+                    </ThemedText>
                   </Pressable>
                 );
               })}
@@ -136,31 +141,32 @@ export function ObservationEditModal({
           </View>
 
           {/* Footer */}
-          <View className="px-5 pt-4 pb-8 border-t border-gray-100">
+          <View className="px-5 pt-4 pb-8" style={{ borderTopWidth: 1, borderTopColor: colors.border.subtle }}>
             <View className="flex-row justify-between items-center">
               <Pressable onPress={confirmDelete} disabled={isSaving} hitSlop={12}>
-                <Text style={{ fontSize: 15, fontWeight: "700", color: colors.error }}>
+                <ThemedText variant="body-medium" color={colors.red[500]}>
                   Delete
-                </Text>
+                </ThemedText>
               </Pressable>
 
               <View className="flex-row gap-3">
                 <Pressable
                   onPress={onClose}
                   disabled={isSaving}
-                  className="px-6 py-3 rounded-xl bg-gray-100"
+                  className="px-6 py-3 rounded-xl"
+                  style={{ backgroundColor: colors.bg.surface2 }}
                 >
-                  <Text style={{ fontSize: 15, fontWeight: "700", color: colors.textSecondary }}>Cancel</Text>
+                  <ThemedText variant="body-medium" color={colors.text.secondary}>Cancel</ThemedText>
                 </Pressable>
                 <Pressable
                   onPress={handleSave}
                   disabled={isSaving}
                   className="px-6 py-3 rounded-xl"
-                  style={{ backgroundColor: colors.primary, opacity: isSaving ? 0.5 : 1 }}
+                  style={{ backgroundColor: colors.blue[500], opacity: isSaving ? 0.5 : 1 }}
                 >
-                  <Text style={{ fontSize: 15, fontWeight: "700", color: "#FFFFFF" }}>
+                  <ThemedText variant="body-medium" color={colors.text.inverse}>
                     {isSaving ? "Saving..." : "Save"}
-                  </Text>
+                  </ThemedText>
                 </Pressable>
               </View>
             </View>

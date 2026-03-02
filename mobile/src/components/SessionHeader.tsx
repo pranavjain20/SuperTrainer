@@ -6,10 +6,11 @@
  */
 
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { colors } from "@/src/constants/colors";
+import { ThemedText } from "@/src/components/ThemedText";
+import { colors } from "@/src/constants/tokens";
 
 interface StatusDisplay {
   label: string;
@@ -38,36 +39,36 @@ export function SessionHeader({
   const insets = useSafeAreaInsets();
 
   return (
-    <View className="bg-white pb-4 px-5" style={{ paddingTop: insets.top + 8 }}>
+    <View
+      className="pb-4 px-5"
+      style={{ backgroundColor: colors.bg.surface1, paddingTop: insets.top + 8 }}
+    >
       <Pressable
         onPress={onBack}
         className="flex-row items-center mb-3 -ml-1"
         hitSlop={{ top: 16, bottom: 16, left: 12, right: 24 }}
       >
-        <FontAwesome name="chevron-left" size={20} color={colors.primary} />
-        <Text
-          className="text-xl font-bold ml-2"
-          style={{ color: colors.primary }}
-        >
+        <FontAwesome name="chevron-left" size={20} color={colors.blue[500]} />
+        <ThemedText variant="title-3" color={colors.blue[500]} style={{ marginLeft: 8 }}>
           Back
-        </Text>
+        </ThemedText>
       </Pressable>
 
-      <Text className="text-3xl font-bold text-gray-900">{clientName}</Text>
+      <ThemedText variant="display" style={{ fontSize: 28 }}>{clientName}</ThemedText>
 
       <View className="flex-row items-end mt-2.5">
-        <Text className="text-lg font-semibold text-gray-700">{sessionTime}</Text>
+        <ThemedText variant="body-medium" color={colors.text.secondary}>{sessionTime}</ThemedText>
         <View
           className="flex-row items-center px-4 py-2 rounded-full ml-3"
-          style={{ backgroundColor: status.color + "1A" }}
+          style={{ backgroundColor: status.color + "25" }}
         >
           <View
             className="w-2.5 h-2.5 rounded-full mr-2"
             style={{ backgroundColor: status.color }}
           />
-          <Text className="text-base font-bold" style={{ color: status.color }}>
+          <ThemedText variant="body-medium" color={status.color} style={{ fontSize: 14 }}>
             {status.label}
-          </Text>
+          </ThemedText>
         </View>
 
         {showEndButton && onEndPress && (
@@ -76,16 +77,13 @@ export function SessionHeader({
             disabled={isEnding}
             className="ml-auto rounded-xl items-center justify-center px-5 py-3.5"
             style={{
-              backgroundColor: colors.error,
+              backgroundColor: colors.red[500],
               opacity: isEnding ? 0.5 : 1,
             }}
           >
-            <Text
-              className="font-black tracking-widest text-white"
-              style={{ fontSize: 13 }}
-            >
+            <ThemedText variant="caption" color={colors.text.primary}>
               END SESSION
-            </Text>
+            </ThemedText>
           </Pressable>
         )}
       </View>

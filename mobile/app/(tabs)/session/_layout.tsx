@@ -1,13 +1,13 @@
 import { Stack } from "expo-router";
 
-import { colors } from "@/src/constants/colors";
+import { colors } from "@/src/constants/tokens";
 
 export default function SessionLayout() {
   return (
     <Stack
       screenOptions={{
-        headerStyle: { backgroundColor: colors.surface },
-        headerTintColor: colors.text,
+        headerStyle: { backgroundColor: colors.bg.surface1 },
+        headerTintColor: colors.text.primary,
       }}
     >
       <Stack.Screen name="index" options={{ headerShown: false }} />

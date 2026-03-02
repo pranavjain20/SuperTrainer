@@ -45,11 +45,12 @@ export const useSessionStore = create<SessionStore>((set) => ({
     set({ isProcessing: true, processingError: null, failedAudioUri: null }),
 
   finishProcessing: (clarifications) =>
-    set((state) => ({
+    set({
       isProcessing: false,
-      // Accumulate across clips — trainer sees all unresolved items
-      clarifications: [...state.clarifications, ...clarifications],
-    })),
+      // Each clip result fully replaces previous state — useVoiceClipUpload
+      // passes [] when entries are produced, clearing stale clarifications.
+      clarifications,
+    }),
 
   failProcessing: (error, audioUri) =>
     set({ isProcessing: false, processingError: error, failedAudioUri: audioUri }),

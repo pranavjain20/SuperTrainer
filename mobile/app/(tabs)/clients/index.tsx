@@ -1,7 +1,7 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useRouter } from "expo-router";
 import { useCallback, useMemo, useState } from "react";
-import { SectionList, Text, TextInput, View } from "react-native";
+import { SectionList, TextInput, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import type { Client } from "@/src/api/types";
@@ -9,8 +9,9 @@ import { ClientRow } from "@/src/components/ClientRow";
 import { EmptyState } from "@/src/components/EmptyState";
 import { ErrorState } from "@/src/components/ErrorState";
 import { LoadingState } from "@/src/components/LoadingState";
+import { ThemedText } from "@/src/components/ThemedText";
 import { useClients } from "@/src/hooks/useClients";
-import { colors } from "@/src/constants/colors";
+import { colors } from "@/src/constants/tokens";
 
 interface ClientSection {
   title: string;
@@ -65,7 +66,7 @@ export default function ClientsScreen() {
 
   if (isLoading) {
     return (
-      <View className="flex-1 bg-[#FAFAFA]">
+      <View className="flex-1 bg-base">
         <LoadingState />
       </View>
     );
@@ -73,7 +74,7 @@ export default function ClientsScreen() {
 
   if (isError) {
     return (
-      <View className="flex-1 bg-[#FAFAFA]">
+      <View className="flex-1 bg-base">
         <ErrorState
           message={error?.message ?? "Failed to load clients"}
           onRetry={refetch}
@@ -86,23 +87,28 @@ export default function ClientsScreen() {
   const hasResults = filtered.length > 0;
 
   return (
-    <View className="flex-1 bg-[#FAFAFA]">
+    <View className="flex-1 bg-base">
       {/* Search bar + count */}
       {hasClients && (
         <View
-          className="px-5 pb-3 bg-white border-b border-gray-100"
+          className="px-5 pb-3 bg-surface-1 border-b border-border-subtle"
           style={{ paddingTop: insets.top + 12 }}
         >
-          <Text className="text-3xl font-bold text-gray-900">Clients</Text>
-          <Text className="text-base font-semibold text-gray-600 mt-1 mb-3">
+          <ThemedText variant="display">Clients</ThemedText>
+          <ThemedText
+            variant="body-medium"
+            color={colors.text.secondary}
+            style={{ marginTop: 4, marginBottom: 12 }}
+          >
             {filtered.length} active {filtered.length === 1 ? "client" : "clients"}
-          </Text>
-          <View className="flex-row items-center bg-gray-100 rounded-xl px-4 py-3">
-            <FontAwesome name="search" size={16} color={colors.textTertiary} />
+          </ThemedText>
+          <View className="flex-row items-center bg-surface-2 rounded-lg px-4 py-3">
+            <FontAwesome name="search" size={16} color={colors.text.tertiary} />
             <TextInput
-              className="flex-1 ml-3 text-base text-gray-900"
+              className="flex-1 ml-3 text-base"
+              style={{ color: colors.text.primary, fontFamily: "Inter-Regular" }}
               placeholder="Search clients..."
-              placeholderTextColor={colors.textTertiary}
+              placeholderTextColor={colors.text.tertiary}
               value={search}
               onChangeText={setSearch}
               autoCapitalize="none"
@@ -112,7 +118,7 @@ export default function ClientsScreen() {
               <FontAwesome
                 name="times-circle"
                 size={18}
-                color={colors.textTertiary}
+                color={colors.text.tertiary}
                 onPress={() => setSearch("")}
               />
             )}
@@ -125,8 +131,10 @@ export default function ClientsScreen() {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <ClientRow client={item} onPress={handlePress} />}
         renderSectionHeader={({ section }) => (
-          <View className="px-5 pt-4 pb-1 bg-[#FAFAFA]">
-            <Text className="text-sm font-bold text-gray-400">{section.title}</Text>
+          <View className="px-5 pt-4 pb-1 bg-base">
+            <ThemedText variant="caption" color={colors.text.tertiary}>
+              {section.title}
+            </ThemedText>
           </View>
         )}
         contentContainerStyle={

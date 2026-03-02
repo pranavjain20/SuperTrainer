@@ -25,13 +25,14 @@ router = APIRouter(prefix="/sessions", tags=["sessions"])
 @router.get("", response_model=SessionListResponse)
 async def list_sessions(
     scheduled_for_date: date | None = Query(None, description="Filter by date (ISO format, e.g. 2026-02-25)"),
+    tz: str = Query("UTC", description="IANA timezone (e.g. America/New_York) for date filtering"),
     cursor: uuid.UUID | None = None,
     limit: int = 20,
     db: AsyncSession = Depends(get_db),
 ) -> SessionListResponse:
     trainer_id = await get_trainer_id(db)
     sessions, has_more = await session_service.list_sessions_by_trainer(
-        db, trainer_id, scheduled_for_date=scheduled_for_date, cursor=cursor, limit=limit,
+        db, trainer_id, scheduled_for_date=scheduled_for_date, tz=tz, cursor=cursor, limit=limit,
     )
     last_id = str(sessions[-1].id) if sessions else None
     return SessionListResponse(

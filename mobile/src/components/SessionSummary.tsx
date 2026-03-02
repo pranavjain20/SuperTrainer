@@ -6,10 +6,11 @@
  */
 
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 
-import { colors } from "@/src/constants/colors";
-import { cardShadow } from "@/src/constants/styles";
+import { ThemedText } from "@/src/components/ThemedText";
+import { colors } from "@/src/constants/tokens";
+import { cardBorder } from "@/src/constants/styles";
 
 interface SessionSummaryProps {
   duration: string;
@@ -35,31 +36,31 @@ export function SessionSummary({
 
   return (
     <View
-      className="mx-4 mt-4 rounded-2xl bg-white overflow-hidden"
-      style={cardShadow}
+      className="mx-4 mt-4 rounded-xl overflow-hidden"
+      style={{ backgroundColor: colors.bg.surface1, ...cardBorder }}
     >
       {/* ── Green success banner ── */}
-      <View style={{ backgroundColor: colors.success + "14", paddingHorizontal: 20, paddingTop: 16, paddingBottom: 14 }}>
+      <View style={{ backgroundColor: colors.green.alpha12, paddingHorizontal: 20, paddingTop: 16, paddingBottom: 14 }}>
         <View className="flex-row items-center justify-between">
           <View className="flex-row items-center">
             <View
               className="w-9 h-9 rounded-full items-center justify-center mr-3"
-              style={{ backgroundColor: colors.success + "2A" }}
+              style={{ backgroundColor: colors.green.alpha12 }}
             >
-              <FontAwesome name="check" size={16} color={colors.success} />
+              <FontAwesome name="check" size={16} color={colors.green[500]} />
             </View>
-            <Text style={{ fontSize: 18, fontWeight: "800", color: colors.success, letterSpacing: 0.3 }}>
+            <ThemedText variant="title-2" color={colors.green[500]}>
               Session Complete
-            </Text>
+            </ThemedText>
           </View>
 
           <View
             className="px-3.5 py-1.5 rounded-full"
-            style={{ backgroundColor: colors.success + "22" }}
+            style={{ backgroundColor: colors.green.alpha12 }}
           >
-            <Text style={{ fontSize: 15, fontWeight: "800", color: colors.success }}>
+            <ThemedText variant="data-bold" color={colors.green[500]}>
               {duration}
-            </Text>
+            </ThemedText>
           </View>
         </View>
       </View>
@@ -68,19 +69,19 @@ export function SessionSummary({
       <View className="px-5 pt-3 pb-3.5">
         {exerciseCount > 0 || isClassifying ? (
           <>
-            <Text style={{ fontSize: 17, fontWeight: "700", color: colors.text }}>
+            <ThemedText variant="title-3">
               {isClassifying ? "Analyzing..." : (workoutType ?? "Session")}
-            </Text>
+            </ThemedText>
             {statsLine.length > 0 && (
-              <Text style={{ fontSize: 14, fontWeight: "600", color: colors.textSecondary, marginTop: 3 }}>
+              <ThemedText variant="body-small" color={colors.text.secondary} style={{ marginTop: 3 }}>
                 {statsLine}
-              </Text>
+              </ThemedText>
             )}
           </>
         ) : (
-          <Text style={{ fontSize: 14, fontWeight: "600", color: colors.text }}>
+          <ThemedText variant="body-small">
             No exercises recorded
-          </Text>
+          </ThemedText>
         )}
       </View>
     </View>

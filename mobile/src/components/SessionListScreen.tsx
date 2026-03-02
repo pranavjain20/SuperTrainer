@@ -4,13 +4,15 @@
  */
 
 import { useRouter } from "expo-router";
-import { FlatList, Text, View } from "react-native";
+import { FlatList, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { EmptyState } from "@/src/components/EmptyState";
 import { ErrorState } from "@/src/components/ErrorState";
 import { LoadingState } from "@/src/components/LoadingState";
 import { SessionRow } from "@/src/components/SessionRow";
+import { ThemedText } from "@/src/components/ThemedText";
+import { colors } from "@/src/constants/tokens";
 import type { SessionWithClient } from "@/src/hooks/useSessions";
 import { useTodaySessions } from "@/src/hooks/useSessions";
 import { formatDayHeader } from "@/src/utils/dates";
@@ -32,7 +34,7 @@ export function SessionListScreen({ title, emptySubtitle }: SessionListScreenPro
 
   if (isLoading) {
     return (
-      <View className="flex-1 bg-[#FAFAFA]">
+      <View className="flex-1 bg-base">
         <LoadingState />
       </View>
     );
@@ -40,7 +42,7 @@ export function SessionListScreen({ title, emptySubtitle }: SessionListScreenPro
 
   if (isError) {
     return (
-      <View className="flex-1 bg-[#FAFAFA]">
+      <View className="flex-1 bg-base">
         <ErrorState
           message={error?.message ?? "Failed to load sessions"}
           onRetry={refetch}
@@ -50,7 +52,7 @@ export function SessionListScreen({ title, emptySubtitle }: SessionListScreenPro
   }
 
   return (
-    <View className="flex-1 bg-[#FAFAFA]">
+    <View className="flex-1 bg-base">
       <FlatList
         data={sessions}
         keyExtractor={(item) => item.id}
@@ -61,9 +63,14 @@ export function SessionListScreen({ title, emptySubtitle }: SessionListScreenPro
           sessions.length === 0 ? { flex: 1 } : { paddingBottom: 16 }
         }
         ListHeaderComponent={
-          <View className="px-5 pb-4 bg-white" style={{ paddingTop: insets.top + 12 }}>
-            <Text className="text-3xl font-bold text-gray-900">{title}</Text>
-            <Text className="text-lg font-semibold text-gray-500 mt-1">{today}</Text>
+          <View
+            className="px-5 pb-6 mb-4 bg-surface-1 border-b border-border-subtle"
+            style={{ paddingTop: insets.top + 12 }}
+          >
+            <ThemedText variant="display">{title}</ThemedText>
+            <ThemedText variant="body-medium" color={colors.text.secondary} style={{ marginTop: 4 }}>
+              {today}
+            </ThemedText>
           </View>
         }
         ListEmptyComponent={

@@ -4,7 +4,7 @@ import { ComponentProps } from "react";
 import { Alert, View } from "react-native";
 
 import { ActiveSessionBanner } from "@/src/components/ActiveSessionBanner";
-import { colors } from "@/src/constants/colors";
+import { colors } from "@/src/constants/tokens";
 import { useRecordingStore } from "@/src/stores/recordingStore";
 
 function TabIcon(props: {
@@ -57,16 +57,17 @@ export default function TabLayout() {
     <View style={{ flex: 1 }}>
       <Tabs
         screenOptions={{
-          tabBarActiveTintColor: colors.tabActive,
-          tabBarInactiveTintColor: colors.tabInactive,
+          tabBarActiveTintColor: colors.blue[500],
+          tabBarInactiveTintColor: colors.text.tertiary,
           tabBarStyle: {
-            backgroundColor: colors.surface,
-            borderTopColor: colors.borderLight,
+            backgroundColor: colors.bg.surface1,
+            borderTopColor: colors.border.subtle,
+            borderTopWidth: 1,
           },
           headerStyle: {
-            backgroundColor: colors.surface,
+            backgroundColor: colors.bg.surface1,
           },
-          headerTintColor: colors.text,
+          headerTintColor: colors.text.primary,
         }}
       >
         <Tabs.Screen

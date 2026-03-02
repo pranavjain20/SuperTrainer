@@ -1,7 +1,8 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, View } from "react-native";
 
-import { colors } from "@/src/constants/colors";
+import { ThemedText } from "@/src/components/ThemedText";
+import { colors } from "@/src/constants/tokens";
 
 interface ErrorStateProps {
   message?: string;
@@ -14,15 +15,19 @@ export function ErrorState({
 }: ErrorStateProps) {
   return (
     <View className="flex-1 items-center justify-center px-8">
-      <FontAwesome name="exclamation-circle" size={48} color={colors.error} />
-      <Text className="text-base text-gray-700 mt-4 text-center">{message}</Text>
+      <FontAwesome name="exclamation-circle" size={48} color={colors.red[500]} />
+      <ThemedText variant="body" color={colors.text.secondary} style={{ marginTop: 16, textAlign: "center" }}>
+        {message}
+      </ThemedText>
       {onRetry && (
         <Pressable
           onPress={onRetry}
           className="mt-4 px-6 py-2.5 rounded-lg active:opacity-80"
-          style={{ backgroundColor: colors.primary }}
+          style={{ backgroundColor: colors.blue[500] }}
         >
-          <Text className="text-white font-semibold text-sm">Try Again</Text>
+          <ThemedText variant="body-medium" color={colors.text.inverse} style={{ fontSize: 14 }}>
+            Try Again
+          </ThemedText>
         </Pressable>
       )}
     </View>

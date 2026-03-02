@@ -15,7 +15,8 @@ import { ClarificationModal } from "@/src/components/ClarificationModal";
 import { EmptyState } from "@/src/components/EmptyState";
 import { EntryCard } from "@/src/components/EntryCard";
 import { ManualEntryModal } from "@/src/components/ManualEntryModal";
-import { colors } from "@/src/constants/colors";
+import { ThemedText } from "@/src/components/ThemedText";
+import { colors } from "@/src/constants/tokens";
 import { useEditableEntries } from "@/src/hooks/useEditableEntries";
 import { useSessionEntries } from "@/src/hooks/useSessionEntries";
 import { useSessionStore } from "@/src/stores/sessionStore";
@@ -154,10 +155,10 @@ export function Timeline({ sessionId, onRetry, onStartRecording, bottomPadding =
         {/* Processing indicator */}
         {isProcessing && (
           <View className="flex-row items-center justify-center py-5">
-            <ActivityIndicator size="small" color={colors.primary} />
-            <Text className="text-sm font-medium text-gray-500 ml-3">
+            <ActivityIndicator size="small" color={colors.blue[500]} />
+            <ThemedText variant="body-small" color={colors.text.secondary} style={{ marginLeft: 12 }}>
               Processing clip...
-            </Text>
+            </ThemedText>
           </View>
         )}
 
@@ -170,24 +171,21 @@ export function Timeline({ sessionId, onRetry, onStartRecording, bottomPadding =
             }}
             className="mx-4 my-2 rounded-xl overflow-hidden"
             style={{
-              backgroundColor: colors.error + "10",
+              backgroundColor: colors.red.alpha12,
               borderLeftWidth: 3,
-              borderLeftColor: colors.error + "60",
+              borderLeftColor: colors.red[500] + "60",
             }}
           >
             <View className="px-4 py-3.5">
-              <Text
-                className="text-[10px] font-bold uppercase tracking-widest mb-2"
-                style={{ color: colors.error }}
-              >
+              <ThemedText variant="caption" color={colors.red[500]} style={{ marginBottom: 8 }}>
                 Processing Failed
-              </Text>
-              <Text className="text-[13px] text-gray-700 leading-5 font-medium">
+              </ThemedText>
+              <ThemedText variant="body-small" color={colors.text.primary} style={{ lineHeight: 20 }}>
                 {processingError}
-              </Text>
-              <Text className="text-xs font-bold mt-2" style={{ color: colors.primary }}>
+              </ThemedText>
+              <ThemedText variant="body-small" color={colors.blue[500]} style={{ marginTop: 8, fontFamily: "Inter-SemiBold" }}>
                 Tap to retry
-              </Text>
+              </ThemedText>
             </View>
           </Pressable>
         )}

@@ -8,7 +8,6 @@ import {
   Pressable,
   RefreshControl,
   ScrollView,
-  Text,
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -19,8 +18,9 @@ import type { Session, SessionPlan } from "@/src/api/types";
 import { EntryCard } from "@/src/components/EntryCard";
 import { ErrorState } from "@/src/components/ErrorState";
 import { LoadingState } from "@/src/components/LoadingState";
-import { colors } from "@/src/constants/colors";
-import { cardShadow } from "@/src/constants/styles";
+import { ThemedText } from "@/src/components/ThemedText";
+import { colors } from "@/src/constants/tokens";
+import { cardBorder } from "@/src/constants/styles";
 import { useClient, useClientPlans, useClientSessions } from "@/src/hooks/useClient";
 import { useEditableEntries } from "@/src/hooks/useEditableEntries";
 import { sessionsQueryKey } from "@/src/hooks/useSessions";
@@ -44,7 +44,10 @@ function ProfileTabBar({
   onSelect: (tab: Tab) => void;
 }) {
   return (
-    <View className="flex-row bg-white border-b border-gray-100 px-4">
+    <View
+      className="flex-row px-4"
+      style={{ backgroundColor: colors.bg.surface1, borderBottomWidth: 1, borderBottomColor: colors.border.subtle }}
+    >
       {TABS.map((tab) => {
         const isActive = tab === active;
         return (
@@ -53,16 +56,17 @@ function ProfileTabBar({
             onPress={() => onSelect(tab)}
             className="flex-1 items-center py-3.5"
           >
-            <Text
-              className="text-sm font-bold"
-              style={{ color: isActive ? colors.primary : colors.textTertiary }}
+            <ThemedText
+              variant="body-medium"
+              color={isActive ? colors.blue[500] : colors.text.tertiary}
+              style={{ fontSize: 14 }}
             >
               {tab}
-            </Text>
+            </ThemedText>
             {isActive && (
               <View
                 className="absolute bottom-0 left-4 right-4 h-[2.5px] rounded-full"
-                style={{ backgroundColor: colors.primary }}
+                style={{ backgroundColor: colors.blue[500] }}
               />
             )}
           </Pressable>
@@ -80,11 +84,11 @@ function GoalPill({ goal }: { goal: string }) {
   return (
     <View
       className="px-4 py-2.5 rounded-full mr-2 mb-2"
-      style={{ backgroundColor: colors.primary + "15" }}
+      style={{ backgroundColor: colors.blue.alpha12 }}
     >
-      <Text className="text-sm font-bold" style={{ color: colors.primary }}>
+      <ThemedText variant="body-small" color={colors.blue[500]} style={{ fontFamily: "Inter-SemiBold" }}>
         {goal.charAt(0).toUpperCase() + goal.slice(1)}
-      </Text>
+      </ThemedText>
     </View>
   );
 }
@@ -126,49 +130,52 @@ function ExpandableSessionCard({ session }: { session: Session }) {
 
   return (
     <>
-      <View className="bg-white rounded-2xl mx-4 mb-3.5 overflow-hidden" style={cardShadow}>
+      <View
+        className="rounded-xl mx-4 mb-3.5 overflow-hidden"
+        style={{ backgroundColor: colors.bg.surface1, ...cardBorder }}
+      >
         {/* Session header — tap to expand */}
         <Pressable
           onPress={() => setExpanded(!expanded)}
           className="flex-row items-center px-5 py-4"
         >
           <View className="flex-1">
-            <Text style={{ fontSize: 16, fontWeight: "700", color: colors.text }}>{date}</Text>
-            <Text style={{ fontSize: 13, fontWeight: "500", color: colors.textSecondary, marginTop: 2 }}>{time}</Text>
+            <ThemedText variant="title-3">{date}</ThemedText>
+            <ThemedText variant="body-small" color={colors.text.secondary} style={{ marginTop: 2 }}>{time}</ThemedText>
           </View>
 
           <View className="flex-row items-center">
             {isCompleted && session.duration_minutes != null && (
-              <Text style={{ fontSize: 14, fontWeight: "600", color: colors.textSecondary, marginRight: 10 }}>
+              <ThemedText variant="data" color={colors.text.secondary} style={{ fontSize: 14, marginRight: 10 }}>
                 {formatDurationMinutes(session.duration_minutes!)}
-              </Text>
+              </ThemedText>
             )}
             <FontAwesome
               name={expanded ? "chevron-up" : "chevron-down"}
               size={12}
-              color={colors.textTertiary}
+              color={colors.text.tertiary}
             />
           </View>
         </Pressable>
 
         {/* Expanded content */}
         {expanded && (
-          <View className="border-t border-gray-100">
+          <View style={{ borderTopWidth: 1, borderTopColor: colors.border.subtle }}>
             {entriesQuery.isLoading && (
               <View className="py-6 items-center">
-                <ActivityIndicator size="small" color={colors.primary} />
+                <ActivityIndicator size="small" color={colors.blue[500]} />
               </View>
             )}
 
             {entriesQuery.isError && (
               <View className="py-4 items-center">
-                <Text className="text-sm text-gray-500">Failed to load entries</Text>
+                <ThemedText variant="body-small" color={colors.text.secondary}>Failed to load entries</ThemedText>
               </View>
             )}
 
             {entriesQuery.data && entriesQuery.data.length === 0 && (
               <View className="py-4 items-center">
-                <Text className="text-sm text-gray-500">No entries recorded</Text>
+                <ThemedText variant="body-small" color={colors.text.secondary}>No entries recorded</ThemedText>
               </View>
             )}
 
@@ -178,41 +185,41 @@ function ExpandableSessionCard({ session }: { session: Session }) {
                 <>
                   {/* ── SUMMARY block ── */}
                   {hasSummary && (
-                    <View style={{ backgroundColor: colors.primary + "0C", paddingHorizontal: 20, paddingTop: 14, paddingBottom: 16 }}>
+                    <View style={{ backgroundColor: colors.blue.alpha12, paddingHorizontal: 20, paddingTop: 14, paddingBottom: 16 }}>
                       {/* Section label */}
-                      <Text style={{ fontSize: 13, fontWeight: "900", color: colors.primary, textTransform: "uppercase", letterSpacing: 0.8, marginBottom: 12 }}>
+                      <ThemedText variant="title-3" color={colors.blue[500]} style={{ marginBottom: 12 }}>
                         Workout Summary
-                      </Text>
+                      </ThemedText>
 
                       {/* Stat row — type + duration + exercises + sets */}
                       <View className="flex-row">
                         <View style={{ marginRight: 24 }}>
-                          <Text style={{ fontSize: 11, fontWeight: "700", color: colors.textTertiary, textTransform: "uppercase", letterSpacing: 0.8 }}>
+                          <ThemedText variant="caption" color={colors.text.tertiary}>
                             Type
-                          </Text>
-                          <Text style={{ fontSize: 15, fontWeight: "800", color: colors.text, marginTop: 2 }}>
+                          </ThemedText>
+                          <ThemedText variant="title-3" style={{ marginTop: 2 }}>
                             {classifyQuery.isLoading ? "..." : (workoutType ?? "—")}
-                          </Text>
+                          </ThemedText>
                         </View>
                         {session.duration_minutes != null && (
                           <View style={{ marginRight: 24 }}>
-                            <Text style={{ fontSize: 11, fontWeight: "700", color: colors.textTertiary, textTransform: "uppercase", letterSpacing: 0.8 }}>
+                            <ThemedText variant="caption" color={colors.text.tertiary}>
                               Duration
-                            </Text>
-                            <Text style={{ fontSize: 15, fontWeight: "800", color: colors.text, marginTop: 2 }}>
+                            </ThemedText>
+                            <ThemedText variant="data-bold" style={{ marginTop: 2 }}>
                               {formatDurationMinutes(session.duration_minutes!)}
-                            </Text>
+                            </ThemedText>
                           </View>
                         )}
                         {stats && (
                           <>
                             <View style={{ marginRight: 24 }}>
-                              <Text style={{ fontSize: 11, fontWeight: "700", color: colors.textTertiary, textTransform: "uppercase", letterSpacing: 0.8 }}>
+                              <ThemedText variant="caption" color={colors.text.tertiary}>
                                 Exercises
-                              </Text>
-                              <Text style={{ fontSize: 15, fontWeight: "800", color: colors.text, marginTop: 2 }}>
+                              </ThemedText>
+                              <ThemedText variant="data-bold" style={{ marginTop: 2 }}>
                                 {stats.exerciseCount}
-                              </Text>
+                              </ThemedText>
                             </View>
                           </>
                         )}
@@ -225,7 +232,7 @@ function ExpandableSessionCard({ session }: { session: Session }) {
                     style={{
                       margin: 12,
                       borderWidth: 1,
-                      borderColor: colors.borderLight,
+                      borderColor: colors.border.subtle,
                       borderRadius: 12,
                       overflow: "hidden",
                     }}
@@ -233,7 +240,7 @@ function ExpandableSessionCard({ session }: { session: Session }) {
                     {entriesQuery.data.map((entry, i) => (
                       <View
                         key={entry.id}
-                        style={i > 0 ? { borderTopWidth: 6, borderTopColor: colors.borderLight } : undefined}
+                        style={i > 0 ? { borderTopWidth: 6, borderTopColor: colors.border.subtle } : undefined}
                       >
                         <EntryCard
                           entry={entry}
@@ -267,8 +274,8 @@ function OverviewTab({ goals, injuryHistory }: { goals: string[] | null; injuryH
   if (!hasGoals && !hasInjuries) {
     return (
       <View className="items-center py-10">
-        <FontAwesome name="user-o" size={40} color={colors.textTertiary} />
-        <Text className="text-base text-gray-500 mt-3">No details yet</Text>
+        <FontAwesome name="user-o" size={40} color={colors.text.tertiary} />
+        <ThemedText variant="body" color={colors.text.secondary} style={{ marginTop: 12 }}>No details yet</ThemedText>
       </View>
     );
   }
@@ -277,7 +284,7 @@ function OverviewTab({ goals, injuryHistory }: { goals: string[] | null; injuryH
     <View className="px-4 pt-5 pb-8">
       {hasGoals && (
         <View className="mb-5">
-          <Text className="text-base font-bold text-gray-700 mb-3">Goals</Text>
+          <ThemedText variant="title-3" color={colors.text.secondary} style={{ marginBottom: 12 }}>Goals</ThemedText>
           <View className="flex-row flex-wrap">
             {goals!.map((goal, i) => (
               <GoalPill key={`${goal}-${i}`} goal={goal} />
@@ -288,7 +295,7 @@ function OverviewTab({ goals, injuryHistory }: { goals: string[] | null; injuryH
 
       {hasInjuries && (
         <View>
-          <Text className="text-base font-bold text-gray-700 mb-3">Injury History</Text>
+          <ThemedText variant="title-3" color={colors.text.secondary} style={{ marginBottom: 12 }}>Injury History</ThemedText>
           <View className="flex-row flex-wrap">
             {injuryHistory!
               .split(/\.\s*/)
@@ -297,11 +304,11 @@ function OverviewTab({ goals, injuryHistory }: { goals: string[] | null; injuryH
                 <View
                   key={`injury-${i}`}
                   className="px-4 py-2.5 rounded-full mr-2 mb-2"
-                  style={{ backgroundColor: colors.error + "12" }}
+                  style={{ backgroundColor: colors.red.alpha12 }}
                 >
-                  <Text className="text-sm font-bold" style={{ color: colors.error }}>
+                  <ThemedText variant="body-small" color={colors.red[500]} style={{ fontFamily: "Inter-SemiBold" }}>
                     {(item.replace(/\.$/, "")).charAt(0).toUpperCase() + item.replace(/\.$/, "").slice(1)}
-                  </Text>
+                  </ThemedText>
                 </View>
               ))}
           </View>
@@ -315,8 +322,8 @@ function SessionsTab({ sessions }: { sessions: Session[] }) {
   if (sessions.length === 0) {
     return (
       <View className="items-center py-10">
-        <FontAwesome name="calendar-o" size={40} color={colors.textTertiary} />
-        <Text className="text-base text-gray-500 mt-3">No sessions yet</Text>
+        <FontAwesome name="calendar-o" size={40} color={colors.text.tertiary} />
+        <ThemedText variant="body" color={colors.text.secondary} style={{ marginTop: 12 }}>No sessions yet</ThemedText>
       </View>
     );
   }
@@ -337,22 +344,25 @@ function PlanCard({ plan }: { plan: SessionPlan }) {
     .filter((s) => s.length > 0);
 
   return (
-    <View className="bg-white rounded-2xl mb-3.5 mx-4 overflow-hidden" style={cardShadow}>
-      <View className="px-5 py-3 border-b border-gray-100" style={{ backgroundColor: colors.primary + "08" }}>
-        <Text className="text-sm font-bold" style={{ color: colors.primary }}>
+    <View
+      className="rounded-xl mb-3.5 mx-4 overflow-hidden"
+      style={{ backgroundColor: colors.bg.surface1, ...cardBorder }}
+    >
+      <View className="px-5 py-3" style={{ backgroundColor: colors.blue.alpha12, borderBottomWidth: 1, borderBottomColor: colors.border.subtle }}>
+        <ThemedText variant="body-small" color={colors.blue[500]} style={{ fontFamily: "Inter-SemiBold" }}>
           {formatPlanDate(plan.planned_for_date)}
-        </Text>
+        </ThemedText>
       </View>
 
       {lines.map((line, i) => (
         <View
           key={`line-${i}`}
           className="px-5 py-3.5"
-          style={i < lines.length - 1 ? { borderBottomWidth: 1, borderBottomColor: colors.borderLight } : undefined}
+          style={i < lines.length - 1 ? { borderBottomWidth: 1, borderBottomColor: colors.border.subtle } : undefined}
         >
           <View className="flex-row">
-            <Text className="text-sm font-bold text-gray-400 mr-3 mt-px">{i + 1}</Text>
-            <Text className="text-sm text-gray-800 leading-5 flex-1">{line}</Text>
+            <ThemedText variant="data" color={colors.text.tertiary} style={{ fontSize: 14, marginRight: 12, marginTop: 1 }}>{i + 1}</ThemedText>
+            <ThemedText variant="body-small" style={{ flex: 1, lineHeight: 20 }}>{line}</ThemedText>
           </View>
         </View>
       ))}
@@ -364,8 +374,8 @@ function PlansTab({ plans }: { plans: SessionPlan[] }) {
   if (plans.length === 0) {
     return (
       <View className="items-center py-10">
-        <FontAwesome name="clipboard" size={40} color={colors.textTertiary} />
-        <Text className="text-base text-gray-500 mt-3">No plans yet</Text>
+        <FontAwesome name="clipboard" size={40} color={colors.text.tertiary} />
+        <ThemedText variant="body" color={colors.text.secondary} style={{ marginTop: 12 }}>No plans yet</ThemedText>
       </View>
     );
   }
@@ -440,7 +450,7 @@ export default function ClientDetailScreen() {
 
   if (clientQuery.isLoading || sessionsQuery.isLoading || plansQuery.isLoading) {
     return (
-      <View className="flex-1 bg-[#FAFAFA]">
+      <View className="flex-1 bg-base">
         <LoadingState />
       </View>
     );
@@ -448,7 +458,7 @@ export default function ClientDetailScreen() {
 
   if (clientQuery.isError || sessionsQuery.isError || plansQuery.isError) {
     return (
-      <View className="flex-1 bg-[#FAFAFA]">
+      <View className="flex-1 bg-base">
         <ErrorState
           message={clientQuery.error?.message ?? sessionsQuery.error?.message ?? plansQuery.error?.message ?? "Failed to load client"}
           onRetry={refetch}
@@ -466,66 +476,68 @@ export default function ClientDetailScreen() {
 
   return (
     <ScrollView
-      className="flex-1 bg-[#FAFAFA]"
+      className="flex-1 bg-base"
       refreshControl={<RefreshControl refreshing={false} onRefresh={refetch} />}
     >
       {/* Header */}
-      <View className="bg-white pb-6 px-5" style={{ paddingTop: insets.top + 8 }}>
+      <View
+        className="pb-6 px-5"
+        style={{ backgroundColor: colors.bg.surface1, paddingTop: insets.top + 8 }}
+      >
         {/* Back button */}
         <Pressable
           onPress={() => router.back()}
           className="flex-row items-center mb-4 -ml-1"
           hitSlop={{ top: 16, bottom: 16, left: 12, right: 24 }}
         >
-          <FontAwesome name="chevron-left" size={20} color={colors.primary} />
-          <Text
-            className="text-xl font-bold ml-2"
-            style={{ color: colors.primary }}
-          >
+          <FontAwesome name="chevron-left" size={20} color={colors.blue[500]} />
+          <ThemedText variant="title-3" color={colors.blue[500]} style={{ marginLeft: 8 }}>
             Clients
-          </Text>
+          </ThemedText>
         </Pressable>
 
-        <View className="items-center">
+        {/* Compact horizontal header — avatar left, name+meta right */}
+        <View className="flex-row items-center">
           <View
-            className="w-28 h-28 rounded-full items-center justify-center"
-            style={{ backgroundColor: initialsColor + "30" }}
+            className="w-16 h-16 rounded-full items-center justify-center"
+            style={{ backgroundColor: initialsColor + "4D" }}
           >
-            <Text className="text-4xl font-bold" style={{ color: initialsColor }}>
+            <ThemedText variant="title-1" color={initialsColor} style={{ fontSize: 22 }}>
               {initials}
-            </Text>
+            </ThemedText>
           </View>
 
-          <Text className="text-3xl font-bold text-gray-900 mt-5">{client.name}</Text>
-
-          {client.training_start_date && (
-            <Text className="text-sm font-medium text-gray-500 mt-1.5">
-              {formatMemberSince(client.training_start_date)}
-            </Text>
-          )}
-
-          {!client.archived && (
-            <Pressable
-              onPress={handleStartSession}
-              disabled={startSessionMutation.isPending}
-              className="mt-5 w-full rounded-xl py-3.5 items-center justify-center flex-row"
-              style={{
-                backgroundColor: startSessionMutation.isPending
-                  ? colors.primary + "80"
-                  : colors.primary,
-              }}
-            >
-              {startSessionMutation.isPending ? (
-                <>
-                  <ActivityIndicator size="small" color="#fff" />
-                  <Text className="text-base font-bold text-white ml-2">Starting...</Text>
-                </>
-              ) : (
-                <Text className="text-base font-bold text-white">Start Session</Text>
-              )}
-            </Pressable>
-          )}
+          <View className="flex-1 ml-4">
+            <ThemedText variant="title-1">{client.name}</ThemedText>
+            {client.training_start_date && (
+              <ThemedText variant="body-small" color={colors.text.secondary} style={{ marginTop: 2 }}>
+                {formatMemberSince(client.training_start_date)}
+              </ThemedText>
+            )}
+          </View>
         </View>
+
+        {!client.archived && (
+          <Pressable
+            onPress={handleStartSession}
+            disabled={startSessionMutation.isPending}
+            className="mt-5 w-full rounded-xl py-3.5 items-center justify-center flex-row"
+            style={{
+              backgroundColor: startSessionMutation.isPending
+                ? colors.blue[500] + "80"
+                : colors.blue[500],
+            }}
+          >
+            {startSessionMutation.isPending ? (
+              <>
+                <ActivityIndicator size="small" color={colors.text.inverse} />
+                <ThemedText variant="body-medium" color={colors.text.inverse} style={{ marginLeft: 8 }}>Starting...</ThemedText>
+              </>
+            ) : (
+              <ThemedText variant="body-medium" color={colors.text.inverse}>Start Session</ThemedText>
+            )}
+          </Pressable>
+        )}
       </View>
 
       {/* Tab bar */}

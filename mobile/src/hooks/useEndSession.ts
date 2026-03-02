@@ -23,10 +23,10 @@ export function useEndSession({ sessionId, isSessionEnded }: UseEndSessionOption
   const queryClient = useQueryClient();
 
   const endSessionMutation = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (endedAt: Date | void) => {
       // Server auto-computes duration_minutes from ended_at - started_at
       return updateSession(sessionId, {
-        ended_at: new Date().toISOString(),
+        ended_at: (endedAt ?? new Date()).toISOString(),
       });
     },
     onSuccess: () => {

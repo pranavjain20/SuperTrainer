@@ -1,52 +1,24 @@
 /**
- * Clean & minimal palette.
- * Apple Health / Linear aesthetic — light background, subtle colors, whitespace.
+ * Legacy color file — kept for FLAG_COLORS and initialsColors which are
+ * re-exported from tokens.ts. All other colors live in tokens.ts.
+ *
+ * Do not import this file directly. Import from "@/src/constants/tokens".
  */
-export const colors = {
-  // Backgrounds
-  background: "#FAFAFA",
-  surface: "#FFFFFF",
-  surfaceSecondary: "#F5F5F5",
-
-  // Text
-  text: "#1A1A1A",
-  textSecondary: "#6B7280",
-  textTertiary: "#9CA3AF",
-
-  // Brand
-  primary: "#2563EB",
-  primaryLight: "#DBEAFE",
-
-  // Status
-  success: "#10B981",
-  warning: "#F59E0B",
-  error: "#EF4444",
-
-  // Flags (matching backend flag_color values)
-  flagGreen: "#10B981",
-  flagYellow: "#EAB308",
-  flagOrange: "#F97316",
-  flagRed: "#EF4444",
-
-  // UI elements
-  chevron: "#C8CCD0",
-  observationDefault: "#6B7280",
-
-  // Borders
-  border: "#E5E7EB",
-  borderLight: "#F3F4F6",
-
-  // Tab bar
-  tabActive: "#2563EB",
-  tabInactive: "#9CA3AF",
-} as const;
 
 /** Flag color map — shared by ObservationCard and edit modals. */
 export const FLAG_COLORS: Record<string, string> = {
-  green: colors.flagGreen,
-  yellow: colors.flagYellow,
-  orange: colors.flagOrange,
-  red: colors.flagRed,
+  green: "#22C55E",
+  yellow: "#F59E0B",
+  orange: "#F97316",
+  red: "#EF4444",
+};
+
+/** Flag background colors — proper rgba alpha for dark backgrounds. */
+export const FLAG_BG_COLORS: Record<string, string> = {
+  green: "rgba(34, 197, 94, 0.12)",
+  yellow: "rgba(245, 158, 11, 0.12)",
+  orange: "rgba(249, 115, 22, 0.12)",
+  red: "rgba(239, 68, 68, 0.12)",
 };
 
 /**
@@ -54,12 +26,12 @@ export const FLAG_COLORS: Record<string, string> = {
  * Stable across the whole app (list + profile).
  */
 export const initialsColors = [
-  "#2563EB", // blue
-  "#7C3AED", // violet
-  "#DB2777", // pink
-  "#EA580C", // orange
-  "#0891B2", // cyan
-  "#4F46E5", // indigo
-  "#059669", // emerald
-  "#CA8A04", // yellow
+  "#38BDF8", // sky blue
+  "#8B5CF6", // violet
+  "#EC4899", // pink
+  "#F97316", // orange
+  "#06B6D4", // cyan
+  "#6366F1", // indigo
+  "#22C55E", // emerald
+  "#EAB308", // yellow
 ];

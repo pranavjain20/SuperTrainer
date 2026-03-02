@@ -3,10 +3,11 @@
  * Matches the existing edit modal pattern (ObservationEditModal, etc.).
  */
 
-import { Modal, Pressable, Text, View } from "react-native";
+import { Modal, Pressable, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { colors } from "@/src/constants/colors";
+import { ThemedText } from "@/src/components/ThemedText";
+import { colors } from "@/src/constants/tokens";
 
 interface ConfirmSheetProps {
   visible: boolean;
@@ -35,40 +36,39 @@ export function ConfirmSheet({
       <Pressable
         className="flex-1"
         onPress={onCancel}
-        style={{ backgroundColor: "rgba(0,0,0,0.3)" }}
+        style={{ backgroundColor: "rgba(0, 0, 0, 0.6)" }}
       />
 
       {/* Sheet */}
       <View
-        className="bg-white rounded-t-3xl px-5 pt-6"
-        style={{ paddingBottom: Math.max(insets.bottom, 20) }}
+        className="rounded-t-3xl px-5 pt-6"
+        style={{ backgroundColor: colors.bg.surface1, paddingBottom: Math.max(insets.bottom, 20) }}
       >
-        <Text className="text-xl font-bold text-gray-900">{title}</Text>
+        <ThemedText variant="title-2">{title}</ThemedText>
         {subtitle && (
-          <Text className="text-base text-gray-500 font-medium mt-1">
+          <ThemedText variant="body" color={colors.text.secondary} style={{ marginTop: 4 }}>
             {subtitle}
-          </Text>
+          </ThemedText>
         )}
 
         <View className="flex-row gap-3 mt-6">
           <Pressable
             onPress={onCancel}
-            className="flex-1 py-3.5 rounded-xl bg-gray-100 items-center"
+            className="flex-1 py-3.5 rounded-xl items-center"
+            style={{ backgroundColor: colors.bg.surface2 }}
           >
-            <Text
-              style={{ fontSize: 15, fontWeight: "700", color: colors.textSecondary }}
-            >
+            <ThemedText variant="body-medium" color={colors.text.secondary}>
               Cancel
-            </Text>
+            </ThemedText>
           </Pressable>
           <Pressable
             onPress={onConfirm}
             className="flex-1 py-3.5 rounded-xl items-center"
-            style={{ backgroundColor: destructive ? colors.error : colors.primary }}
+            style={{ backgroundColor: destructive ? colors.red[500] : colors.blue[500] }}
           >
-            <Text style={{ fontSize: 15, fontWeight: "700", color: "#FFFFFF" }}>
+            <ThemedText variant="body-medium" color={destructive ? colors.text.primary : colors.text.inverse}>
               {confirmText}
-            </Text>
+            </ThemedText>
           </Pressable>
         </View>
       </View>

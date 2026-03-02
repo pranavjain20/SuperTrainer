@@ -14,13 +14,13 @@ import {
   Platform,
   Pressable,
   ScrollView,
-  Text,
   TextInput,
   View,
 } from "react-native";
 
 import type { SessionEntry, SessionEntryUpdate, SetData } from "@/src/api/types";
-import { colors } from "@/src/constants/colors";
+import { ThemedText } from "@/src/components/ThemedText";
+import { colors } from "@/src/constants/tokens";
 import { capitalizeWords } from "@/src/utils/strings";
 
 interface SetFormData {
@@ -107,91 +107,95 @@ export function ExerciseEditModal({
         className="flex-1 justify-end"
       >
         {/* Backdrop */}
-        <Pressable className="flex-1" onPress={isSaving ? undefined : onClose} />
+        <Pressable
+          className="flex-1"
+          onPress={isSaving ? undefined : onClose}
+          style={{ backgroundColor: "rgba(0, 0, 0, 0.6)" }}
+        />
 
         {/* Sheet */}
-        <View className="bg-white rounded-t-3xl" style={{ maxHeight: "85%" }}>
+        <View className="rounded-t-3xl" style={{ backgroundColor: colors.bg.surface1, maxHeight: "85%" }}>
           {/* Header */}
-          <View className="px-5 pt-5 pb-3 border-b border-gray-100">
-            <Text className="text-lg font-bold text-gray-900">Edit Exercise</Text>
+          <View className="px-5 pt-5 pb-3" style={{ borderBottomWidth: 1, borderBottomColor: colors.border.subtle }}>
+            <ThemedText variant="title-2">Edit Exercise</ThemedText>
           </View>
 
           <ScrollView className="px-5 pt-4 pb-2" keyboardShouldPersistTaps="handled">
             {/* Exercise name */}
-            <Text style={{ fontSize: 13, fontWeight: "700", color: colors.textSecondary, marginBottom: 6 }}>
+            <ThemedText variant="caption" color={colors.text.secondary} style={{ marginBottom: 6 }}>
               Exercise Name
-            </Text>
+            </ThemedText>
             <TextInput
-              className="bg-gray-50 rounded-xl px-4 py-3.5 mb-5"
-              style={{ fontSize: 18, fontWeight: "700", color: colors.text }}
+              className="rounded-lg px-4 py-3.5 mb-5"
+              style={{ backgroundColor: colors.bg.surface2, fontSize: 18, fontFamily: "Inter-Bold", color: colors.text.primary }}
               value={exerciseName}
               onChangeText={setExerciseName}
               autoCapitalize="words"
               placeholder="e.g. Bench Press"
-              placeholderTextColor={colors.textTertiary}
+              placeholderTextColor={colors.text.tertiary}
             />
 
             {/* Sets */}
             {sets.map((set, i) => (
               <View key={i} className="mb-5">
-                <Text style={{ fontSize: 13, fontWeight: "700", color: colors.textSecondary, marginBottom: 8 }}>
+                <ThemedText variant="caption" color={colors.text.secondary} style={{ marginBottom: 8 }}>
                   Set {i + 1}
-                </Text>
+                </ThemedText>
                 <View className="flex-row gap-2">
                   <View className="flex-1">
-                    <Text style={{ fontSize: 12, fontWeight: "600", color: colors.textSecondary, marginBottom: 4 }}>
+                    <ThemedText variant="small" color={colors.text.secondary} style={{ marginBottom: 4 }}>
                       Reps
-                    </Text>
+                    </ThemedText>
                     <TextInput
-                      className="bg-gray-50 rounded-lg px-3 py-3 text-center"
-                      style={{ fontSize: 17, fontWeight: "700", color: colors.text }}
+                      className="rounded-lg px-3 py-3 text-center"
+                      style={{ backgroundColor: colors.bg.surface2, fontSize: 17, fontFamily: "JetBrainsMono-Bold", color: colors.text.primary }}
                       value={set.reps}
                       onChangeText={(v) => updateSet(i, "reps", v)}
                       keyboardType="numeric"
                       placeholder="—"
-                      placeholderTextColor={colors.textTertiary}
+                      placeholderTextColor={colors.text.tertiary}
                     />
                   </View>
                   <View className="flex-1">
-                    <Text style={{ fontSize: 12, fontWeight: "600", color: colors.textSecondary, marginBottom: 4 }}>
+                    <ThemedText variant="small" color={colors.text.secondary} style={{ marginBottom: 4 }}>
                       Weight (kg)
-                    </Text>
+                    </ThemedText>
                     <TextInput
-                      className="bg-gray-50 rounded-lg px-3 py-3 text-center"
-                      style={{ fontSize: 17, fontWeight: "700", color: colors.text }}
+                      className="rounded-lg px-3 py-3 text-center"
+                      style={{ backgroundColor: colors.bg.surface2, fontSize: 17, fontFamily: "JetBrainsMono-Bold", color: colors.text.primary }}
                       value={set.weight}
                       onChangeText={(v) => updateSet(i, "weight", v)}
                       keyboardType="decimal-pad"
                       placeholder="—"
-                      placeholderTextColor={colors.textTertiary}
+                      placeholderTextColor={colors.text.tertiary}
                     />
                   </View>
                   <View className="flex-1">
-                    <Text style={{ fontSize: 12, fontWeight: "600", color: colors.textSecondary, marginBottom: 4 }}>
+                    <ThemedText variant="small" color={colors.text.secondary} style={{ marginBottom: 4 }}>
                       RPE
-                    </Text>
+                    </ThemedText>
                     <TextInput
-                      className="bg-gray-50 rounded-lg px-3 py-3 text-center"
-                      style={{ fontSize: 17, fontWeight: "700", color: colors.text }}
+                      className="rounded-lg px-3 py-3 text-center"
+                      style={{ backgroundColor: colors.bg.surface2, fontSize: 17, fontFamily: "JetBrainsMono-Bold", color: colors.text.primary }}
                       value={set.rpe}
                       onChangeText={(v) => updateSet(i, "rpe", v)}
                       keyboardType="numeric"
                       placeholder="—"
-                      placeholderTextColor={colors.textTertiary}
+                      placeholderTextColor={colors.text.tertiary}
                     />
                   </View>
                 </View>
                 <View className="mt-2">
-                  <Text style={{ fontSize: 12, fontWeight: "600", color: colors.textSecondary, marginBottom: 4 }}>
+                  <ThemedText variant="small" color={colors.text.secondary} style={{ marginBottom: 4 }}>
                     Notes
-                  </Text>
+                  </ThemedText>
                   <TextInput
-                    className="bg-gray-50 rounded-lg px-3 py-3"
-                    style={{ fontSize: 15, fontWeight: "500", color: colors.text }}
+                    className="rounded-lg px-3 py-3"
+                    style={{ backgroundColor: colors.bg.surface2, fontSize: 15, fontFamily: "Inter-Medium", color: colors.text.primary }}
                     value={set.notes}
                     onChangeText={(v) => updateSet(i, "notes", v)}
                     placeholder="Optional"
-                    placeholderTextColor={colors.textTertiary}
+                    placeholderTextColor={colors.text.tertiary}
                   />
                 </View>
               </View>
@@ -199,31 +203,32 @@ export function ExerciseEditModal({
           </ScrollView>
 
           {/* Footer */}
-          <View className="px-5 pt-4 pb-8 border-t border-gray-100">
+          <View className="px-5 pt-4 pb-8" style={{ borderTopWidth: 1, borderTopColor: colors.border.subtle }}>
             <View className="flex-row justify-between items-center">
               <Pressable onPress={confirmDelete} disabled={isSaving} hitSlop={12}>
-                <Text style={{ fontSize: 15, fontWeight: "700", color: colors.error }}>
+                <ThemedText variant="body-medium" color={colors.red[500]}>
                   Delete
-                </Text>
+                </ThemedText>
               </Pressable>
 
               <View className="flex-row gap-3">
                 <Pressable
                   onPress={onClose}
                   disabled={isSaving}
-                  className="px-6 py-3 rounded-xl bg-gray-100"
+                  className="px-6 py-3 rounded-xl"
+                  style={{ backgroundColor: colors.bg.surface2 }}
                 >
-                  <Text style={{ fontSize: 15, fontWeight: "700", color: colors.textSecondary }}>Cancel</Text>
+                  <ThemedText variant="body-medium" color={colors.text.secondary}>Cancel</ThemedText>
                 </Pressable>
                 <Pressable
                   onPress={handleSave}
                   disabled={isSaving}
                   className="px-6 py-3 rounded-xl"
-                  style={{ backgroundColor: colors.primary, opacity: isSaving ? 0.5 : 1 }}
+                  style={{ backgroundColor: colors.blue[500], opacity: isSaving ? 0.5 : 1 }}
                 >
-                  <Text style={{ fontSize: 15, fontWeight: "700", color: "#FFFFFF" }}>
+                  <ThemedText variant="body-medium" color={colors.text.inverse}>
                     {isSaving ? "Saving..." : "Save"}
-                  </Text>
+                  </ThemedText>
                 </Pressable>
               </View>
             </View>

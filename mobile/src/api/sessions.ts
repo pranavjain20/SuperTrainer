@@ -28,6 +28,7 @@ import type {
 
 interface TrainerSessionParams {
   scheduled_for_date?: string; // ISO date, e.g. "2026-02-25"
+  tz?: string;                 // IANA timezone, e.g. "America/New_York"
   cursor?: string;
   limit?: number;
 }

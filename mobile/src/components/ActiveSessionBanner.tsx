@@ -1,10 +1,11 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useRouter } from "expo-router";
 import { useEffect, useRef, useState } from "react";
-import { Animated, Pressable, Text, View } from "react-native";
+import { Animated, Pressable, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { colors } from "@/src/constants/colors";
+import { ThemedText } from "@/src/components/ThemedText";
+import { colors } from "@/src/constants/tokens";
 import { useRecordingStore } from "@/src/stores/recordingStore";
 
 const TAB_BAR_HEIGHT = 49;
@@ -61,17 +62,13 @@ export function ActiveSessionBanner() {
         left: 12,
         right: 12,
         height: 48,
-        backgroundColor: colors.primary,
+        backgroundColor: colors.blue[500],
         borderRadius: 14,
         flexDirection: "row",
         alignItems: "center",
-        paddingHorizontal: 16,
+        paddingHorizontal: 20,
+        paddingVertical: 14,
         zIndex: 100,
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.2,
-        shadowRadius: 8,
-        elevation: 8,
       }}
     >
       {/* Pulsing dot + client name */}
@@ -84,26 +81,23 @@ export function ActiveSessionBanner() {
               width: 18,
               height: 18,
               borderRadius: 9,
-              backgroundColor: colors.success,
+              backgroundColor: colors.green[500],
               opacity: pulseAnim.interpolate({ inputRange: [0.3, 1], outputRange: [0, 0.25] }),
             }}
           />
           {/* Solid dot */}
-          <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: colors.success }} />
+          <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: colors.green[500] }} />
         </View>
-        <Text
-          style={{ color: "#FFFFFF", fontWeight: "700", fontSize: 15 }}
-          numberOfLines={1}
-        >
+        <ThemedText variant="title-3" color={colors.text.inverse} numberOfLines={1}>
           {activeClientName}
-        </Text>
+        </ThemedText>
       </View>
 
-      {/* Timer + chevron */}
-      <Text style={{ color: "rgba(255,255,255,0.85)", fontSize: 14, fontWeight: "600", marginRight: 8 }}>
+      {/* Timer + chevron — JetBrains Mono for the timer */}
+      <ThemedText variant="data" color={colors.text.inverse} style={{ marginRight: 8, opacity: 0.9 }}>
         {elapsed}
-      </Text>
-      <FontAwesome name="chevron-right" size={12} color="rgba(255,255,255,0.7)" />
+      </ThemedText>
+      <FontAwesome name="chevron-right" size={12} color={colors.text.inverse} style={{ opacity: 0.7 }} />
     </Pressable>
   );
 }

@@ -1,11 +1,11 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, View } from "react-native";
 
-import { colors } from "@/src/constants/colors";
-import { cardShadow } from "@/src/constants/styles";
+import { ThemedText } from "@/src/components/ThemedText";
+import { colors } from "@/src/constants/tokens";
 import type { SessionWithClient } from "@/src/hooks/useSessions";
 import { formatTime } from "@/src/utils/dates";
-import { getSessionDisplay } from "@/src/utils/sessions";
+import { formatDurationMinutes, getSessionDisplay } from "@/src/utils/sessions";
 
 interface SessionRowProps {
   session: SessionWithClient;
@@ -26,67 +26,56 @@ export function SessionRow({ session, onPress, hideClientName }: SessionRowProps
   return (
     <Pressable
       onPress={() => onPress(session)}
-      className="bg-white rounded-2xl px-5 py-5 mb-3.5 mx-4"
-      style={cardShadow}
+      className="mb-3 mx-4"
+      style={{ backgroundColor: colors.bg.surface1, borderRadius: 12, paddingHorizontal: 16, paddingVertical: 14 }}
     >
-      {/* Time */}
-      <Text className="text-sm font-bold text-gray-900 tracking-wide">{time}</Text>
-
-      {/* Client name */}
-      {!hideClientName && (
-        <Text className="text-xl font-bold text-gray-900 mt-1.5">
-          {session.client_name}
-        </Text>
+      {/* Line 1: client name (left) + time (right) — or just time when hideClientName */}
+      {!hideClientName ? (
+        <View className="flex-row justify-between items-baseline">
+          <ThemedText variant="title-3" style={{ flex: 1, marginRight: 12 }} numberOfLines={1}>
+            {session.client_name}
+          </ThemedText>
+          <ThemedText variant="caption" color={colors.text.secondary}>{time}</ThemedText>
+        </View>
+      ) : (
+        <ThemedText variant="caption" color={colors.text.secondary}>{time}</ThemedText>
       )}
 
-      {/* Bottom row: status pill (left) + continue/duration (right) */}
-      <View className="flex-row items-center justify-between mt-3.5">
+      {/* Line 2: status pill + duration (left) + continue button (right) */}
+      <View className="flex-row items-center justify-between mt-2">
         <View className="flex-row items-center">
           <View
             className="flex-row items-center px-3.5 py-2 rounded-xl"
-            style={{ backgroundColor: display.color + "18" }}
+            style={{ backgroundColor: display.color + "25" }}
           >
             <View
               className="w-2 h-2 rounded-full mr-2"
               style={{ backgroundColor: display.color }}
             />
-            <Text
-              style={{
-                fontSize: 11,
-                fontWeight: "800",
-                letterSpacing: 0.8,
-                color: display.color,
-                textTransform: "uppercase",
-              }}
+            <ThemedText
+              variant="caption"
+              color={display.color}
             >
               {display.label}
-            </Text>
+            </ThemedText>
           </View>
 
           {isCompleted && session.duration_minutes != null && (
-            <Text className="text-sm font-medium text-gray-400 ml-3">
-              {session.duration_minutes} min
-            </Text>
+            <ThemedText variant="body-small" color={colors.text.tertiary} style={{ marginLeft: 12 }}>
+              {formatDurationMinutes(session.duration_minutes!)}
+            </ThemedText>
           )}
         </View>
 
         {isInProgress && (
           <View
             className="flex-row items-center px-3.5 py-2 rounded-xl"
-            style={{ backgroundColor: colors.primary }}
+            style={{ backgroundColor: colors.blue[500] }}
           >
-            <Text
-              style={{
-                fontSize: 11,
-                fontWeight: "800",
-                letterSpacing: 0.8,
-                color: "#FFFFFF",
-                textTransform: "uppercase",
-              }}
-            >
+            <ThemedText variant="caption" color={colors.text.inverse}>
               Continue Session
-            </Text>
-            <FontAwesome name="chevron-right" size={9} color="#FFFFFF" style={{ marginLeft: 6 }} />
+            </ThemedText>
+            <FontAwesome name="chevron-right" size={9} color={colors.text.inverse} style={{ marginLeft: 6 }} />
           </View>
         )}
       </View>

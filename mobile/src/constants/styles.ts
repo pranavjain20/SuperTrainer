@@ -2,10 +2,13 @@
  * Shared style objects used across multiple components.
  */
 
-export const cardShadow = {
-  shadowColor: "#000",
-  shadowOffset: { width: 0, height: 3 },
-  shadowOpacity: 0.08,
-  shadowRadius: 8,
-  elevation: 4,
+import { colors } from "./tokens";
+
+/** Card border — replaces cardShadow for dark theme. Depth from borders, not shadows. */
+export const cardBorder = {
+  borderWidth: 1,
+  borderColor: colors.border.subtle,
 } as const;
+
+/** @deprecated Use cardBorder instead. Kept for backwards compat during migration. */
+export const cardShadow = cardBorder;

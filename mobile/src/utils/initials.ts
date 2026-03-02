@@ -5,7 +5,7 @@
  * same client always gets the same initials and color everywhere.
  */
 
-import { initialsColors } from "@/src/constants/colors";
+import { initialsColors } from "@/src/constants/tokens";
 
 export function getInitialsColor(name: string): string {
   let hash = 0;

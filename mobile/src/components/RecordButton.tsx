@@ -15,7 +15,8 @@ import * as Haptics from "expo-haptics";
 import { useCallback, useEffect, useRef } from "react";
 import { Animated, Easing, Pressable, Text, View } from "react-native";
 
-import { colors } from "@/src/constants/colors";
+import { ThemedText } from "@/src/components/ThemedText";
+import { colors } from "@/src/constants/tokens";
 
 interface RecordButtonProps {
   isRecording: boolean;
@@ -31,8 +32,9 @@ function formatDuration(seconds: number): string {
   return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
 }
 
-const BUTTON_SIZE = 64;
-const RECORDING_SCALE = 1.15;
+const BUTTON_SIZE = 72;
+const RECORDING_SIZE = 88;
+const RECORDING_SCALE = RECORDING_SIZE / BUTTON_SIZE; // ~1.22
 
 export function RecordButton({
   isRecording,
@@ -124,7 +126,7 @@ export function RecordButton({
     };
   }, [isRecording, pulseScale, pulseOpacity, buttonScale]);
 
-  const buttonColor = isRecording ? colors.error : colors.primary;
+  const buttonColor = isRecording ? colors.recording.red : colors.blue[500];
 
   const lastPressRef = useRef(0);
 
@@ -151,11 +153,11 @@ export function RecordButton({
       {isRecording && (
         <View
           className="rounded-full px-3 py-1 mb-2"
-          style={{ backgroundColor: colors.error }}
+          style={{ backgroundColor: colors.recording.red }}
         >
-          <Text className="text-xs font-bold text-white tracking-wider">
+          <ThemedText variant="data" color={colors.text.primary} style={{ fontSize: 12 }}>
             {formatDuration(duration)}
-          </Text>
+          </ThemedText>
         </View>
       )}
 
@@ -177,14 +179,14 @@ export function RecordButton({
           }}
         />
 
-        {/* Shadow + main button */}
+        {/* Shadow + main button — mic button is the ONLY shadow in the app */}
         <Animated.View
           style={{
             transform: [{ scale: buttonScale }],
-            shadowColor: "#000",
+            shadowColor: buttonColor,
             shadowOffset: { width: 0, height: 4 },
-            shadowOpacity: 0.2,
-            shadowRadius: 8,
+            shadowOpacity: 0.25,
+            shadowRadius: 16,
             elevation: 6,
           }}
         >
@@ -203,8 +205,8 @@ export function RecordButton({
           >
             <FontAwesome
               name={isRecording ? "stop" : "microphone"}
-              size={isRecording ? 20 : 24}
-              color="#FFFFFF"
+              size={isRecording ? 24 : 28}
+              color={colors.text.primary}
             />
           </Pressable>
         </Animated.View>

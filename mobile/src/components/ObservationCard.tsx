@@ -1,10 +1,11 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 
 import type { SessionEntry } from "@/src/api/types";
 import { PressableCard } from "@/src/components/PressableCard";
-import { colors, FLAG_COLORS } from "@/src/constants/colors";
-import { cardShadow } from "@/src/constants/styles";
+import { ThemedText } from "@/src/components/ThemedText";
+import { colors, FLAG_BG_COLORS, FLAG_COLORS } from "@/src/constants/tokens";
+import { cardBorder } from "@/src/constants/styles";
 
 interface ObservationCardProps {
   entry: SessionEntry;
@@ -28,7 +29,7 @@ export function ObservationCard({ entry, onPress, contained }: ObservationCardPr
     <View
       className="px-4 py-3"
       style={{
-        backgroundColor: flagColor + "12",
+        backgroundColor: FLAG_BG_COLORS[entry.flag_color ?? "green"] ?? FLAG_BG_COLORS.green,
         borderLeftWidth: 4,
         borderLeftColor: flagColor,
       }}
@@ -42,18 +43,16 @@ export function ObservationCard({ entry, onPress, contained }: ObservationCardPr
             style={{ marginRight: 6 }}
           />
         )}
-        <Text
-          style={{ fontSize: 12, fontWeight: "700", color: flagColor, textTransform: "uppercase", letterSpacing: 0.8, flex: 1 }}
-        >
+        <ThemedText variant="caption" color={flagColor} style={{ flex: 1 }}>
           {heading}
-        </Text>
+        </ThemedText>
         {onPress && (
-          <FontAwesome name="pencil" size={11} color={colors.textTertiary} style={{ marginLeft: 6, flexShrink: 0 }} />
+          <FontAwesome name="pencil" size={11} color={colors.text.tertiary} style={{ marginLeft: 6, flexShrink: 0 }} />
         )}
       </View>
-      <Text style={{ fontSize: 14, fontWeight: "500", color: colors.text, lineHeight: 20 }}>
+      <ThemedText variant="body-small" color={colors.text.primary} style={{ lineHeight: 20 }}>
         {entry.observation_text}
-      </Text>
+      </ThemedText>
     </View>
   );
 
@@ -71,7 +70,10 @@ export function ObservationCard({ entry, onPress, contained }: ObservationCardPr
 
   return (
     <PressableCard onPress={onPress}>
-      <View className="mx-4 mb-3 rounded-xl overflow-hidden" style={cardShadow}>
+      <View
+        className="mx-4 mb-3 rounded-xl overflow-hidden"
+        style={{ backgroundColor: colors.bg.surface1, ...cardBorder }}
+      >
         {content}
       </View>
     </PressableCard>

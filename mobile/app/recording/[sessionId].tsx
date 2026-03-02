@@ -1,10 +1,11 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Alert, Pressable, ScrollView, Text, View } from "react-native";
+import { Alert, Pressable, ScrollView, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { ConfirmSheet } from "@/src/components/ConfirmSheet";
+import { EndTimePickerSheet } from "@/src/components/EndTimePickerSheet";
 import { EntryCard } from "@/src/components/EntryCard";
 import { ErrorState } from "@/src/components/ErrorState";
 import { LoadingState } from "@/src/components/LoadingState";
@@ -12,8 +13,9 @@ import { RecordButton } from "@/src/components/RecordButton";
 import { SessionHeader } from "@/src/components/SessionHeader";
 import { SessionSummary } from "@/src/components/SessionSummary";
 import { Timeline } from "@/src/components/Timeline";
-import { colors } from "@/src/constants/colors";
-import { cardShadow } from "@/src/constants/styles";
+import { ThemedText } from "@/src/components/ThemedText";
+import { colors } from "@/src/constants/tokens";
+import { cardBorder } from "@/src/constants/styles";
 import { useClient } from "@/src/hooks/useClient";
 import { useEditableEntries } from "@/src/hooks/useEditableEntries";
 import { useEndSession } from "@/src/hooks/useEndSession";
@@ -30,6 +32,9 @@ import {
   getSessionDisplay,
   numberExercises,
 } from "@/src/utils/sessions";
+
+// 2h in production, 30s in dev for easy testing
+const SESSION_DURATION_THRESHOLD_MS = __DEV__ ? 30_000 : 2 * 60 * 60 * 1000;
 
 // ---------------------------------------------------------------------------
 // Screen
@@ -52,6 +57,7 @@ export default function SessionRecordingScreen() {
   const clearActiveSession = useRecordingStore((s) => s.clearActiveSession);
 
   const [showEndConfirm, setShowEndConfirm] = useState(false);
+  const [showEndTimePicker, setShowEndTimePicker] = useState(false);
 
   const session = sessionQuery.data;
   const isSessionEnded = !!session?.ended_at;
@@ -142,9 +148,23 @@ export default function SessionRecordingScreen() {
 
   const handleEndSession = useCallback(() => {
     setShowEndConfirm(false);
-    clearActiveSession();
-    endSession();
-  }, [endSession, clearActiveSession]);
+    const elapsed = Date.now() - new Date(session!.started_at).getTime();
+    if (elapsed > SESSION_DURATION_THRESHOLD_MS) {
+      setShowEndTimePicker(true);
+    } else {
+      clearActiveSession();
+      endSession();
+    }
+  }, [endSession, clearActiveSession, session]);
+
+  const handleEndTimeConfirm = useCallback(
+    (endedAt: Date) => {
+      setShowEndTimePicker(false);
+      clearActiveSession();
+      endSession(endedAt);
+    },
+    [endSession, clearActiveSession],
+  );
 
   const handleDone = useCallback(() => {
     router.back();
@@ -153,7 +173,7 @@ export default function SessionRecordingScreen() {
   // Loading
   if (sessionQuery.isLoading) {
     return (
-      <View className="flex-1 bg-[#FAFAFA]">
+      <View className="flex-1 bg-base">
         <LoadingState />
       </View>
     );
@@ -162,7 +182,7 @@ export default function SessionRecordingScreen() {
   // Error
   if (sessionQuery.isError || !sessionQuery.data) {
     return (
-      <View className="flex-1 bg-[#FAFAFA]">
+      <View className="flex-1 bg-base">
         <ErrorState
           message={sessionQuery.error?.message ?? "Session not found"}
           onRetry={() => sessionQuery.refetch()}
@@ -188,7 +208,7 @@ export default function SessionRecordingScreen() {
     const exerciseNumbers = numberExercises(entries);
 
     return (
-      <View className="flex-1 bg-[#FAFAFA]">
+      <View className="flex-1 bg-base">
         <SessionHeader
           clientName={clientName}
           sessionTime={sessionTime}
@@ -209,55 +229,44 @@ export default function SessionRecordingScreen() {
             isClassifying={isClassifying}
           />
 
-          {/* ── Done button ── */}
+          {/* ── Back to Home button (outline) ── */}
           <View className="mx-4 mt-4">
             <Pressable
               onPress={handleDone}
               className="py-4 rounded-xl items-center"
               style={{
-                backgroundColor: colors.primary,
-                shadowColor: colors.primary,
-                shadowOffset: { width: 0, height: 4 },
-                shadowOpacity: 0.3,
-                shadowRadius: 8,
-                elevation: 6,
+                backgroundColor: "transparent",
+                borderWidth: 1.5,
+                borderColor: colors.border.default,
               }}
             >
-              <Text style={{ fontSize: 16, fontWeight: "800", color: "#FFFFFF", letterSpacing: 0.5 }}>
-                Done
-              </Text>
+              <ThemedText variant="body-medium" color={colors.text.primary} style={{ letterSpacing: 0.5 }}>
+                Back to Home
+              </ThemedText>
             </Pressable>
           </View>
 
           {/* ── Workout Details (single container card) ── */}
           {sortedEntries.length > 0 && (
             <View
-              className="mx-4 mt-5 mb-4 rounded-2xl bg-white overflow-hidden"
-              style={cardShadow}
+              className="mx-4 mt-5 mb-4 rounded-xl overflow-hidden"
+              style={{ backgroundColor: colors.bg.surface1, ...cardBorder }}
             >
               {/* Section header */}
               <View
                 className="px-4 py-3"
-                style={{ backgroundColor: colors.primary + "0A" }}
+                style={{ backgroundColor: colors.blue.alpha12 }}
               >
-                <Text
-                  style={{
-                    fontSize: 13,
-                    fontWeight: "800",
-                    color: colors.primary,
-                    textTransform: "uppercase",
-                    letterSpacing: 1.2,
-                  }}
-                >
+                <ThemedText variant="title-3" color={colors.blue[500]}>
                   Workout Details
-                </Text>
+                </ThemedText>
               </View>
 
               {/* Entries separated by dividers */}
               {sortedEntries.map((entry, i) => (
                 <View
                   key={entry.id}
-                  style={i > 0 ? { borderTopWidth: 1, borderTopColor: colors.borderLight } : undefined}
+                  style={i > 0 ? { borderTopWidth: 1, borderTopColor: colors.border.subtle } : undefined}
                 >
                   <EntryCard
                     entry={entry}
@@ -280,7 +289,7 @@ export default function SessionRecordingScreen() {
   // Active state — recording in progress
   // ---------------------------------------------------------------------------
   return (
-    <View className="flex-1 bg-[#FAFAFA]">
+    <View className="flex-1 bg-base">
       <SessionHeader
         clientName={clientName}
         sessionTime={sessionTime}
@@ -294,10 +303,10 @@ export default function SessionRecordingScreen() {
       {/* Timeline — entries + processing state */}
       {recorder.error ? (
         <View className="flex-1 items-center justify-center px-10">
-          <FontAwesome name="exclamation-circle" size={48} color={colors.error} />
-          <Text className="text-base text-gray-700 mt-4 text-center">
+          <FontAwesome name="exclamation-circle" size={48} color={colors.red[500]} />
+          <ThemedText variant="body" color={colors.text.secondary} style={{ marginTop: 16, textAlign: "center" }}>
             {recorder.error}
-          </Text>
+          </ThemedText>
         </View>
       ) : (
         <Timeline
@@ -326,6 +335,18 @@ export default function SessionRecordingScreen() {
         onConfirm={handleEndSession}
         onCancel={() => setShowEndConfirm(false)}
         destructive
+      />
+
+      {/* Time picker for forgotten sessions (elapsed > threshold) */}
+      <EndTimePickerSheet
+        visible={showEndTimePicker}
+        startedAt={session!.started_at}
+        elapsedLabel={formatSessionDuration(
+          session!.started_at,
+          new Date().toISOString(),
+        )}
+        onConfirm={handleEndTimeConfirm}
+        onCancel={() => setShowEndTimePicker(false)}
       />
     </View>
   );

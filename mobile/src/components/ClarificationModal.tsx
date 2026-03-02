@@ -8,9 +8,10 @@
  *   - "Cancel"      — dismiss without action
  */
 
-import { Modal, Pressable, Text, View } from "react-native";
+import { Modal, Pressable, View } from "react-native";
 
-import { colors } from "@/src/constants/colors";
+import { ThemedText } from "@/src/components/ThemedText";
+import { colors } from "@/src/constants/tokens";
 
 interface ClarificationModalProps {
   visible: boolean;
@@ -32,21 +33,18 @@ export function ClarificationModal({
       {/* Backdrop */}
       <View
         className="flex-1 items-center justify-center px-8"
-        style={{ backgroundColor: "rgba(0, 0, 0, 0.4)" }}
+        style={{ backgroundColor: "rgba(0, 0, 0, 0.6)" }}
       >
         {/* Card */}
-        <View className="bg-white rounded-2xl w-full overflow-hidden">
+        <View className="rounded-2xl w-full overflow-hidden" style={{ backgroundColor: colors.bg.surface1 }}>
           {/* Header */}
           <View className="px-6 pt-6 pb-2">
-            <Text
-              className="text-[11px] font-bold uppercase tracking-widest mb-2"
-              style={{ color: colors.textTertiary }}
-            >
+            <ThemedText variant="caption" color={colors.text.tertiary} style={{ marginBottom: 8 }}>
               Didn't catch that
-            </Text>
-            <Text className="text-[15px] leading-6 text-gray-700 font-medium">
+            </ThemedText>
+            <ThemedText variant="body" color={colors.text.secondary}>
               {reason}
-            </Text>
+            </ThemedText>
           </View>
 
           {/* Actions */}
@@ -55,24 +53,22 @@ export function ClarificationModal({
             <Pressable
               onPress={onSpeakAgain}
               className="py-3.5 rounded-xl items-center"
-              style={{ backgroundColor: colors.primary }}
+              style={{ backgroundColor: colors.blue[500] }}
             >
-              <Text style={{ fontSize: 15, fontWeight: "700", color: "#FFFFFF" }}>
+              <ThemedText variant="body-medium" color={colors.text.inverse}>
                 Speak again
-              </Text>
+              </ThemedText>
             </Pressable>
 
             {/* Type it out */}
             <Pressable
               onPress={onTypeIt}
               className="py-3.5 rounded-xl items-center"
-              style={{
-                backgroundColor: colors.primaryLight,
-              }}
+              style={{ backgroundColor: colors.blue.alpha12 }}
             >
-              <Text style={{ fontSize: 15, fontWeight: "700", color: colors.primary }}>
+              <ThemedText variant="body-medium" color={colors.blue[500]}>
                 Type it out
-              </Text>
+              </ThemedText>
             </Pressable>
 
             {/* Cancel */}
@@ -80,9 +76,9 @@ export function ClarificationModal({
               onPress={onCancel}
               className="py-3 items-center"
             >
-              <Text style={{ fontSize: 14, fontWeight: "600", color: colors.textTertiary }}>
+              <ThemedText variant="body-small" color={colors.text.tertiary}>
                 Cancel
-              </Text>
+              </ThemedText>
             </Pressable>
           </View>
         </View>

@@ -49,11 +49,14 @@ export const sessionsQueryKey = {
 export function useTodaySessions() {
   const today = toISODateString(new Date());
 
+  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
   const sessionsQuery = useQuery({
     queryKey: sessionsQueryKey.byDate(today),
     queryFn: async () => {
       const res = await getTrainerSessions({
         scheduled_for_date: today,
+        tz,
         limit: 50,
       });
       return res.data;

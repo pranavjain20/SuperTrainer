@@ -5,7 +5,7 @@
  * SessionRecordingScreen (session detail header).
  */
 
-import { colors } from "@/src/constants/colors";
+import { colors } from "@/src/constants/tokens";
 import type { SessionEntry } from "@/src/api/types";
 
 interface StatusDisplay {
@@ -22,17 +22,17 @@ interface SessionLike {
 export function getSessionDisplay(session: SessionLike): StatusDisplay {
   // Done
   if (session.ended_at) {
-    return { label: "Done", color: colors.success };
+    return { label: "Done", color: colors.green[500] };
   }
 
   // Actively processing audio
   if (session.processing_status === "processing") {
-    return { label: "In Progress", color: colors.warning };
+    return { label: "In Progress", color: colors.amber[500] };
   }
 
   // No scheduled time — must be an ad-hoc session in progress
   if (!session.scheduled_for) {
-    return { label: "In Progress", color: colors.warning };
+    return { label: "In Progress", color: colors.amber[500] };
   }
 
   const now = new Date();
@@ -43,12 +43,12 @@ export function getSessionDisplay(session: SessionLike): StatusDisplay {
 
   // Already past the scheduled time — in progress
   if (minutesUntil <= 0) {
-    return { label: "In Progress", color: colors.warning };
+    return { label: "In Progress", color: colors.amber[500] };
   }
 
   // Under 1 hour away — show countdown
   if (minutesUntil < 60) {
-    return { label: `In ${minutesUntil} min`, color: colors.warning };
+    return { label: `In ${minutesUntil} min`, color: colors.amber[500] };
   }
 
   // More than 1 hour away
@@ -56,7 +56,7 @@ export function getSessionDisplay(session: SessionLike): StatusDisplay {
   const remainingMin = minutesUntil % 60;
   const timeLabel =
     remainingMin > 0 ? `In ${hours}h ${remainingMin}m` : `In ${hours}h`;
-  return { label: timeLabel, color: colors.textTertiary };
+  return { label: timeLabel, color: colors.text.tertiary };
 }
 
 // ---------------------------------------------------------------------------
