@@ -81,6 +81,10 @@ Updated after every correction.
 
 - **"Done" means EVERYTHING is done.** Fifth time now (Days 1, 4, 5, Day 2 Phase 1b, Day 11 Phase 2a). Said "done" with STATUS.md not updated, lessons.md not written, scratch devlog not renamed. The checklist before saying "done": (1) tests pass, (2) STATUS.md updated, (3) tasks/todo.md updated, (4) tasks/lessons.md updated if new lessons, (5) devlog written and renamed from scratch, (6) all changes committed, (7) pushed to remote, (8) `git status` clean. This is not optional. Run through the full list every time.
 
+## Debugging — Backtrace Before Fixing
+
+- **Claude panics when something breaks and tries to fix immediately instead of backtracing.** Observed during the design system session: something wasn't working, Claude went in circles for an hour trying different fixes without stopping to identify the root cause. Pranav intervened, forced a systematic backtrace, and the actual issue was small. This is the same pattern senior engineers use — when something breaks, don't flail. Stop, backtrace from the symptom to the root cause, understand WHY it broke, then fix. The rule: when a fix attempt fails, DO NOT try another fix. Instead: (1) state what you expected, (2) state what actually happened, (3) trace backward from the symptom to find the divergence point, (4) only then propose a fix. One hour of circling = one minute of backtracing. This is non-negotiable.
+
 ## Context Window Management
 
 - **Proactively flag context window issues.** Failed TWICE now — Day 5/6 boundary and Day 9/10 boundary. Both times Pranav had to ask "new terminal?" instead of me telling him first. This is in MEMORY.md as a non-negotiable. The rule: BEFORE the user finishes a day or asks what's next, check if context is heavy. If it is, say "heads up, context is full — start a fresh terminal for Day X" BEFORE they have to ask. No more misses on this.
