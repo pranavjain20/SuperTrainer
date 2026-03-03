@@ -109,7 +109,11 @@
 - [x] Backend: timezone-aware date filtering for session list
 - [x] 734 backend tests passing, phone-tested
 
-### Next Session: Planning Discussion (FIRST TASK)
+### Next Session (FIRST TASK): Compact Exercise Format
+
+- [ ] **Compact inline exercise format** — decide where it goes and how it looks. The trainer writes "squat: 4x8, 5x8, 6x8" — that's his mental model. Currently no exercise detail shows in SessionRow (home list), SessionSummary (end-of-session card), or client profile session history. Candidates: SessionSummary (post-session review), client profile session cards (browsing past sessions), pre-session briefings (future). Build the utility function + wire it into the right places. Keep the full table for editing/detail view.
+
+### Planning Discussion
 
 - [ ] **Planning discussion:** Phase 2b exists in `docs/BUILD_PLAN.md` (session detail view, AI flag system, swipe navigation, onboarding flow). Much of it was already built during 2a (session history, flags on entries, client profile). Diff what's done vs what's left. Then decide: finish remaining 2b items, jump to Phase 3 (Brain/RAG/patterns), or something else? Goal: by end of next phase, a complete v1 a trainer could use with confidence. Key principle: whatever ships must be flawless, even if not everything ships yet.
 
