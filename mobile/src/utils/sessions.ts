@@ -144,6 +144,43 @@ export function numberExercises(entries: SessionEntry[]): Map<string, number> {
   return result;
 }
 
+// ---------------------------------------------------------------------------
+// Client-side workout classifier (compact session cards)
+// ---------------------------------------------------------------------------
+
+const LOWER_KEYWORDS = ["squat", "lunge", "leg", "calf", "hamstring", "glute", "deadlift", "hip thrust"];
+const UPPER_KEYWORDS = ["bench", "curl", "pulldown", "pull-down", "pull down", "row", "fly", "tricep", "bicep", "shoulder", "lateral raise", "overhead press", "chest"];
+const CORE_KEYWORDS = ["plank", "crunch", "ab", "sit-up"];
+
+/**
+ * Classify a workout type from exercise names — no LLM, pure keyword matching.
+ *
+ * Scans exercise_name/exercise_canonical for muscle-group keywords and
+ * returns "Upper Body", "Lower Body", "Full Body", "Core", or "Workout".
+ */
+export function classifyWorkoutFromEntries(entries: SessionEntry[]): string {
+  const exercises = entries.filter((e) => e.entry_type === "exercise_card");
+  if (exercises.length === 0) return "Workout";
+
+  let upper = 0;
+  let lower = 0;
+  let core = 0;
+
+  for (const entry of exercises) {
+    const name = (entry.exercise_name ?? entry.exercise_canonical ?? "").toLowerCase();
+    if (UPPER_KEYWORDS.some((kw) => name.includes(kw))) upper++;
+    if (LOWER_KEYWORDS.some((kw) => name.includes(kw))) lower++;
+    if (CORE_KEYWORDS.some((kw) => name.includes(kw))) core++;
+  }
+
+  const total = exercises.length;
+  if (upper > 0 && lower > 0) return "Full Body";
+  if (upper > 0) return "Upper Body";
+  if (lower > 0) return "Lower Body";
+  if (core > 0 && core >= total / 2) return "Core";
+  return "Workout";
+}
+
 /**
  * Format a duration_minutes integer for display.
  * 0 or 1 → "< 1m", otherwise "45m" / "1h 15m".
