@@ -1,7 +1,7 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
@@ -13,21 +13,22 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { getSessionEntries } from "@/src/api/entries";
-import { classifyWorkout, createSession } from "@/src/api/sessions";
-import type { Session, SessionPlan } from "@/src/api/types";
+import { createSession } from "@/src/api/sessions";
+import type { Session, SessionEntry, SessionPlan, WeightUnit } from "@/src/api/types";
 import { EntryCard } from "@/src/components/EntryCard";
 import { ErrorState } from "@/src/components/ErrorState";
 import { LoadingState } from "@/src/components/LoadingState";
 import { ThemedText } from "@/src/components/ThemedText";
 import { colors } from "@/src/constants/tokens";
 import { cardBorder } from "@/src/constants/styles";
-import { useClient, useClientPlans, useClientSessions } from "@/src/hooks/useClient";
+import { groupEntriesBySession, useClient, useClientEntries, useClientPlans, useClientSessions } from "@/src/hooks/useClient";
 import { useEditableEntries } from "@/src/hooks/useEditableEntries";
 import { sessionsQueryKey } from "@/src/hooks/useSessions";
 import { useRecordingStore } from "@/src/stores/recordingStore";
 import { formatMemberSince, formatPlanDate, formatSessionDate, formatTime } from "@/src/utils/dates";
 import { getInitials, getInitialsColor } from "@/src/utils/initials";
-import { computeSessionStats, formatDurationMinutes, numberExercises } from "@/src/utils/sessions";
+import { classifyWorkoutFromEntries, formatDurationMinutes, numberExercises } from "@/src/utils/sessions";
+import { formatCompactExercise, formatCompactSet } from "@/src/utils/sets";
 
 // ---------------------------------------------------------------------------
 // Tab bar
@@ -97,8 +98,18 @@ function GoalPill({ goal }: { goal: string }) {
 // Expandable session card
 // ---------------------------------------------------------------------------
 
-function ExpandableSessionCard({ session }: { session: Session }) {
-  const [expanded, setExpanded] = useState(false);
+type CardView = "collapsed" | "summary" | "detail";
+
+function ExpandableSessionCard({
+  session,
+  compactEntries,
+  weightUnit,
+}: {
+  session: Session;
+  compactEntries?: SessionEntry[];
+  weightUnit: WeightUnit;
+}) {
+  const [view, setView] = useState<CardView>("collapsed");
 
   const entriesQuery = useQuery({
     queryKey: ["entries", "session", session.id],
@@ -106,15 +117,8 @@ function ExpandableSessionCard({ session }: { session: Session }) {
       const res = await getSessionEntries(session.id);
       return res.data;
     },
-    enabled: expanded,
+    enabled: view === "detail",
     staleTime: 5 * 60 * 1000,
-  });
-
-  const classifyQuery = useQuery({
-    queryKey: ["sessions", session.id, "classify"],
-    queryFn: () => classifyWorkout(session.id),
-    enabled: expanded && !!session.ended_at,
-    staleTime: Infinity,
   });
 
   const { setEditingEntry, editModals } = useEditableEntries(session.id);
@@ -122,11 +126,17 @@ function ExpandableSessionCard({ session }: { session: Session }) {
   const time = formatTime(session.scheduled_for ?? session.started_at);
   const date = formatSessionDate(session.started_at);
   const isCompleted = !!session.ended_at;
-  const entries = entriesQuery.data ?? [];
-  const stats = entries.length > 0 ? computeSessionStats(entries) : null;
-  const workoutType = classifyQuery.data?.workout_type ?? null;
 
-  const hasSummary = isCompleted && (stats || classifyQuery.isLoading);
+  const exerciseEntries = compactEntries?.filter((e) => e.entry_type === "exercise_card") ?? [];
+  const hasCompactData = isCompleted && exerciseEntries.length > 0;
+
+  const handleHeaderTap = () => {
+    if (view === "collapsed") {
+      setView(hasCompactData ? "summary" : "detail");
+    } else {
+      setView("collapsed");
+    }
+  };
 
   return (
     <>
@@ -134,16 +144,12 @@ function ExpandableSessionCard({ session }: { session: Session }) {
         className="rounded-xl mx-4 mb-3.5 overflow-hidden"
         style={{ backgroundColor: colors.bg.surface1, ...cardBorder }}
       >
-        {/* Session header — tap to expand */}
-        <Pressable
-          onPress={() => setExpanded(!expanded)}
-          className="flex-row items-center px-5 py-4"
-        >
+        {/* Session header — tap to toggle */}
+        <Pressable onPress={handleHeaderTap} className="flex-row items-center px-5 py-4">
           <View className="flex-1">
             <ThemedText variant="title-3">{date}</ThemedText>
             <ThemedText variant="body-small" color={colors.text.secondary} style={{ marginTop: 2 }}>{time}</ThemedText>
           </View>
-
           <View className="flex-row items-center">
             {isCompleted && session.duration_minutes != null && (
               <ThemedText variant="data" color={colors.text.secondary} style={{ fontSize: 14, marginRight: 10 }}>
@@ -151,15 +157,43 @@ function ExpandableSessionCard({ session }: { session: Session }) {
               </ThemedText>
             )}
             <FontAwesome
-              name={expanded ? "chevron-up" : "chevron-down"}
+              name={view === "collapsed" ? "chevron-down" : "chevron-up"}
               size={12}
               color={colors.text.tertiary}
             />
           </View>
         </Pressable>
 
-        {/* Expanded content */}
-        {expanded && (
+        {/* ── Summary view ── */}
+        {view === "summary" && hasCompactData && (
+          <View style={{ paddingHorizontal: 20, paddingBottom: 16 }}>
+            {exerciseEntries.map((entry) => (
+              <ThemedText
+                key={entry.id}
+                variant="body-small"
+                color={colors.text.primary}
+                numberOfLines={1}
+                style={{ lineHeight: 22 }}
+              >
+                {formatCompactExercise(entry, weightUnit)}
+              </ThemedText>
+            ))}
+
+            <Pressable
+              onPress={() => setView("detail")}
+              className="flex-row items-center justify-center self-end rounded-full"
+              style={{ marginTop: 12, backgroundColor: colors.blue.alpha12, paddingHorizontal: 16, paddingVertical: 8 }}
+            >
+              <ThemedText variant="body-medium" color={colors.blue[500]} style={{ fontFamily: "Inter-Bold" }}>
+                View full workout
+              </ThemedText>
+              <FontAwesome name="angle-right" size={16} color={colors.blue[500]} style={{ marginLeft: 6 }} />
+            </Pressable>
+          </View>
+        )}
+
+        {/* ── Detail view — full entry cards ── */}
+        {view === "detail" && (
           <View style={{ borderTopWidth: 1, borderTopColor: colors.border.subtle }}>
             {entriesQuery.isLoading && (
               <View className="py-6 items-center">
@@ -183,50 +217,6 @@ function ExpandableSessionCard({ session }: { session: Session }) {
               const exerciseNumbers = numberExercises(entriesQuery.data);
               return (
                 <>
-                  {/* ── SUMMARY block ── */}
-                  {hasSummary && (
-                    <View style={{ backgroundColor: colors.blue.alpha12, paddingHorizontal: 20, paddingTop: 14, paddingBottom: 16 }}>
-                      {/* Section label */}
-                      <ThemedText variant="title-3" color={colors.blue[500]} style={{ marginBottom: 12 }}>
-                        Workout Summary
-                      </ThemedText>
-
-                      {/* Stat row — type + duration + exercises + sets */}
-                      <View className="flex-row">
-                        <View style={{ marginRight: 24 }}>
-                          <ThemedText variant="caption" color={colors.text.tertiary}>
-                            Type
-                          </ThemedText>
-                          <ThemedText variant="title-3" style={{ marginTop: 2 }}>
-                            {classifyQuery.isLoading ? "..." : (workoutType ?? "—")}
-                          </ThemedText>
-                        </View>
-                        {session.duration_minutes != null && (
-                          <View style={{ marginRight: 24 }}>
-                            <ThemedText variant="caption" color={colors.text.tertiary}>
-                              Duration
-                            </ThemedText>
-                            <ThemedText variant="data-bold" style={{ marginTop: 2 }}>
-                              {formatDurationMinutes(session.duration_minutes!)}
-                            </ThemedText>
-                          </View>
-                        )}
-                        {stats && (
-                          <>
-                            <View style={{ marginRight: 24 }}>
-                              <ThemedText variant="caption" color={colors.text.tertiary}>
-                                Exercises
-                              </ThemedText>
-                              <ThemedText variant="data-bold" style={{ marginTop: 2 }}>
-                                {stats.exerciseCount}
-                              </ThemedText>
-                            </View>
-                          </>
-                        )}
-                      </View>
-                    </View>
-                  )}
-
                   {/* ── Exercise cards in a bordered container ── */}
                   <View
                     style={{
@@ -318,7 +308,15 @@ function OverviewTab({ goals, injuryHistory }: { goals: string[] | null; injuryH
   );
 }
 
-function SessionsTab({ sessions }: { sessions: Session[] }) {
+function SessionsTab({
+  sessions,
+  entriesBySession,
+  weightUnit,
+}: {
+  sessions: Session[];
+  entriesBySession: Map<string, SessionEntry[]>;
+  weightUnit: WeightUnit;
+}) {
   if (sessions.length === 0) {
     return (
       <View className="items-center py-10">
@@ -331,7 +329,12 @@ function SessionsTab({ sessions }: { sessions: Session[] }) {
   return (
     <View className="pt-4 pb-8">
       {sessions.map((session) => (
-        <ExpandableSessionCard key={session.id} session={session} />
+        <ExpandableSessionCard
+          key={session.id}
+          session={session}
+          compactEntries={entriesBySession.get(session.id)}
+          weightUnit={weightUnit}
+        />
       ))}
     </View>
   );
@@ -404,6 +407,7 @@ export default function ClientDetailScreen() {
   const clientQuery = useClient(id);
   const sessionsQuery = useClientSessions(id);
   const plansQuery = useClientPlans(id);
+  const entriesQuery = useClientEntries(id);
 
   const startSessionMutation = useMutation({
     mutationFn: () =>
@@ -440,11 +444,17 @@ export default function ClientDetailScreen() {
     startSessionMutation.mutate();
   };
 
+  const entriesBySession = useMemo(
+    () => groupEntriesBySession(entriesQuery.data ?? []),
+    [entriesQuery.data],
+  );
+
   const refetch = async () => {
     await Promise.allSettled([
       clientQuery.refetch(),
       sessionsQuery.refetch(),
       plansQuery.refetch(),
+      entriesQuery.refetch(),
     ]);
   };
 
@@ -548,7 +558,11 @@ export default function ClientDetailScreen() {
         <OverviewTab goals={client.goals} injuryHistory={client.injury_history} />
       )}
       {activeTab === "Sessions" && (
-        <SessionsTab sessions={sessions} />
+        <SessionsTab
+          sessions={sessions}
+          entriesBySession={entriesBySession}
+          weightUnit={client.preferred_weight_unit ?? "kg"}
+        />
       )}
       {activeTab === "Plans" && (
         <PlansTab plans={plans} />
