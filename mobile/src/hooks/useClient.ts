@@ -12,8 +12,10 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { getClient } from "@/src/api/clients";
+import { getClientEntries } from "@/src/api/entries";
 import { getClientPlans } from "@/src/api/plans";
 import { getClientSessions } from "@/src/api/sessions";
+import type { SessionEntry } from "@/src/api/types";
 
 export function useClient(id: string | undefined) {
   return useQuery({
@@ -46,4 +48,30 @@ export function useClientPlans(id: string | undefined) {
     enabled: !!id,
     staleTime: 5 * 60 * 1000,
   });
+}
+
+export function useClientEntries(id: string | undefined) {
+  return useQuery({
+    queryKey: ["entries", "client", id],
+    queryFn: async () => {
+      const res = await getClientEntries(id!, { limit: 200 });
+      return res.data;
+    },
+    enabled: !!id,
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
+/** Group a flat array of entries by session_id. */
+export function groupEntriesBySession(entries: SessionEntry[]): Map<string, SessionEntry[]> {
+  const map = new Map<string, SessionEntry[]>();
+  for (const entry of entries) {
+    const group = map.get(entry.session_id);
+    if (group) {
+      group.push(entry);
+    } else {
+      map.set(entry.session_id, [entry]);
+    }
+  }
+  return map;
 }
