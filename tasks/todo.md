@@ -1,5 +1,26 @@
 # SuperTrainer — Task Tracker
 
+## Compact Exercise Format (Mar 4, 2026)
+
+### Logic + Tests ✅ COMPLETE
+- [x] `convertWeight` (kg→lbs conversion)
+- [x] `formatCompactSet` (weighted/bodyweight/timed sets)
+- [x] `formatCompactExercise` (one-liner with title-casing)
+- [x] `classifyWorkoutFromEntries` (keyword-based: Upper/Lower/Full Body/Core/Workout)
+- [x] `useClientEntries` hook + `groupEntriesBySession` helper
+- [x] 3-level session card (collapsed → summary → full detail)
+- [x] Removed server-side classifyQuery — all client-side now
+- [x] Jest setup for mobile (jest + ts-jest + @types/jest)
+- [x] 33 tests passing, zero type errors
+
+### Design Review — PENDING (first task tomorrow)
+- [ ] Review compact exercise line visual design — needs Equinox-level polish
+- [ ] Font, color, spacing decisions for exercise one-liners
+- [ ] "View full workout" button styling
+- [ ] Verify on multiple clients with different data shapes
+
+---
+
 ## Phase 2: Mobile App
 
 ### Pre-Work: Backend Addition ✅ COMPLETE

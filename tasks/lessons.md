@@ -85,6 +85,12 @@ Updated after every correction.
 
 - **Claude panics when something breaks and tries to fix immediately instead of backtracing.** Observed during the design system session: something wasn't working, Claude went in circles for an hour trying different fixes without stopping to identify the root cause. Pranav intervened, forced a systematic backtrace, and the actual issue was small. This is the same pattern senior engineers use — when something breaks, don't flail. Stop, backtrace from the symptom to the root cause, understand WHY it broke, then fix. The rule: when a fix attempt fails, DO NOT try another fix. Instead: (1) state what you expected, (2) state what actually happened, (3) trace backward from the symptom to find the divergence point, (4) only then propose a fix. One hour of circling = one minute of backtracing. This is non-negotiable.
 
+## UI/UX Design Iteration
+
+- **Don't guess at visual design — iterate with screenshots.** The compact exercise format went through ~8 visual iterations. Problems: using `caption` variant (adds ALL CAPS textTransform), colored backgrounds that clash with the dark theme, table layouts that look out of place, transparent text colors. Key takeaway: every UI variant must be tested on the actual phone screen — what looks reasonable in code often looks terrible on device. Ask for screenshots early and often. The design system has specific behaviors (caption = uppercase) that aren't obvious from the variant name.
+
+- **Start minimal, add visual weight only when needed.** Tried blue backgrounds, pill chips, split fonts, table layouts — all looked worse than simple text lines. The cleanest version was the simplest: one-liner exercise text in primary color, no dividers, no backgrounds. Premium ≠ complex. Premium = intentional restraint.
+
 ## Context Window Management
 
 - **Proactively flag context window issues.** Failed TWICE now — Day 5/6 boundary and Day 9/10 boundary. Both times Pranav had to ask "new terminal?" instead of me telling him first. This is in MEMORY.md as a non-negotiable. The rule: BEFORE the user finishes a day or asks what's next, check if context is heavy. If it is, say "heads up, context is full — start a fresh terminal for Day X" BEFORE they have to ask. No more misses on this.
