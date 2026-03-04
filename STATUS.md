@@ -1,8 +1,16 @@
 # SuperTrainer — Current Status
 
-**Last updated:** Mar 3, 2026
+**Last updated:** Mar 4, 2026
 **Current phase:** Phase 2a — Mobile App. COMPLETE. Design system polish done.
-**Next action:** Planning discussion — define minimum viable feature set, decide next phase.
+**Next action:** Review compact exercise format design on client profile session cards, then planning discussion.
+
+---
+
+## Compact Exercise Format — IN PROGRESS (Mar 4, 2026)
+
+Added compact exercise lines to client profile session cards (3-level expand: collapsed → summary → full detail). Backend logic and tests complete (33 new mobile Jest tests). Jest test runner set up for mobile project. **Design needs polish** — first task tomorrow is reviewing the visual design before proceeding to planning.
+
+Files changed: `sets.ts` (formatCompactExercise, formatCompactSet, convertWeight), `sessions.ts` (classifyWorkoutFromEntries), `useClient.ts` (useClientEntries, groupEntriesBySession), `[id].tsx` (3-level card view), `sets.test.ts` (new). New: `jest.config.js`, test script in package.json.
 
 ---
 
