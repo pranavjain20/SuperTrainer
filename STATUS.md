@@ -1,8 +1,8 @@
 # SuperTrainer — Current Status
 
-**Last updated:** Mar 4, 2026
+**Last updated:** Mar 5, 2026
 **Current phase:** Phase 2a — Mobile App. COMPLETE. Design system polish done.
-**Next action:** Review compact exercise format design on client profile session cards, then planning discussion.
+**Next action:** Review compact exercise format design on client profile session cards, then planning discussion. Phase 2a walkthrough guide written (`docs/guides/phase-2a.md`).
 
 ---
 
