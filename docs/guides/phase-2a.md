@@ -149,3 +149,192 @@ Zustand is purpose-built for simple, synchronous, cross-component state. Using T
 Each tool does what it's best at. The boundary is clean: if the data comes from the server, TanStack Query owns it. If it's UI-only state shared across components, Zustand owns it. Nothing else.
 
 ---
+
+## Voice Recording — Five Layers Working Together
+
+The core interaction of the app: trainer taps a button, speaks, and structured data appears on screen. Five layers cooperate to make this feel instant and reliable.
+
+### Layer 1: useVoiceRecorder (expo-av)
+
+Manages the hardware. Requests microphone permission, creates an `Audio.Recording` with high-quality settings (M4A, 44kHz, 128kbps AAC), tracks duration, and returns a local file URI when the trainer stops recording.
+
+Duration tracking uses a wall-clock `setInterval`, not expo-av's status callbacks. Why? The status callbacks fire inconsistently on different devices. A simple `Date.now()` interval is more reliable for showing "0:03... 0:04... 0:05..." on the UI. We don't need millisecond precision — we need consistent ticking.
+
+On mount, the hook registers its `stopRecording` function into `recordingStore`. This is how the tab layout can stop recording without knowing anything about expo-av.
+
+### Layer 2: recordingStore (Zustand)
+
+The bridge between the recording hook and the rest of the app. Components that need to know "is a recording happening?" read from this store. The tab layout reads `isRecording` to guard navigation. The `ActiveSessionBanner` reads `activeClientName` and `activeSessionStartedAt` to show "Recording with Elena — 12:34."
+
+### Layer 3: useVoiceClipUpload
+
+The orchestration hook. When `useVoiceRecorder` produces a URI, this hook:
+
+1. Sets `isProcessing: true` in `sessionStore` (Timeline shows a spinner)
+2. Calls `processVoiceClip(sessionId, audioUri)` — multipart POST to the backend
+3. Backend runs the full pipeline: Deepgram STT → Claude parser → validation → persistence (~3 seconds)
+4. Invalidates the TanStack Query cache for this session's entries (triggers refetch)
+5. Clears processing state, surfaces any clarifications
+
+On error, it stores the failed audio URI so the Timeline can show a retry row. The trainer can tap to re-send the same clip without re-recording.
+
+A `useRef` tracks the last uploaded URI to prevent double-uploads. React effects can fire multiple times during re-renders — without this guard, the same clip could be sent to the backend twice.
+
+### Layer 4: sessionStore (Zustand)
+
+Drives the Timeline's feedback UI. Three states:
+- `isProcessing: true` → spinner row at the bottom of the timeline
+- `processingError` set → error row with retry button
+- `clarifications` set → `ClarificationModal` appears
+
+### Layer 5: Timeline Component
+
+Reads session entries from TanStack Query and processing state from `sessionStore`. Renders entry cards (exercise or observation), plus contextual UI rows for processing, errors, and clarifications.
+
+When clarification is needed (the backend couldn't parse the audio), the trainer gets three choices: "Speak Again" (restarts recording), "Type It" (opens `ManualEntryModal` for text input that skips Deepgram and goes straight to Claude), or "Cancel" (dismisses).
+
+### The Full Session Lifecycle
+
+1. Trainer taps "Start Session" on a client profile → `createSession` mutation → navigates to recording screen
+2. `recordingStore.setActiveSession` → `ActiveSessionBanner` appears across all tabs
+3. Trainer taps the `RecordButton` → button turns red, pulses, haptic feedback fires
+4. Trainer taps again → recording stops → URI triggers auto-upload
+5. Backend processes (~3 seconds) → cache invalidates → new cards appear on Timeline
+6. Trainer can tap any card → edit modal → optimistic cache update (instant UI)
+7. Repeat steps 3-6 for each voice clip
+8. Trainer taps "End Session" → `ConfirmSheet` → optional `EndTimePickerSheet` → session saved with `ended_at`
+9. Screen transitions: Timeline replaced by `SessionSummary` (stats) + "Workout Details" (all entries)
+10. Workout classification fires automatically → "Upper Body" / "Lower Body" / "Full Body" label
+11. `clearActiveSession` → banner disappears
+
+### Inline Editing — Optimistic Updates
+
+Every entry card is tappable. `ExerciseEditModal` lets the trainer fix exercise names, set data, form notes. `ObservationEditModal` lets them edit observation text and flag colors.
+
+The `useEditableEntries` hook is shared between the recording Timeline and the client profile's session history. It returns both the rendered entry list AND the modal components — the consuming screen just renders both and gets full editing capability for free.
+
+After a mutation, `setQueryData` patches the cached entries array in-place. The UI updates immediately. A background refetch confirms the server accepted the change. If the server rejects it (validation error), the next refetch restores the correct state. This is "optimistic-style" without full rollback machinery — simple enough for our needs, since server rejections are rare for inline edits.
+
+---
+
+## The Design Token System — No Ad-Hoc Values
+
+Every color, font size, font weight, and spacing value in the app comes from one file: `src/constants/tokens.ts`. No hex strings in component files. No inline font sizes. No "what shade of gray was that again?"
+
+### Colors — Semantic, Not Named
+
+Colors aren't named by their hue ("gray-800"). They're named by their purpose:
+
+```typescript
+colors.bg.base        // App background
+colors.bg.surface1    // Card backgrounds (one layer up)
+colors.bg.surface2    // Nested elements (two layers up)
+colors.text.primary   // Main text
+colors.text.secondary // Supporting text
+colors.text.tertiary  // Subtle labels
+colors.blue.base      // Primary action color
+colors.ai.purple      // AI-generated content (distinct from user content)
+colors.recording.red  // Active recording indicator
+```
+
+This means components never decide what color to use — they declare what role the color plays. If we rebrand tomorrow and change the primary color from blue to green, one line changes in `tokens.ts` and the entire app updates.
+
+Alpha variants (`colors.blue.alpha12`, `colors.red.alpha12`) are for backgrounds behind colored text — a light tint that provides contrast without visual heaviness.
+
+### Typography — ThemedText as the Gate
+
+`ThemedText` is the only way to render text in the app. It wraps React Native's `<Text>` and applies a variant's full style object:
+
+```tsx
+<ThemedText variant="title-1">Session History</ThemedText>
+<ThemedText variant="body" color={colors.text.secondary}>No sessions yet</ThemedText>
+<ThemedText variant="data-bold">145 kg</ThemedText>
+```
+
+13 variants exist, split between two font families:
+- **Inter** (Regular/Medium/SemiBold/Bold) — all UI text: titles, body copy, labels, captions
+- **JetBrains Mono** (Regular/Bold) — exclusively for data: weights, reps, durations, timers
+
+This split is intentional. Monospaced fonts make numbers align vertically in tables and feel "data-like." Proportional fonts (Inter) are more readable for prose. Using the wrong font for the wrong content type is a subtle but noticeable design flaw.
+
+One gotcha: the `caption` variant includes `textTransform: "uppercase"` baked in. Any text rendered as `caption` will automatically be all-caps. This is by design (column headers, section labels) but surprised us a few times during development.
+
+### Why This Matters
+
+Without a token system, every developer makes independent color and sizing decisions. After 20 components, you have 8 slightly different grays, 3 font sizes that are "close enough," and spacing that looks inconsistent on every screen. The token system makes consistency automatic — you can't use the wrong gray because you never type a hex code.
+
+---
+
+## Quick Reference — Phase 2a Files
+
+### Screens (7 routes)
+
+| File | Screen |
+|------|--------|
+| `app/(tabs)/index.tsx` | Home — today's sessions |
+| `app/(tabs)/clients/index.tsx` | Client list — search, alphabetical grouping |
+| `app/(tabs)/clients/[id].tsx` | Client profile — goals, sessions, plans |
+| `app/(tabs)/brain.tsx` | Brain — placeholder for Phase 3 |
+| `app/(tabs)/session/index.tsx` | All sessions list |
+| `app/recording/[sessionId].tsx` | Active recording screen |
+| `app/+not-found.tsx` | 404 fallback |
+
+### Components (22)
+
+| Component | Purpose |
+|-----------|---------|
+| `ThemedText` | Typography gate — all text goes through here |
+| `PressableCard` | Base pressable wrapper with card styling |
+| `EntryCard` | Routes to ExerciseCard or ObservationCard by type |
+| `ExerciseCard` | Set table with data columns (JetBrains Mono) |
+| `ObservationCard` | Observation text with flag-color left border |
+| `ExerciseEditModal` | Inline exercise editing |
+| `ObservationEditModal` | Inline observation editing |
+| `ManualEntryModal` | Text input fallback when voice fails |
+| `ClarificationModal` | "Speak again" / "Type it" / "Cancel" dialog |
+| `ConfirmSheet` | Generic confirm/cancel bottom sheet |
+| `EndTimePickerSheet` | Date picker for forgotten end times |
+| `RecordButton` | FAB with pulse animation + haptic feedback |
+| `ActiveSessionBanner` | Persistent banner across all tabs during recording |
+| `Timeline` | Live entry list during recording |
+| `SessionHeader` | Recording screen header with end button |
+| `SessionSummary` | Post-session stats card |
+| `SessionListScreen` | Shared list used by Home and Sessions tabs |
+| `SessionRow` | Single row in a session list |
+| `ClientRow` | Single row in client list (initials avatar) |
+| `EmptyState` | Empty list placeholder |
+| `ErrorState` | Error display with retry button |
+| `LoadingState` | Loading spinner |
+
+### Hooks (10)
+
+| Hook | Purpose |
+|------|---------|
+| `useClients` | Client list + `useClientMap` for O(1) lookups |
+| `useClient` | Single client, sessions, plans, entries |
+| `useSessions` | Today's sessions with client name enrichment |
+| `useSession` | Single session fetch |
+| `useSessionEntries` | Entries for a given session |
+| `useEditableEntries` | Edit modal wiring (shared between screens) |
+| `useEntryMutations` | Update + delete entry mutations |
+| `useEndSession` | End session + classify workout |
+| `useVoiceRecorder` | expo-av recording lifecycle |
+| `useVoiceClipUpload` | Upload orchestration |
+
+### Utilities (5 files)
+
+| File | Functions |
+|------|-----------|
+| `sessions.ts` | `getSessionDisplay`, `computeSessionStats`, `numberExercises`, `classifyWorkoutFromEntries` |
+| `sets.ts` | `getSetWeight`, `getSetReps`, `formatCompactSet`, `formatCompactExercise`, `convertWeight` |
+| `dates.ts` | `formatTime`, `formatSessionDate`, `formatMemberSince`, `toISODateString` |
+| `strings.ts` | `capitalizeFirst`, `capitalizeWords` |
+| `initials.ts` | `getInitials`, `getInitialsColor` (deterministic from name) |
+
+### Numbers
+
+- 7 screens, 4 tabs
+- 22 components, 10 hooks, 2 Zustand stores
+- 13 typography variants, 2 font families (6 font files)
+- 734 total tests (701 backend + 33 mobile Jest)
+- 12 days of development
