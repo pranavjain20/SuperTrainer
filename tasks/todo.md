@@ -134,9 +134,22 @@
 
 - [ ] **Compact inline exercise format** — decide where it goes and how it looks. The trainer writes "squat: 4x8, 5x8, 6x8" — that's his mental model. Currently no exercise detail shows in SessionRow (home list), SessionSummary (end-of-session card), or client profile session history. Candidates: SessionSummary (post-session review), client profile session cards (browsing past sessions), pre-session briefings (future). Build the utility function + wire it into the right places. Keep the full table for editing/detail view.
 
-### Live Exercise History (Notebook Replacement)
+### Live Exercise History (Notebook Replacement) — SCOPED (Mar 7)
 
-- [ ] **Per-exercise history during live sessions** — When trainer starts an exercise (e.g. tricep pushdowns), the app surfaces what the client did last time for that specific exercise in compact format ("4kg x10, 3kg x8, 3kg x8"). Must be as fast as glancing at a notebook. Pre-exercise reference (to decide today's programming) + stays accessible mid-exercise (client asks "what did we do last time?"). Needs: (a) design how the trigger works (reactive from voice clip vs manual search vs hybrid), (b) backend query to fetch last N sessions' data for a specific exercise + client, (c) UI that's glanceable mid-coaching without leaving the recording screen, (d) decide how many sessions back to show (1 essential, 2-3 for progression trends).
+**Goal:** Replicate the speed of flipping back 3 pages in a notebook. Trainer picks an exercise, instantly sees what the client did last time.
+
+**Decisions made:**
+- Trigger: manual search (voice-reactive ruled out — wrong timing + expensive)
+- Data: pre-fetch last 3 sessions at session start, search locally on device
+- Access: session-wide (available from anywhere via active session context, not locked to recording screen)
+- Display: compact format already built ("4kg x10, 3kg x8, 3kg x8")
+- Future: Phase 3 session plans auto-surface history for planned exercises; manual search remains as fallback
+
+**To plan (next session):**
+- [ ] Backend: endpoint/query for last N sessions' entries for a client (or use existing endpoints + client-side grouping)
+- [ ] Mobile: pre-fetch strategy (when to load, how to cache)
+- [ ] Mobile: search UX — where does the lookup live, how does the trainer invoke it, what does the results view look like
+- [ ] Mobile: integration with active session banner (access from any tab)
 
 ### Planning Discussion
 

@@ -1,14 +1,29 @@
 # SuperTrainer — Current Status
 
-**Last updated:** Mar 6, 2026
+**Last updated:** Mar 7, 2026
 **Current phase:** Phase 2a — Mobile App. COMPLETE. Design system polish done.
-**Next action:** (1) Review compact exercise format design on phone, (2) planning discussion — diff 2b vs what's already built, decide next phase, (3) scope live exercise history feature (notebook replacement). Phase 2a walkthrough guide written (`docs/guides/phase-2a.md`).
+**Next action:** (1) Review compact exercise format design on phone, (2) plan + build live exercise history feature (scoped — see below), (3) planning discussion — diff 2b vs what's already built, decide next phase. Phase 2a walkthrough guide written (`docs/guides/phase-2a.md`).
 
 ---
 
-## Live Exercise History — Scoped (Mar 6, 2026)
+## Live Exercise History — Scoped (Mar 7, 2026)
 
-New feature from real trainer observation: during a session, before each exercise, the trainer checks what the client did last time for that specific movement. Uses compact format ("4kg x10, 3kg x8, 3kg x8") to decide today's programming. This is pre-exercise, not pre-session — happens for every movement. The app must surface this as fast as glancing at a notebook. Design questions: trigger mechanism (voice-reactive vs manual search), UI placement on recording screen, session depth (1 vs 2-3 sessions back).
+**The problem:** During a session, before each exercise, the trainer checks what the client did last time for that specific movement. Uses compact format ("4kg x10, 3kg x8, 3kg x8") to decide today's programming. This is pre-exercise, not pre-session — happens for every movement. The app must surface this as fast as flipping back three pages in a notebook.
+
+**Brainstorming decisions (Mar 7):**
+
+- **Trigger: Manual search only.** Voice-reactive ruled out — trainer records clips after finishing an exercise, not before, so the timing is wrong. Also expensive (every lookup would hit the LLM pipeline). Chatbot queries ruled out for the same reasons — slower than a notebook and more costly.
+- **Data strategy: Pre-fetch at session start.** When the trainer opens a session, pull the last 3 sessions' worth of entries for that client. All data lives locally on device. Search is instant, no network round-trip mid-session. The data is small (30-50 exercise entries across 3 sessions).
+- **Access: Session-wide, not locked to recording screen.** Trainer moves around the app during a session (client profile, other tabs). The active session banner already follows them across tabs. Exercise history lookup should be available from anywhere during an active session.
+- **Display: Compact format** ("4kg x10, 3kg x8, 3kg x8") — utility functions already built.
+- **Session depth: Last 3 sessions.** Covers most training frequencies. Not tied to workout type (since plans can change day-of).
+
+**Future enhancement (Phase 3 — session planning):**
+- When a session plan exists, auto-surface history for the planned exercises (no manual search needed).
+- Manual search remains as fallback for when the trainer pivots mid-session ("planned legs, switching to upper body").
+- The plan-linked version is a layer on top of the general-purpose lookup, not a replacement.
+
+**The narrative to keep in mind:** A notebook is three pages — flip back, scan for "squats," see the numbers. Done in seconds. The app has to be that easy and that intuitive. If it takes more taps or more time than flipping pages, the trainer won't use it.
 
 ---
 
