@@ -1,14 +1,20 @@
 # SuperTrainer — Current Status
 
-**Last updated:** Mar 5, 2026
+**Last updated:** Mar 6, 2026
 **Current phase:** Phase 2a — Mobile App. COMPLETE. Design system polish done.
-**Next action:** Review compact exercise format design on client profile session cards, then planning discussion. Phase 2a walkthrough guide written (`docs/guides/phase-2a.md`).
+**Next action:** (1) Review compact exercise format design on phone, (2) planning discussion — diff 2b vs what's already built, decide next phase, (3) scope live exercise history feature (notebook replacement). Phase 2a walkthrough guide written (`docs/guides/phase-2a.md`).
+
+---
+
+## Live Exercise History — Scoped (Mar 6, 2026)
+
+New feature from real trainer observation: during a session, before each exercise, the trainer checks what the client did last time for that specific movement. Uses compact format ("4kg x10, 3kg x8, 3kg x8") to decide today's programming. This is pre-exercise, not pre-session — happens for every movement. The app must surface this as fast as glancing at a notebook. Design questions: trigger mechanism (voice-reactive vs manual search), UI placement on recording screen, session depth (1 vs 2-3 sessions back).
 
 ---
 
 ## Compact Exercise Format — IN PROGRESS (Mar 4, 2026)
 
-Added compact exercise lines to client profile session cards (3-level expand: collapsed → summary → full detail). Backend logic and tests complete (33 new mobile Jest tests). Jest test runner set up for mobile project. **Design needs polish** — first task tomorrow is reviewing the visual design before proceeding to planning.
+Added compact exercise lines to client profile session cards (3-level expand: collapsed → summary → full detail). Backend logic and tests complete (33 new mobile Jest tests). Jest test runner set up for mobile project. **Design needs polish** — first task next session is reviewing the visual design before proceeding to planning.
 
 Files changed: `sets.ts` (formatCompactExercise, formatCompactSet, convertWeight), `sessions.ts` (classifyWorkoutFromEntries), `useClient.ts` (useClientEntries, groupEntriesBySession), `[id].tsx` (3-level card view), `sets.test.ts` (new). New: `jest.config.js`, test script in package.json.
 
