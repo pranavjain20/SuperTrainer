@@ -134,6 +134,10 @@
 
 - [ ] **Compact inline exercise format** — decide where it goes and how it looks. The trainer writes "squat: 4x8, 5x8, 6x8" — that's his mental model. Currently no exercise detail shows in SessionRow (home list), SessionSummary (end-of-session card), or client profile session history. Candidates: SessionSummary (post-session review), client profile session cards (browsing past sessions), pre-session briefings (future). Build the utility function + wire it into the right places. Keep the full table for editing/detail view.
 
+### Live Exercise History (Notebook Replacement)
+
+- [ ] **Per-exercise history during live sessions** — When trainer starts an exercise (e.g. tricep pushdowns), the app surfaces what the client did last time for that specific exercise in compact format ("4kg x10, 3kg x8, 3kg x8"). Must be as fast as glancing at a notebook. Pre-exercise reference (to decide today's programming) + stays accessible mid-exercise (client asks "what did we do last time?"). Needs: (a) design how the trigger works (reactive from voice clip vs manual search vs hybrid), (b) backend query to fetch last N sessions' data for a specific exercise + client, (c) UI that's glanceable mid-coaching without leaving the recording screen, (d) decide how many sessions back to show (1 essential, 2-3 for progression trends).
+
 ### Planning Discussion
 
 - [ ] **Planning discussion:** Phase 2b exists in `docs/BUILD_PLAN.md` (session detail view, AI flag system, swipe navigation, onboarding flow). Much of it was already built during 2a (session history, flags on entries, client profile). Diff what's done vs what's left. Then decide: finish remaining 2b items, jump to Phase 3 (Brain/RAG/patterns), or something else? Goal: by end of next phase, a complete v1 a trainer could use with confidence. Key principle: whatever ships must be flawless, even if not everything ships yet.
