@@ -1,5 +1,13 @@
 # SuperTrainer — Task Tracker
 
+## Business Pitch Review (Mar 8, 2026)
+
+- [ ] **Review `docs/PITCH.md`** — read through the full pitch document, verify the narrative flows, check that caveats on stats are clear enough for competition judges
+- [ ] Decide: any additional data points or sources to add?
+- [ ] Decide: does the pitch section order work (30-sec pitch → thesis → market data → implications)?
+
+---
+
 ## Compact Exercise Format (Mar 4, 2026)
 
 ### Logic + Tests ✅ COMPLETE
