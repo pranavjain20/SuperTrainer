@@ -164,6 +164,13 @@
 
 - [ ] **Planning discussion:** Phase 2b exists in `docs/BUILD_PLAN.md` (session detail view, AI flag system, swipe navigation, onboarding flow). Much of it was already built during 2a (session history, flags on entries, client profile). Diff what's done vs what's left. Then decide: finish remaining 2b items, jump to Phase 3 (Brain/RAG/patterns), or something else? Goal: by end of next phase, a complete v1 a trainer could use with confidence. Key principle: whatever ships must be flawless, even if not everything ships yet.
 
+---
+
+## Future Roadmap
+
+### iPad Support
+- [ ] **iPad-optimized layout** — trainers may use iPads instead of physical notebooks. The app runs on iPad today (set `supportsTablet: true` in app.json), but it's a stretched phone UI. Proper iPad support means: responsive layouts (split views, sidebar navigation, wider content areas), NativeWind breakpoints (`md:`/`lg:` prefixes), and component sizing tuned for 12" screens. No backend or business logic changes needed — purely a UI/layout pass on existing components. Not urgent for v1, but should be part of the shipping plan before trainers start using it.
+
 ### Trainer Feedback — Pre-Session Briefing Requirements (from real trainer conversation)
 
 What a trainer actually wants in the pre-session AI summary:
