@@ -5,7 +5,7 @@
 - [ ] **Review `docs/PITCH.md`** — read through the full pitch document, verify the narrative flows, check that caveats on stats are clear enough for competition judges
 - [ ] Decide: any additional data points or sources to add?
 - [ ] Decide: does the pitch section order work (30-sec pitch → thesis → market data → implications)?
-- [ ] **Review Columbia AI startup submission** — revisit application answers in light of today's market data and pitch framing, update where the Fitt Insider stats strengthen the narrative
+- [x] **Review Columbia AI startup submission** — revisited application answers in light of market data and pitch framing ✅
 
 ---
 
