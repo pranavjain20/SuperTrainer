@@ -2,7 +2,7 @@
 
 **Last updated:** Mar 8, 2026
 **Current phase:** Phase 2a — Mobile App. COMPLETE. Design system polish done.
-**Next action:** (1) Review business pitch document (`docs/PITCH.md`), (2) review compact exercise format design on phone, (3) plan + build live exercise history feature (scoped — see below), (4) planning discussion — diff 2b vs what's already built, decide next phase. Phase 2a walkthrough guide written (`docs/guides/phase-2a.md`).
+**Next action:** (1) Review business pitch document (`docs/PITCH.md`), (2) review compact exercise format design on phone, (3) plan + build live exercise history feature (scoped — see below), (4) planning discussion — diff 2b vs what's already built, decide next phase. Phase 2a walkthrough guide written (`docs/guides/phase-2a.md`). Columbia AI startup submission reviewed (Mar 9).
 
 ---
 
