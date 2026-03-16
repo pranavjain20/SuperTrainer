@@ -2,9 +2,9 @@
 
 ## Business Pitch Review (Mar 8, 2026)
 
-- [ ] **Review `docs/PITCH.md`** — read through the full pitch document, verify the narrative flows, check that caveats on stats are clear enough for competition judges
-- [ ] Decide: any additional data points or sources to add?
-- [ ] Decide: does the pitch section order work (30-sec pitch → thesis → market data → implications)?
+- [x] **Review `docs/PITCH.md`** — reviewed, looks good ✅
+- [x] Decide: any additional data points or sources to add? — no changes needed ✅
+- [x] Decide: does the pitch section order work (30-sec pitch → thesis → market data → implications)? — yes ✅
 - [x] **Review Columbia AI startup submission** — revisited application answers in light of market data and pitch framing ✅
 
 ---
@@ -139,30 +139,17 @@
 - [x] Backend: timezone-aware date filtering for session list
 - [x] 734 backend tests passing, phone-tested
 
-### Next Session (FIRST TASK): Compact Exercise Format
+### Planning Discussion — What's Next for v1
 
-- [ ] **Compact inline exercise format** — decide where it goes and how it looks. The trainer writes "squat: 4x8, 5x8, 6x8" — that's his mental model. Currently no exercise detail shows in SessionRow (home list), SessionSummary (end-of-session card), or client profile session history. Candidates: SessionSummary (post-session review), client profile session cards (browsing past sessions), pre-session briefings (future). Build the utility function + wire it into the right places. Keep the full table for editing/detail view.
+Everything below needs to be discussed together before building. Goal: define the path to a complete v1 a trainer could use with confidence.
 
-### Live Exercise History (Notebook Replacement) — SCOPED (Mar 7)
+- [ ] **1. Compact exercise format — visual review.** Logic + 33 tests done. On-phone design not yet reviewed. Need to check fonts, colors, spacing for exercise one-liners ("Squat: 4kg x10, 3kg x8, 3kg x8"). Decide: does the current visual pass the Equinox bar, or does it need iteration?
 
-**Goal:** Replicate the speed of flipping back 3 pages in a notebook. Trainer picks an exercise, instantly sees what the client did last time.
+- [ ] **2. Live Exercise History (notebook replacement).** Scoped Mar 7 — manual search, pre-fetch last 3 sessions, compact format display. Decisions made on trigger/data/access/display. Still needs: backend endpoint design, mobile pre-fetch/caching strategy, search UX (where does it live, how does the trainer invoke it), active session banner integration. How much of this is v1-critical vs Phase 3?
 
-**Decisions made:**
-- Trigger: manual search (voice-reactive ruled out — wrong timing + expensive)
-- Data: pre-fetch last 3 sessions at session start, search locally on device
-- Access: session-wide (available from anywhere via active session context, not locked to recording screen)
-- Display: compact format already built ("4kg x10, 3kg x8, 3kg x8")
-- Future: Phase 3 session plans auto-surface history for planned exercises; manual search remains as fallback
+- [ ] **3. Phase 2b vs Phase 3 — what's left, what's next.** Phase 2b in `docs/BUILD_PLAN.md` includes session detail view, AI flag system, swipe navigation, onboarding. Much was already built in 2a (session history, flags on entries, client profile). Diff what's done vs what's left. Then decide: finish remaining 2b items, jump to Phase 3 (Brain/RAG/patterns), or cherry-pick the highest-impact items from both?
 
-**To plan (next session):**
-- [ ] Backend: endpoint/query for last N sessions' entries for a client (or use existing endpoints + client-side grouping)
-- [ ] Mobile: pre-fetch strategy (when to load, how to cache)
-- [ ] Mobile: search UX — where does the lookup live, how does the trainer invoke it, what does the results view look like
-- [ ] Mobile: integration with active session banner (access from any tab)
-
-### Planning Discussion
-
-- [ ] **Planning discussion:** Phase 2b exists in `docs/BUILD_PLAN.md` (session detail view, AI flag system, swipe navigation, onboarding flow). Much of it was already built during 2a (session history, flags on entries, client profile). Diff what's done vs what's left. Then decide: finish remaining 2b items, jump to Phase 3 (Brain/RAG/patterns), or something else? Goal: by end of next phase, a complete v1 a trainer could use with confidence. Key principle: whatever ships must be flawless, even if not everything ships yet.
+- [ ] **4. Define the v1 scope.** What does "a trainer could use this with confidence" actually mean? Which features are must-have vs nice-to-have? What's the minimum bar before putting it in a real trainer's hands? Key principle: whatever ships must be flawless, even if not everything ships yet.
 
 ---
 
