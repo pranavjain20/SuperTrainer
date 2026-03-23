@@ -155,6 +155,9 @@ Everything below needs to be discussed together before building. Goal: define th
 
 ## Future Roadmap
 
+### Autoresearch — Prompt Optimization Loop (Phase 3+)
+- [ ] **Apply autoresearch pattern to LLM prompt optimization.** When we build briefings (Phase 3b) and the Brain (Phase 3c), design eval sets alongside the feature — then run an overnight agent loop to optimize prompts. Parser prompt is already at 100% on current eval; new AI features are where the leverage is. Pattern: agent edits prompt → runs eval → measures accuracy → keeps improvement or reverts → repeats. ~100 lines of harness code when the time comes. Reference: [karpathy/autoresearch](https://github.com/karpathy/autoresearch).
+
 ### iPad Support
 - [ ] **iPad-optimized layout** — trainers may use iPads instead of physical notebooks. The app runs on iPad today (set `supportsTablet: true` in app.json), but it's a stretched phone UI. Proper iPad support means: responsive layouts (split views, sidebar navigation, wider content areas), NativeWind breakpoints (`md:`/`lg:` prefixes), and component sizing tuned for 12" screens. No backend or business logic changes needed — purely a UI/layout pass on existing components. Not urgent for v1, but should be part of the shipping plan before trainers start using it.
 
