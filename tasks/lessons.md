@@ -1,96 +1,185 @@
 # SuperTrainer — Lessons Learned
 
-Mistakes, patterns, and rules discovered during development.
-Updated after every correction.
+Patterns and rules discovered during development. Each entry uses root-cause-first format. Grouped by theme, not by date. Updated after every correction — code fixed first, doc updated second, lesson recorded last.
 
-## Day 1
+---
 
-- **pytest-asyncio loop scope**: When using session-scoped async fixtures with asyncpg, ALL test functions must also use `loop_scope="session"`. Otherwise the test runs on a function-scoped loop while the DB connection lives on the session loop → `Future attached to a different loop`. Fix: add `pytestmark = pytest.mark.asyncio(loop_scope="session")` at the top of each test file.
+## Audit Discipline
 
-- **IntegrityError + savepoints**: After an IntegrityError, the underlying transaction is invalidated. Use `begin_nested()` (savepoint) before the operation that will fail, then `rollback()` after. Otherwise subsequent operations on the same session fail.
+### The Audit Must Be Automatic and Adversarial
+**Mistake**: Declared "done" without doing the staff engineer review — happened 5 times across Days 1, 4, 5 (Phase 1a), Day 2 (Phase 1b), Day 11 (Phase 2a). Each time, real issues were sitting in plain sight (missing cascade tests, untested ownership paths, unused imports, missing edge cases).
+**Root Cause**: Treating the audit as a checkbox instead of adversarial review. Running the audit agent (step 1) but skipping the personal staff engineer re-read (step 2).
+**Correct Approach**: Two-step audit, every time, automatically: (1) audit agent, (2) personal re-read of every file looking for things that are WRONG. If the audit finds nothing, you didn't look hard enough. Finish code → re-read everything → cross-reference spec → find gaps → fix → THEN report.
+**Fixed In**: Global CLAUDE.md workflow protocol, MEMORY.md pre-done checklist.
 
-- **Native Postgres port conflict**: Pranav has a native Postgres on port 5432. Docker dev DB uses port 5434 to avoid conflict. Remember this for all connection strings.
+### Report Audit Findings Explicitly
+**Mistake**: Said "I did the audit" without listing what was checked or found.
+**Root Cause**: Audit treated as a declaration rather than a deliverable.
+**Correct Approach**: List what was checked, what was found, what was fixed, and what was already clean. If the report doesn't name specific findings, it didn't happen.
+**Fixed In**: Phase 1a Day 4 audit process.
 
-## Day 1 (v3 rebuild)
+### Run a Second Audit After Batch Fixes
+**Mistake**: Fixed 9 audit issues, stopped. Second pass found 1 more (plan_id ownership).
+**Root Cause**: Fixes themselves can introduce or reveal new problems.
+**Correct Approach**: Always run a second pass after a batch of fixes.
+**Fixed In**: Phase 1a Day 5 golden audit.
 
-- **DO THE AUDIT AUTOMATICALLY**: After finishing implementation, STOP and switch to reviewer mode BEFORE saying "done". Re-read every file. Check every cascade path in the spec against actual tests. Check every FK constraint. On Day 1 v3, I wrote 18 tests, said "all done", and missed 4 cascade behaviors with zero test coverage. The CLAUDE.md says to do this automatically — not when asked. This is non-negotiable. The pattern: finish code → re-read everything → cross-reference spec → find gaps → fix gaps → THEN report.
-
-- **Test the spec table, not just the models**: When there's a cascade/behavior spec table, every single row must have a dedicated test proving it works. Don't assume "18 tests" is enough just because the plan said 18. The plan is a starting point, not a ceiling.
-
-## Day 3 (v3 rebuild)
-
-- **Never include Co-Authored-By in commits.** Two early commits shipped with `Co-Authored-By: Claude` lines. Had to use `git filter-branch --msg-filter` to strip them and force-push both branches. This is in CLAUDE.md and MEMORY.md — no AI attribution, ever. No exceptions.
-
-- **httpx 0.28+ requires ASGITransport**: Can't use `AsyncClient(app=app)` anymore. Must use `httpx.ASGITransport(app=app)` and pass `transport=transport` to `AsyncClient`. The old pattern silently fails.
-
-- **DB session sharing in test fixtures**: The HTTP `client` fixture must override `get_db` to yield the same `db_session` the test is using. Otherwise test data created via `db_session.add()` isn't visible to HTTP handlers — they get a different session and see an empty database.
-
-## Day 4 (v3 rebuild)
-
-- **Audit must cover every HTTP verb per ownership path**: On Day 4, first audit pass only tested GET and POST for cross-trainer ownership but missed PATCH and DELETE. All four verbs go through `_validate_entry_ownership`, but without explicit tests, a regression could silently let trainers modify each other's entries. Rule: if an endpoint validates ownership, there must be an integration test proving wrong-trainer returns 404 for that specific HTTP method.
-
-- **Test validation edge cases at the integration level, not just schema level**: Schema tests proved `sequence_order=0` fails at the Pydantic layer, but there was no integration test proving the API returns 422 (not 500) for this input. Schema validation and API validation are two separate trust boundaries — test both.
-
-- **Report audit findings explicitly**: Don't just say "I did the audit." List what was checked, what was found, what was fixed, and what was already clean. If the report doesn't name specific findings, it didn't happen.
-
-## Day 5 (v3 rebuild)
-
-- **The audit is not a checkbox — it's adversarial review.** Day 5: declared "audit complete" with 3 real issues sitting in plain sight (missing return type annotations, 2 untested ownership paths). Had to be called out again, same mistake as Day 1 and Day 4. The audit means: read each file line by line looking for things that are WRONG. Compare every function signature against the reference file (entries.py). Check that every HTTP verb x every ownership path has a test. If the audit doesn't find at least one issue, you probably didn't look hard enough. Finding nothing is suspicious, not a success.
-
-- **Symmetry check for ownership tests**: When testing ownership (wrong-trainer → 404), ensure ALL endpoints are covered symmetrically. On Day 5, plans had tests for create/get/patch/delete/list with wrong trainer. Injury flags only had create/get/delete — missing patch and list. The check: list every endpoint in the router, verify each one has a wrong-trainer test. No exceptions.
-
-## Day 5 Golden Audit
-
-- **DRY violations compound across days.** Identical `_validate_client_ownership` was copy-pasted into 3 routers over Days 4-5. Each day it was "just one copy." By Day 5, it's 27 lines of identical code in 3 files. Fix: extract shared validation into `dependencies.py` on day one of the pattern. The rule is: if the same function appears in 2+ files, extract immediately.
-
-- **Ownership validation must be checked when adding new endpoints.** Clients and sessions routers shipped without ownership validation on get/update/delete — a trainer could access any client/session by guessing the UUID. Entries, plans, and injury flags (written later) got it right because the pattern was established. The gap: the earlier routers were written before the pattern existed and never got updated. Rule: when establishing a new security pattern, backport it to ALL existing endpoints immediately.
-
-- **FK ownership is a separate concern from FK existence.** Sessions.py validated that `plan_id` exists but not that it belongs to the current trainer. This is a subtle distinction: existence checks prevent 500s, ownership checks prevent cross-tenant data leaks. Every FK reference in a create/update endpoint must check BOTH existence AND ownership.
-
-- **Schema update validators need entry_type context.** SessionEntryUpdate initially had no cross-field validator. The fix adds validation only when `entry_type` is explicitly included in the update payload. Without entry_type, we can't know the current type from the schema alone, so validation is skipped. This is a deliberate design choice, not a gap — document it.
-
-- **Second audit passes catch real issues.** The first audit found 9 issues. After fixing all 9, the second audit found 1 more (plan_id ownership). Always run a second pass after a batch of fixes — the fixes themselves can introduce or reveal new problems.
+---
 
 ## Definition of Done
 
-- **"Done" means committed.** On Day 5, declared golden audit complete and ready for Day 6 while 18 files of changes sat uncommitted. Pranav had to ask "have you committed?" — that should never happen. The rule: if it's not committed, it's not done. Before saying "done" or "clean" or "ready to move on," the checklist is: (1) tests pass, (2) changes committed, (3) nothing left hanging. This is what separates a co-architect from someone who needs micromanaging. Big statements ("everything is clean") require big verification.
+### "Done" Means Committed and Pushed
+**Mistake**: Declared "done" repeatedly with uncommitted changes, un-updated STATUS.md, unwritten lessons, or un-renamed scratch devlogs.
+**Root Cause**: Treating "done" as "code is written" instead of "everything is shipped."
+**Correct Approach**: Checklist before saying "done": (1) tests pass, (2) STATUS.md updated, (3) tasks/todo.md updated, (4) tasks/lessons.md updated if new lessons, (5) devlog written and renamed from scratch, (6) all changes committed, (7) pushed to remote, (8) `git status` clean.
+**Fixed In**: MEMORY.md pre-done checklist, repeated across Phases 1a, 1b, 2a.
 
-## Day 2 (Phase 1b)
+---
 
-- **The audit is STILL not automatic.** Day 2 Phase 1b: wrote parser.py + test_parser.py, ran the audit agent, fixed the audit findings, and was about to say "done" — without doing the staff engineer review myself. Pranav had to ask "have we done the staff engineer check?" That's the FOURTH time (Days 1, 4, 5, and now Day 2 Phase 1b). The audit agent is step 1. The personal staff engineer re-read is step 2. Both must happen, automatically, before ANY mention of "done" or "wrapping up." Found: 6 unused imports in test file, missing "all sets malformed" edge case test. Both real issues that would have shipped unnoticed.
+## Testing Strategy
 
-- **Save important reflections immediately — don't trust the context window.** Pranav gave a deep, important reflection about the tension between AI-assisted learning speed and depth of understanding. He explicitly said "this is golden, very important stuff for me to remember." It got lost when the context compacted. The rule: when Pranav shares something he calls important, write it to a scratch file (`devlog/scratch-YYYY-MM-DD.md`) immediately. Don't wait for the devlog. Context compaction is unpredictable. If it matters, save it now.
+### Treat Testing as Its Own Task
+**Mistake**: Folded testing into the build plan. Implementation plan produced 15 integration tests — solid but standard.
+**Root Cause**: AI defaults to "build + test as I go" which produces adequate but not thorough coverage.
+**Correct Approach**: Always create a dedicated testing plan as a separate task after implementation is done. Explore the codebase specifically for coverage gaps. On Phase 1b Day 5, the dedicated pass found 7 categories of missing tests and produced 27 targeted additions.
+**Fixed In**: Phase 1b Day 5 testing workflow.
 
-## Day 5 (Phase 1b) — Testing Workflow
+### Vacuous Assertion Detection
+**Mistake**: Test used `weight=85, weight_unit="kg"` for both input and expected output. Test passed regardless of whether the guard worked.
+**Root Cause**: When raw == normalized, the assertion is vacuous — it can't detect a broken guard.
+**Correct Approach**: Always use values where raw != normalized. Use lbs values (raw=185, normalized=83.9) so a broken guard produces a visibly wrong result.
+**Fixed In**: Phase 1b Day 5 validation tests.
 
-- **Treat testing as its own task, not a subtask of implementation.** AI defaults to "build the thing and test as I go." A human nudging "now step back and think about testing separately" produces meaningfully better coverage. On Day 5, the implementation plan produced 15 integration tests — solid, but standard. When Pranav pushed for a dedicated testing pass, the result was a separate plan that explored the codebase specifically for coverage gaps, found 7 categories of missing tests, and produced 27 targeted additions. Two plans instead of one. Without the nudge, a vacuous assertion that hid a real guard failure would have shipped. The pattern: always create a dedicated testing plan as a separate task after implementation is done. Don't fold testing into the build plan.
+### Test the Spec Table, Not Just the Models
+**Mistake**: Wrote 18 tests, said "all done," missed 4 cascade behaviors with zero coverage.
+**Root Cause**: Assumed the plan's test count was a ceiling rather than a floor.
+**Correct Approach**: When there's a cascade/behavior spec table, every single row must have a dedicated test. The plan is a starting point.
+**Fixed In**: Phase 1a Day 1 cascade tests.
 
-- **Vacuous assertion detection.** When testing guards/normalization, always use values where raw ≠ normalized. If `weight=85, weight_unit="kg"` is used for both input and expected output, the test passes regardless of whether the guard works. Use lbs values (raw=185, normalized=83.9) so a broken guard produces a visibly wrong result.
+### Test Validation at Integration Level, Not Just Schema Level
+**Mistake**: Schema test proved `sequence_order=0` fails at Pydantic layer, but no integration test proved the API returns 422 (not 500).
+**Root Cause**: Schema validation and API validation are two separate trust boundaries.
+**Correct Approach**: Test both. A schema test proves the schema rejects it; an integration test proves the API handles it correctly.
+**Fixed In**: Phase 1a Day 4 entry validation tests.
+
+---
+
+## Ownership & Security Testing
+
+### Ownership Test Symmetry Across HTTP Verbs
+**Mistake**: Tested GET and POST for cross-trainer ownership but missed PATCH and DELETE. Later: plans had all 5 verbs, injury flags only had 3.
+**Root Cause**: Not systematically enumerating endpoints when writing ownership tests.
+**Correct Approach**: List every endpoint in the router. Verify each one has a wrong-trainer test. No exceptions. All HTTP verbs.
+**Fixed In**: Phase 1a Days 4-5, dependencies.py extraction.
+
+### FK Ownership vs FK Existence
+**Mistake**: Sessions.py validated that `plan_id` exists but not that it belongs to the current trainer.
+**Root Cause**: Existence checks prevent 500s. Ownership checks prevent cross-tenant data leaks. Two separate concerns.
+**Correct Approach**: Every FK reference in a create/update endpoint must check BOTH existence AND ownership.
+**Fixed In**: Phase 1a Day 5 golden audit, plan_id ownership validation.
+
+### Backport Security Patterns to Existing Endpoints
+**Mistake**: Clients and sessions routers shipped without ownership validation — a trainer could access any client/session by guessing the UUID. Later routers got it right because the pattern was established.
+**Root Cause**: Earlier routers written before the pattern existed, never backported.
+**Correct Approach**: When establishing a new security pattern, backport it to ALL existing endpoints immediately.
+**Fixed In**: Phase 1a Day 5 golden audit, dependencies.py.
+
+---
+
+## Frontend-Backend Data Contract
+
+### Read Backend Before Building Frontend
+**Mistake**: Built session entry display using TypeScript `SetData` interface — but actual backend data uses different keys. Seed data uses `"set"` and `"weight_kg"`. Voice pipeline uses `"weight"` and has NO set number key. Two formats, neither matching the TypeScript type.
+**Root Cause**: TypeScript types are aspirational. The JSONB `sets` field is `list[dict]` with no enforced schema. The backend is reality; the type is a wish.
+**Correct Approach**: Before displaying any backend data, read: (1) Pydantic response schema, (2) the service that creates the data (seed.py, voice.py), (3) the actual DB format. Build from what the backend ACTUALLY returns.
+**Fixed In**: Phase 2a Day 4, `getSetWeight` reads `weight` before `weight_kg`.
+
+### Cross-System Entity Naming Must Match
+**Mistake**: `seed.py` stores `goblet_squat`, `exercise_db.json` stores `Goblet Squat`. Workout classifier does exact-match dict lookup — silently fails, returns "Session" for everything.
+**Root Cause**: Two systems reference the same entity with different formats. No validation at the boundary.
+**Correct Approach**: Whenever two systems reference the same entity by name, verify the format matches. Especially dangerous with JSONB fields that have no schema enforcement. One-line fix: `.replace("_", " ")` before lookup.
+**Fixed In**: Phase 2a Day 11, `workout_classifier.py`.
+
+---
+
+## Debugging
+
+### Backtrace Before Fixing
+**Mistake**: Something broke during design system migration. Spent an hour going in circles trying different fixes without identifying the root cause. Pranav intervened, forced a backtrace, found it in a minute.
+**Root Cause**: Panic response — try to fix immediately instead of understanding first.
+**Correct Approach**: When a fix attempt fails, DO NOT try another fix. Instead: (1) state what you expected, (2) state what actually happened, (3) trace backward from symptom to divergence point, (4) only then propose a fix.
+**Fixed In**: Phase 2a Day 1, design system debugging session.
+
+---
+
+## UI/UX Design
+
+### Iterate with Screenshots, Start Minimal
+**Mistake**: Compact exercise format went through ~8 visual iterations — blue backgrounds, pill chips, split fonts, table layouts — all looked worse than simple text lines. `caption` variant adds ALL CAPS (not obvious from name).
+**Root Cause**: Guessing at visual design in code without seeing it on device. What looks reasonable in code often looks terrible on screen.
+**Correct Approach**: Test every UI variant on actual phone. Ask for screenshots early and often. Start minimal, add visual weight only when needed. Premium = intentional restraint, not complexity.
+**Fixed In**: Phase 2a compact exercise format iterations.
+
+---
+
+## Communication & Context
+
+### Proactively Flag Context Window Issues
+**Mistake**: Failed to warn about heavy context twice (Day 5/6 and Day 9/10 boundaries). Pranav had to ask "new terminal?" both times.
+**Root Cause**: Not monitoring context load proactively.
+**Correct Approach**: Before the user finishes a day or asks what's next, check if context is heavy. Say "heads up, context is full" BEFORE they have to ask.
+**Fixed In**: MEMORY.md non-negotiable rule.
+
+### Save Important Reflections Immediately
+**Mistake**: Pranav gave a deep reflection he called "golden, very important." It got lost when context compacted.
+**Root Cause**: Context compaction is unpredictable. Waiting for the devlog is too late.
+**Correct Approach**: When Pranav shares something he calls important, write it to a scratch file (`devlog/scratch-YYYY-MM-DD.md`) immediately. Don't wait.
+**Fixed In**: Phase 1b Day 2, MEMORY.md rule.
+
+---
 
 ## Git Workflow
 
-- **Docs go on master, code goes on feature branch.** STATUS.md, README.md, devlogs, and other documentation updates must be committed and pushed to master — not the feature branch. Code changes go on the feature branch. This was established in the workflow but I kept putting everything on the feature branch. Cherry-picking after the fact causes merge conflicts. Do it right the first time.
+### Docs on Master, Code on Feature Branch
+**Mistake**: Put STATUS.md, devlogs, and documentation on the feature branch instead of master.
+**Root Cause**: Default behavior — commit everything to the current branch.
+**Correct Approach**: Docs go on master. Code goes on feature branch. Do it right the first time — cherry-picking after the fact causes merge conflicts.
+**Fixed In**: Phase 1b workflow, MEMORY.md rule.
 
-## Phase 2a — Frontend Must Match Backend Data
+### No AI Attribution in Commits
+**Mistake**: Two early commits shipped with `Co-Authored-By: Claude` lines.
+**Root Cause**: Default git commit behavior.
+**Correct Approach**: No AI attribution, ever. No Co-Authored-By, no Claude mentions in commits, PRs, or comments.
+**Fixed In**: Phase 1a Day 3, git filter-branch to strip from history.
 
-- **Always read backend schemas/services BEFORE building frontend display code.** On Day 4, built the session entry display using the TypeScript `SetData` interface (which had `set_number`, `weight_kg`) — but the actual backend data uses different keys. Seed data uses `"set"` (not `"set_number"`) and `"weight_kg"`. Voice pipeline uses `"weight"` (not `"weight_kg"`) and has NO set number key at all. Two different formats, neither matching the TypeScript type. The rule: before displaying any backend data, read (1) the Pydantic response schema, (2) the service that creates the data (seed.py, voice.py), and (3) the actual DB format. Build the frontend from what the backend ACTUALLY returns, not from what the TypeScript type says it should be. The TypeScript types are aspirational — the JSONB `sets` field is `list[dict]` with no enforced schema.
+---
 
-## Phase 2a Day 11 — Phone Testing
+## DRY Violations
 
-- **Seed data naming vs exercise DB naming.** `seed.py` stores exercise canonical names with underscores (`goblet_squat`), but `exercise_db.json` uses spaces (`Goblet Squat`). The workout classifier does a dict lookup on exact match — silently fails, returns "Session" for every session. One-line fix: `.replace("_", " ")` before lookup. The pattern: whenever two systems reference the same entity by name, verify the format matches. Especially dangerous with JSONB fields that have no schema enforcement.
+### Extract Shared Code on Day One of the Pattern
+**Mistake**: Identical `_validate_client_ownership` copy-pasted into 3 routers over Days 4-5. Each day "just one copy." By Day 5: 27 lines of identical code in 3 files.
+**Root Cause**: DRY violations compound across days. Each copy feels harmless in isolation.
+**Correct Approach**: If the same function appears in 2+ files, extract immediately. Don't wait for a third copy.
+**Fixed In**: Phase 1a Day 5 golden audit, `dependencies.py`.
 
-- **"Done" means EVERYTHING is done.** Fifth time now (Days 1, 4, 5, Day 2 Phase 1b, Day 11 Phase 2a). Said "done" with STATUS.md not updated, lessons.md not written, scratch devlog not renamed. The checklist before saying "done": (1) tests pass, (2) STATUS.md updated, (3) tasks/todo.md updated, (4) tasks/lessons.md updated if new lessons, (5) devlog written and renamed from scratch, (6) all changes committed, (7) pushed to remote, (8) `git status` clean. This is not optional. Run through the full list every time.
+---
 
-## Debugging — Backtrace Before Fixing
+## Technical Gotchas
 
-- **Claude panics when something breaks and tries to fix immediately instead of backtracing.** Observed during the design system session: something wasn't working, Claude went in circles for an hour trying different fixes without stopping to identify the root cause. Pranav intervened, forced a systematic backtrace, and the actual issue was small. This is the same pattern senior engineers use — when something breaks, don't flail. Stop, backtrace from the symptom to the root cause, understand WHY it broke, then fix. The rule: when a fix attempt fails, DO NOT try another fix. Instead: (1) state what you expected, (2) state what actually happened, (3) trace backward from the symptom to find the divergence point, (4) only then propose a fix. One hour of circling = one minute of backtracing. This is non-negotiable.
+### pytest-asyncio Loop Scope
+When using session-scoped async fixtures with asyncpg, ALL test functions must use `loop_scope="session"`. Add `pytestmark = pytest.mark.asyncio(loop_scope="session")` at top of each test file. Otherwise: `Future attached to a different loop`.
 
-## UI/UX Design Iteration
+### IntegrityError + Savepoints
+After an IntegrityError, the transaction is invalidated. Use `begin_nested()` (savepoint) before the operation that will fail, then `rollback()` after.
 
-- **Don't guess at visual design — iterate with screenshots.** The compact exercise format went through ~8 visual iterations. Problems: using `caption` variant (adds ALL CAPS textTransform), colored backgrounds that clash with the dark theme, table layouts that look out of place, transparent text colors. Key takeaway: every UI variant must be tested on the actual phone screen — what looks reasonable in code often looks terrible on device. Ask for screenshots early and often. The design system has specific behaviors (caption = uppercase) that aren't obvious from the variant name.
+### httpx 0.28+ Requires ASGITransport
+Can't use `AsyncClient(app=app)` anymore. Must use `httpx.ASGITransport(app=app)` and pass `transport=transport`. Old pattern silently fails.
 
-- **Start minimal, add visual weight only when needed.** Tried blue backgrounds, pill chips, split fonts, table layouts — all looked worse than simple text lines. The cleanest version was the simplest: one-liner exercise text in primary color, no dividers, no backgrounds. Premium ≠ complex. Premium = intentional restraint.
+### DB Session Sharing in Test Fixtures
+HTTP `client` fixture must override `get_db` to yield the same `db_session` the test uses. Otherwise test data isn't visible to HTTP handlers.
 
-## Context Window Management
+### Native Postgres Port Conflict
+Pranav has native Postgres on port 5432. Docker dev DB uses port 5434, test DB uses 5433.
 
-- **Proactively flag context window issues.** Failed TWICE now — Day 5/6 boundary and Day 9/10 boundary. Both times Pranav had to ask "new terminal?" instead of me telling him first. This is in MEMORY.md as a non-negotiable. The rule: BEFORE the user finishes a day or asks what's next, check if context is heavy. If it is, say "heads up, context is full — start a fresh terminal for Day X" BEFORE they have to ask. No more misses on this.
+### Schema Update Validators Need Entry Type Context
+`SessionEntryUpdate` cross-field validation only runs when `entry_type` is in the update payload. Without it, we can't know the current type from the schema alone. Deliberate design choice, not a gap.
