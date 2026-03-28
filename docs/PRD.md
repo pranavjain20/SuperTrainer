@@ -423,11 +423,34 @@ The product never pretends to know more than it does. A flag that appears after 
 
 ---
 
-#### Future: Wearable Data Integration (Tier 4)
+#### Future: Wearable Data Integration (Tier 4) — Client Readiness Intelligence
 
-When the client app and wearable integration exist (Tier 4), a fifth layer is added to the briefing: same-day recovery data from Whoop, Oura, or Apple Watch. "Pranav's recovery score is 42% today — consider reducing intensity or swapping heavy compound movements for accessory work."
+**The insight:** Right now, trainers ask "how are you feeling?" at the start of every session and get a subjective, often inaccurate answer. Clients say "I'm fine" when they slept 4 hours and their HRV is tanked. The trainer adjusts the session reactively — noticing mid-set that the client is struggling — instead of proactively building the right plan before the session starts.
 
-This layer only appears when the data exists and is from the same day. It is never estimated or carried over from yesterday. Architecture must support adding this layer without restructuring the briefing system.
+Wearable devices already capture the objective data: sleep duration and quality, HRV, resting heart rate, recovery scores, strain from the previous day, respiratory rate. The key insight is that this data should flow to the **trainer**, not just the client. The client already has their Whoop app. The trainer has nothing. By surfacing wearable data in the pre-session briefing, the trainer walks in with a readiness assessment the client couldn't articulate themselves.
+
+**What this enables:**
+- **Proactive intensity adjustment.** The trainer sees "Client Readiness: Low — 4.5 hours sleep, HRV 22ms (baseline 45ms), recovery 38%" and adjusts the plan before the session starts. No guessing, no waiting until the client looks gassed on set 2.
+- **Pattern detection across training + recovery.** The AI can correlate: "This client's HRV drops every Monday after weekend sessions. Their Saturday sessions may be too intense for their recovery capacity." This is intelligence no human trainer could compute across 25 clients.
+- **Longitudinal readiness trends.** Not just today's score — "client's average recovery has declined 15% over the past 3 weeks" could indicate overtraining, life stress, or sleep issues the trainer should ask about.
+- **Trainer credibility.** When a trainer says "I can see your body didn't recover well — let's go lighter today" without the client mentioning anything, that builds enormous trust. The trainer looks like they have superhuman intuition.
+
+**How it would work:**
+1. Client connects their wearable (Whoop, Oura, Garmin, Apple Watch) via OAuth in the app
+2. The app pulls the latest recovery/sleep/HRV data before each scheduled session
+3. The AI synthesizes wearable data into a "Client Readiness" section in the pre-session briefing — not raw numbers, but actionable training implications
+4. Over time, the AI correlates wearable data with session outcomes to detect patterns (e.g., "sessions after low-recovery days show 20% lower volume and more form notes")
+
+**Integration approach:** Terra API is the likely path — a single integration that connects to Whoop, Oura, Garmin, Fitbit, Apple Health, and 20+ other devices. One OAuth flow, all wearables supported.
+
+**Priority:** Post-intelligence. This layer needs the briefing system (Phase 3b) and pattern detection (Phase 5a) built first, since it feeds into both. The AI must already be smart enough to synthesize multiple data sources before adding another one. Once the intelligence layer is mature, wearable data becomes a natural extension — another input for the same synthesis engine.
+
+**Privacy:** Clients must explicitly consent to sharing their wearable data with their trainer through the app. This is a feature in itself — OAuth flow, consent screen, granular controls over what data is shared. The trainer never sees raw health data the client didn't opt into sharing.
+
+**Data rules (same as all AI features):**
+- Only surface same-day data. Never estimate or carry over from yesterday.
+- Never overstate what the data means. "Recovery is low" is valid. "You shouldn't train today" is not — that's the trainer's call.
+- Architecture must support adding this layer without restructuring the briefing system.
 
 ---
 
@@ -1059,13 +1082,14 @@ Weights stored in kilograms internally. Display conversion based on user prefere
 
 ### Phase 6: Growth Features (Weeks 21-24+)
 
-**Week 21-22: Client App + Wearables**
+**Week 21-22: Client App + Wearable Readiness Intelligence**
 - Client-facing app (separate user role)
 - Client sees own session history, goal progress, trainer-shared notes
-- Whoop OAuth integration
-- Oura OAuth integration
-- Apple Health integration
-- Recovery/HRV data surfaced in briefing as Layer 4 (same-day only, never estimated)
+- Wearable integration via Terra API (single integration → Whoop, Oura, Garmin, Fitbit, Apple Health)
+- Client OAuth consent flow with granular data-sharing controls
+- "Client Readiness" section in pre-session briefing: synthesized sleep/HRV/recovery → actionable training implications
+- Pattern detection: correlate wearable data with session outcomes over time (e.g., low-recovery days → lower volume, more form issues)
+- Longitudinal readiness trends surfaced in briefings and client analysis
 
 **Week 23-24: Multi-Trainer + Session Sharing + Scale**
 - Multi-trainer support for gyms
