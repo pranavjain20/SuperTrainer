@@ -33,7 +33,18 @@
 
 ### Deferred to post-v1
 
-The Brain, pattern detection, auth, onboarding, push notifications, swipe navigation, plan vs actual, progress charts, iPad layout
+| Item | Original Phase | Why deferred |
+|------|---------------|-------------|
+| The Brain (conversational agent) | Phase 3c | Biggest build. Better with real trainer data. Post-v1 capstone. |
+| Pattern detection | Phase 5a | Needs longitudinal data to be meaningful. Feeds into briefings later. |
+| Push notifications | Phase 3b | Briefing delivery before sessions. Useful but not blocking daily workflow. |
+| Onboarding flow | Phase 2b | Manual setup for single trainer beta. Not needed at scale yet. |
+| Auth | Phase 4a | Single user. Not needed until multi-trainer. |
+| Swipe navigation | Phase 2b | Browse prev/next session. Convenient, not blocking. |
+| Home screen flag indicators | Phase 2b | Red/orange dot on flagged clients. Depends on flag system. |
+| Plan vs actual comparison | Phase 3a | Silent tracking of planned vs done. Nice-to-have. |
+| Progress charts | Phase 5b | Visual weight/volume trends. Needs longitudinal data. |
+| iPad layout | Post-launch | Responsive layouts for 12" screens. UI pass, no logic changes. |
 
 *Note: The original phase timeline below was the initial build plan. Phases 1a, 1b, and 2a are complete. The v1 scope above replaces the Phase 2b-3c ordering — we cherry-picked the highest-impact items across those phases.*
 
