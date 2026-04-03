@@ -6,22 +6,34 @@
 
 **v1 target:** Replace the trainer's notebook. Must be simpler, cleaner, and faster than GoodNotes on iPad, physical notebooks, Notes app, or relying on memory.
 
-**Tier 1 — Notebook Replacement (must ship):**
-1. Compact exercise format (visual review first — prerequisite for everything)
-2. Live exercise history (the #1 daily action — 8-15 lookups per session)
-3. Plan creation from app (backend exists, no mobile UI)
-4. Plan modification on the fly
-5. End-session plan dictation
-6. Settings screen (weight units for US trainers)
+### Tier 1 — Notebook Replacement (must ship)
 
-**Tier 2 — Intelligence Layer (ships with v1):**
-7. Session summaries (2-3 sentence AI recap)
-8. Flag system with AI auto-assign
-9. Pre-session briefing (4-layer)
+| # | Item | Status | What it means | Depends on |
+|---|------|--------|--------------|------------|
+| 1 | Compact exercise format | Logic done, visual unreviewed | "4kg x10, 3kg x8" one-liner. How trainers actually write. Prerequisite for display. | — |
+| 2 | Live exercise history | Scoped, not built | See what client did last time for each exercise. #1 daily action (8-15x/session). Faster than GoodNotes. | #1 |
+| 3 | Plan creation from app | Backend exists, no mobile UI | Create plans via voice or text. | — |
+| 4 | Plan modification on the fly | Backend exists, no mobile UI | Modify plan mid-session when things change. | #3 |
+| 5 | End-session plan dictation | Not built | "Anything for next time?" -> saves as plan. | #3 |
+| 6 | Settings (weight units) | Not built | US trainers need lbs. No settings screen exists. | — |
 
-**Conditional:** Session detail view (decide after compact format review)
+### Tier 2 — Intelligence Layer (ships with v1)
 
-**Deferred to post-v1:** The Brain, pattern detection, auth, onboarding, push notifications, swipe navigation, plan vs actual, progress charts, iPad layout
+| # | Item | Status | What it means | Depends on |
+|---|------|--------|--------------|------------|
+| 7 | Session summaries | Not built | 2-3 sentence AI recap per session. | — |
+| 8 | Flag system (AI auto-assign) | Partial — display only | AI assigns flags on session save. Trainer can override. | — |
+| 9 | Pre-session briefing | Not built | 4-layer AI summary before each client arrives. | #7, #8 |
+
+### Conditional
+
+| # | Item | Status | Decision |
+|---|------|--------|----------|
+| 10 | Session detail view | Not built | Decide after #1 visual review — pull in if expandable cards feel cramped. |
+
+### Deferred to post-v1
+
+The Brain, pattern detection, auth, onboarding, push notifications, swipe navigation, plan vs actual, progress charts, iPad layout
 
 *Note: The original phase timeline below was the initial build plan. Phases 1a, 1b, and 2a are complete. The v1 scope above replaces the Phase 2b-3c ordering — we cherry-picked the highest-impact items across those phases.*
 

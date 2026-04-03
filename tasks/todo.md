@@ -19,37 +19,59 @@
 
 ### Tier 1 — Notebook Replacement (must ship)
 
-Build order: top to bottom (dependencies flow downward).
+Organized by the trainer's actual day. Build order follows dependencies top to bottom.
 
-- [ ] **1. Compact exercise format — visual review.** Logic + 33 tests done. Need on-phone visual check before anything else. Prerequisite for live history.
-- [ ] **2. Live exercise history.** Before each exercise, see what client did last time. The #1 daily action — happens 8-15 times per session. Must be faster than flipping a page in GoodNotes.
-- [ ] **3. Plan creation from app.** Create a plan via voice or text. Backend CRUD exists, no mobile UI.
-- [ ] **4. Plan modification on the fly.** Change the plan mid-session when things change.
-- [ ] **5. End-session plan dictation.** "Anything for next time?" -> saves as plan for next session.
-- [ ] **6. Settings (weight units).** US trainers need lbs. No settings screen exists yet.
+#### Before the session — "What am I walking into?"
+
+| # | Item | Status | What it means | Depends on |
+|---|------|--------|--------------|------------|
+| 1 | **Compact exercise format** | Logic + 33 tests done, visual unreviewed | The "4kg x10, 3kg x8" one-liner format. How trainers actually write in their notebooks. Prerequisite for everything display-related. | — |
+| 2 | **Live exercise history** (notebook replacement) | Scoped, not built | Trainer searches or triggers lookup -> instantly sees what client did last 1-3 times for that exercise. The #1 daily action — happens 8-15x per session. Must be faster than flipping a page in GoodNotes. | #1 |
+
+#### During the session — "Record and coach"
+
+| # | Item | Status | What it means | Depends on |
+|---|------|--------|--------------|------------|
+| 3 | **Plan creation from app** | Backend CRUD exists, no mobile UI | Create a plan via voice or text before a session. Currently plans are read-only in the app. | — |
+| 4 | **Plan modification on the fly** | Backend CRUD exists, no mobile UI | When things change mid-session, modify the plan. Trainers plan ahead but adapt in real time. | #3 |
+| 5 | **End-session plan dictation** | Not built | "Anything to note for next time?" -> voice input -> saved as next session's plan. The natural end to every session. | #3 |
+
+#### Setup / infrastructure
+
+| # | Item | Status | What it means | Depends on |
+|---|------|--------|--------------|------------|
+| 6 | **Settings (weight units)** | Not built, no settings screen exists | US trainers use lbs. Currently no UI to change weight unit. Needed before any US trainer touches the app. | — |
 
 ### Tier 2 — Intelligence Layer (what makes us better than a notebook)
 
-- [ ] **7. Session summaries.** 2-3 sentence AI recap per session. When browsing history, trainer reads 3 lines and remembers the session.
-- [ ] **8. Flag system (AI auto-assign).** Green/yellow/red flags on session save. Display exists, no AI assignment logic.
-- [ ] **9. Pre-session briefing.** 4-layer AI summary before each client arrives. The "why is this better than a notebook" moment.
+These ship with v1. Zero extra effort from the trainer — intelligence comes for free from the voice data we're already capturing.
+
+| # | Item | Status | What it means | Depends on |
+|---|------|--------|--------------|------------|
+| 7 | **Session summaries** | Not built | 2-3 sentence AI recap per session. When browsing history, trainer reads 3 lines and remembers the session instead of expanding every card. | — |
+| 8 | **Flag system (AI auto-assign)** | Partial — display exists, no AI | AI assigns green/yellow/red flags on session save based on content. Trainer can override. Quick visual scanning of client health. | — |
+| 9 | **Pre-session briefing** | Not built | 4-layer AI summary before each client: today's plan, last session recap, same-muscle-group history, trend flags. The "why is this better than a notebook" moment. | #7, #8 |
 
 ### Conditional
 
-- [ ] **10. Session detail view.** Decide after compact format visual review — if expandable cards feel cramped with compact format, pull this into v1.
+| # | Item | Status | What it means | Decision |
+|---|------|--------|--------------|----------|
+| 10 | **Session detail view** | Not built | Dedicated screen for a past session: AI summary at top, full timeline below. Currently only expandable cards in client profile. | Decide after #1 visual review — if expandable cards feel cramped with compact format, pull into v1. |
 
 ### Deferred — Not in v1
 
-- **Onboarding flow** — manual setup for single trainer beta
-- **Auth** — single user, not needed yet
-- **The Brain** — post-v1, build with real data from actual trainer usage
-- **Pattern detection** — post-v1, feeds into briefings later
-- **Push notifications** — post-v1
-- **Swipe navigation** — post-v1
-- **Home screen flag indicators** — post-v1
-- **Plan vs actual comparison** — post-v1
-- **Progress charts** — post-v1
-- **iPad layout** — post-v1
+| Item | Why deferred |
+|------|-------------|
+| **Onboarding flow** | Manual setup for single trainer beta. Not needed at scale yet. |
+| **Auth** | Single user. Not needed until multi-trainer. |
+| **The Brain** | Biggest build. Better with real data from actual trainer usage. Post-v1 capstone. |
+| **Pattern detection** | Feeds into briefings later. Needs longitudinal data to be meaningful. |
+| **Push notifications** | Briefing delivery. Useful but not blocking daily workflow. |
+| **Swipe navigation** | Browse prev/next session. Convenient, not blocking. |
+| **Home screen flag indicators** | Red/orange dot on flagged clients. Depends on flag system. |
+| **Plan vs actual comparison** | Silent tracking of planned vs done. Nice-to-have. |
+| **Progress charts** | Visual weight/volume trends. Needs longitudinal data. |
+| **iPad layout** | Responsive layouts for 12" screens. UI pass, no logic changes. |
 
 ---
 
