@@ -2,7 +2,32 @@
 
 ---
 
-## Timeline Overview
+## v1 Scope (Finalized Apr 3, 2026)
+
+**v1 target:** Replace the trainer's notebook. Must be simpler, cleaner, and faster than GoodNotes on iPad, physical notebooks, Notes app, or relying on memory.
+
+**Tier 1 — Notebook Replacement (must ship):**
+1. Compact exercise format (visual review first — prerequisite for everything)
+2. Live exercise history (the #1 daily action — 8-15 lookups per session)
+3. Plan creation from app (backend exists, no mobile UI)
+4. Plan modification on the fly
+5. End-session plan dictation
+6. Settings screen (weight units for US trainers)
+
+**Tier 2 — Intelligence Layer (ships with v1):**
+7. Session summaries (2-3 sentence AI recap)
+8. Flag system with AI auto-assign
+9. Pre-session briefing (4-layer)
+
+**Conditional:** Session detail view (decide after compact format review)
+
+**Deferred to post-v1:** The Brain, pattern detection, auth, onboarding, push notifications, swipe navigation, plan vs actual, progress charts, iPad layout
+
+*Note: The original phase timeline below was the initial build plan. Phases 1a, 1b, and 2a are complete. The v1 scope above replaces the Phase 2b-3c ordering — we cherry-picked the highest-impact items across those phases.*
+
+---
+
+## Timeline Overview (Original)
 
 Every phase is ≤2 weeks. Review and approve each before moving to the next.
 

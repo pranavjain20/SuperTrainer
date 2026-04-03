@@ -2,27 +2,26 @@
 
 ## Current Phase
 
-v1 planning discussion in progress. All build phases (1a, 1b, 2a) complete. Defining scope for what ships to a real trainer.
+v1 scope finalized. Implementation starts next session. Target: replace the trainer's notebook.
 
-## Last Session (Mar 15, 2026)
+## Last Session (Apr 3, 2026)
 
-Design system polish complete — all 40+ components migrated to centralized token system. v1 planning started: compiled 18-item feature list, gathered real trainer feedback on briefings and exercise history. Pending decisions: Brain priority, item ranking, v1 cut line, build phase grouping.
+v1 planning discussion completed. Defined the notebook replacement workflow through trainer research: organized by client, numbers-only recording in real time, pre-exercise history lookup (must be faster than GoodNotes on iPad), plan creation/modification. Finalized three-tier scope: Tier 1 (notebook replacement), Tier 2 (intelligence layer), deferred (Brain, patterns, auth, onboarding).
 
-Also: business pitch document created (`docs/PITCH.md`), Columbia AI startup submission reviewed, compact exercise format logic + 33 tests done (visual review still pending), live exercise history scoped (manual search, pre-fetch last 3 sessions, compact display).
+Key insight: the real competitors are physical notebooks, GoodNotes on iPad, Notes app, and trainers who use nothing at all. We win by matching the friction AND adding intelligence for free.
 
 ## Blockers
 
-v1 scope decisions pending — need to resolve before building:
-- Compact exercise format visual review (on-phone design check)
-- Phase 2b vs Phase 3 — diff what's done vs what's left, decide ordering
-- Brain priority — how central is it to v1?
-- v1 cut line — what's must-have vs nice-to-have for real trainer beta?
+- Compact exercise format visual review on phone (blocks live history build)
+- Session detail view decision (contingent on compact format review)
 
 ## Next Steps
 
-1. Review compact exercise visual design on phone
-2. v1 scope discussion — resolve the 4 blockers above
-3. Build next phase based on scope decisions
+1. Compact format visual review on phone
+2. Build live exercise history (the #1 daily action)
+3. Plan creation/modification UI
+4. Settings screen (weight units)
+5. Session summaries -> flag system -> briefing
 
 ## Project Timeline
 
@@ -31,3 +30,4 @@ v1 scope decisions pending — need to resolve before building:
 - **Phase 2a: Mobile App** — COMPLETE (734 tests, 12 days). Full React Native + Expo app: home, clients, profile, session recording, voice pipeline, inline editing, clarification UX, active session banner.
 - **Design System Polish** — COMPLETE (Mar 1). Centralized tokens, ThemedText, Inter + JetBrains Mono, all components migrated.
 - **Business Pitch** — COMPLETE (Mar 8). Market data, sourced statistics, trainer-enablement thesis.
+- **v1 Scope** — FINALIZED (Apr 3). Notebook replacement + intelligence layer. See tasks/todo.md for full breakdown.
