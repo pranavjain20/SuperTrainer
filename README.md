@@ -26,12 +26,18 @@ Trainer speaks → Audio clip uploaded
 
 Each clip is additive — the parser sees the full session context and can modify previous entries ("actually that was 65kg not 60") or attach observations to specific sets.
 
-## Coming Next
+## Coming Next (v1 — Notebook Replacement)
 
-- **Live exercise history** — Mid-session lookup: "what did this client do last time for squats?" Pre-fetched at session start, instant local search. Must be faster than flipping back three pages in a notebook.
-- **The Brain** — Conversational AI agent with RAG. Ask anything about any client ("has Sarah's squat been progressing?", "which clients mentioned knee pain this month?").
-- **Pre-session briefings** — AI-generated prep with last session recap, progression trends across multiple time windows, recurring pain detection, and training gap analysis.
-- **Session planning** — Plan workouts in-app, auto-surface exercise history for planned movements.
+v1 goal: replace physical notebooks, GoodNotes, Notes app — or nothing at all. Must be simpler, cleaner, and faster.
+
+- **Live exercise history** — Mid-session lookup: "what did this client do last time for squats?" Must be faster than flipping a page in GoodNotes. The #1 daily action (8-15 lookups per session).
+- **Session planning** — Create, view, and modify plans from the app. End-session dictation: "anything for next time?" saves plan for next session.
+- **Settings** — Weight unit preference (kg/lbs) for US trainers.
+- **Session summaries** — 2-3 sentence AI recap per session. Read 3 lines, remember the whole session.
+- **Flag system** — AI auto-assigns green/yellow/red flags on session save. Quick visual scanning of client health.
+- **Pre-session briefings** — 4-layer AI summary: today's plan, last session recap, same-muscle-group history, trend flags.
+
+Post-v1: The Brain (conversational RAG agent), pattern detection, progress charts, iPad layout.
 
 ## Tech Stack
 

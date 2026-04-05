@@ -7,7 +7,8 @@ AI-powered coaching assistant for personal trainers. Trainers record sessions vi
 **Phase 1a (backend), 1b (voice pipeline), 2a (mobile app) COMPLETE. Design system polish done. 734 tests.**
 - See STATUS.md for current task state.
 - See docs/PRD.md for full product requirements.
-- Next: planning discussion — define remaining work before Phase 3.
+- v1 scope finalized (Apr 3, 2026). Target: replace the trainer's notebook. See tasks/todo.md for full breakdown.
+- Next: compact format visual review on phone, then build live exercise history.
 
 ## Key Documents
 - `docs/PRD.md` — Product requirements, features, build phases, data model
