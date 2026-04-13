@@ -4,7 +4,7 @@
 
 v1 scope finalized. Implementation starts next session. Target: replace the trainer's notebook.
 
-## Last Session (Apr 3, 2026)
+## Last Session (Apr 13, 2026)
 
 v1 planning discussion completed. Defined the notebook replacement workflow through trainer research: organized by client, numbers-only recording in real time, pre-exercise history lookup (must be faster than GoodNotes on iPad), plan creation/modification. Finalized three-tier scope: Tier 1 (notebook replacement), Tier 2 (intelligence layer), deferred (Brain, patterns, auth, onboarding).
 
