@@ -2,25 +2,22 @@
 
 ## Current Phase
 
-v1 implementation starting. Setting up iOS simulator workflow for laptop-based UI development.
+v1 implementation in progress. iOS simulator workflow established. Exercise display redesigned.
 
 ## Last Session (Apr 15, 2026)
 
-Resumed after ~10 day break. All 734 backend tests pass. Spent session setting up iOS simulator workflow so we can develop/review UI on laptop instead of physical phone. Diagnosed and fixed multiple environment issues: Node 25 incompatible with Expo SDK 54 (installed Node 22), Expo telemetry hangs in non-TTY environments, iCloud Drive evicting node_modules files causing ETIMEDOUT on readFileSync. Moving project off iCloud-synced Desktop to ~/supertrainer. Expo Go installed on simulator, dev server starts successfully with Node 22 + EXPO_NO_TELEMETRY=1.
+Resumed after ~10 day break. All 734 backend tests pass. Set up iOS simulator workflow — Claude can screenshot the simulator and review UI proactively. Fixed environment: Node 22 (not 25), EXPO_NO_TELEMETRY=1, project at ~/supertrainer (iCloud evicts files from Desktop). Created `/fire-it-up` skill. Redesigned session summary cards: workout type heading, exercise names bold on own line, sets below. Tightened exercise detail table rows. Config switched to localhost for simulator.
 
 ## Blockers
 
-- Project on iCloud Drive Desktop — must move to ~/supertrainer (non-synced) to prevent file eviction
-- Compact exercise format visual review (blocks live history build)
-- Session detail view decision (contingent on compact format review)
+- Live exercise history build (next up)
 
 ## Next Steps
 
-1. Compact format visual review on phone
-2. Build live exercise history (the #1 daily action)
-3. Plan creation/modification UI
-4. Settings screen (weight units)
-5. Session summaries -> flag system -> briefing
+1. Build live exercise history (the #1 daily action)
+2. Plan creation/modification UI
+3. Settings screen (weight units)
+4. Session summaries -> flag system -> briefing
 
 ## Project Timeline
 
