@@ -25,7 +25,7 @@ Organized by the trainer's actual day. Build order follows dependencies top to b
 
 | # | Item | Status | What it means | Depends on |
 |---|------|--------|--------------|------------|
-| 1 | **Compact exercise format** | Logic + 33 tests done, visual unreviewed | The "4kg x10, 3kg x8" one-liner format. How trainers actually write in their notebooks. Prerequisite for everything display-related. | — |
+| 1 | **Compact exercise format** | DONE (Apr 15) | The "4kg x10, 3kg x8" one-liner format. Redesigned summary cards: workout type heading, exercise names bold on own line, sets below. Detail table rows tightened. | — |
 | 2 | **Live exercise history** (notebook replacement) | Scoped, not built | Trainer searches or triggers lookup -> instantly sees what client did last 1-3 times for that exercise. The #1 daily action — happens 8-15x per session. Must be faster than flipping a page in GoodNotes. | #1 |
 
 #### During the session — "Record and coach"
