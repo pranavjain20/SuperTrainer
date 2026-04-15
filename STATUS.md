@@ -2,17 +2,16 @@
 
 ## Current Phase
 
-v1 scope finalized. Implementation starts next session. Target: replace the trainer's notebook.
+v1 implementation starting. Setting up iOS simulator workflow for laptop-based UI development.
 
-## Last Session (Apr 14, 2026)
+## Last Session (Apr 15, 2026)
 
-v1 planning discussion completed. Defined the notebook replacement workflow through trainer research: organized by client, numbers-only recording in real time, pre-exercise history lookup (must be faster than GoodNotes on iPad), plan creation/modification. Finalized three-tier scope: Tier 1 (notebook replacement), Tier 2 (intelligence layer), deferred (Brain, patterns, auth, onboarding).
-
-Key insight: the real competitors are physical notebooks, GoodNotes on iPad, Notes app, and trainers who use nothing at all. We win by matching the friction AND adding intelligence for free.
+Resumed after ~10 day break. All 734 backend tests pass. Spent session setting up iOS simulator workflow so we can develop/review UI on laptop instead of physical phone. Diagnosed and fixed multiple environment issues: Node 25 incompatible with Expo SDK 54 (installed Node 22), Expo telemetry hangs in non-TTY environments, iCloud Drive evicting node_modules files causing ETIMEDOUT on readFileSync. Moving project off iCloud-synced Desktop to ~/supertrainer. Expo Go installed on simulator, dev server starts successfully with Node 22 + EXPO_NO_TELEMETRY=1.
 
 ## Blockers
 
-- Compact exercise format visual review on phone (blocks live history build)
+- Project on iCloud Drive Desktop — must move to ~/supertrainer (non-synced) to prevent file eviction
+- Compact exercise format visual review (blocks live history build)
 - Session detail view decision (contingent on compact format review)
 
 ## Next Steps
