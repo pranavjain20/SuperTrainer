@@ -92,3 +92,18 @@ export function formatCompactExercise(entry: SessionEntry, unit: WeightUnit): st
   const parts = entry.sets.map((s) => formatCompactSet(s, unit));
   return `${name}: ${parts.join(", ")}`;
 }
+
+/**
+ * Split version — returns name and sets separately for styled rendering.
+ */
+export function formatCompactExerciseParts(
+  entry: SessionEntry,
+  unit: WeightUnit,
+): { name: string; sets: string } {
+  const raw = entry.exercise_name ?? entry.exercise_canonical ?? "Unknown";
+  const name = titleCase(raw);
+  if (!entry.sets || entry.sets.length === 0) return { name, sets: "" };
+
+  const parts = entry.sets.map((s) => formatCompactSet(s, unit));
+  return { name, sets: parts.join(", ") };
+}

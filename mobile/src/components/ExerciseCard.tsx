@@ -73,7 +73,7 @@ export function ExerciseCard({ entry, exerciseNumber, onPress, contained }: Exer
             return (
               <View
                 key={getSetNumber(set, i)}
-                className="flex-row items-center px-4 py-2.5"
+                className="flex-row items-center px-4 py-1.5"
                 style={{
                   borderTopWidth: 1,
                   borderTopColor: colors.border.subtle,

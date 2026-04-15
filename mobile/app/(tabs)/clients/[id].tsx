@@ -28,7 +28,7 @@ import { useRecordingStore } from "@/src/stores/recordingStore";
 import { formatMemberSince, formatPlanDate, formatSessionDate, formatTime } from "@/src/utils/dates";
 import { getInitials, getInitialsColor } from "@/src/utils/initials";
 import { classifyWorkoutFromEntries, formatDurationMinutes, numberExercises } from "@/src/utils/sessions";
-import { formatCompactExercise, formatCompactSet } from "@/src/utils/sets";
+import { formatCompactExercise, formatCompactExerciseParts, formatCompactSet } from "@/src/utils/sets";
 
 // ---------------------------------------------------------------------------
 // Tab bar
@@ -167,17 +167,24 @@ function ExpandableSessionCard({
         {/* ── Summary view ── */}
         {view === "summary" && hasCompactData && (
           <View style={{ paddingHorizontal: 20, paddingBottom: 16 }}>
-            {exerciseEntries.map((entry) => (
-              <ThemedText
-                key={entry.id}
-                variant="body-small"
-                color={colors.text.primary}
-                numberOfLines={1}
-                style={{ lineHeight: 22 }}
-              >
-                {formatCompactExercise(entry, weightUnit)}
-              </ThemedText>
-            ))}
+            <ThemedText variant="title-3" color={colors.blue[400]} style={{ fontFamily: "Inter-Bold", marginBottom: 4 }}>
+              {classifyWorkoutFromEntries(exerciseEntries)}
+            </ThemedText>
+            {exerciseEntries.map((entry, i) => {
+              const { name, sets } = formatCompactExerciseParts(entry, weightUnit);
+              return (
+                <View key={entry.id} style={{ marginBottom: i < exerciseEntries.length - 1 ? 6 : 0 }}>
+                  <ThemedText variant="body-small" style={{ fontFamily: "Inter-SemiBold", fontSize: 15 }}>
+                    {name}
+                  </ThemedText>
+                  {sets.length > 0 && (
+                    <ThemedText variant="body-small" color={colors.text.secondary} style={{ fontSize: 15, marginTop: 1 }}>
+                      {sets}
+                    </ThemedText>
+                  )}
+                </View>
+              );
+            })}
 
             <Pressable
               onPress={() => setView("detail")}
@@ -230,7 +237,7 @@ function ExpandableSessionCard({
                     {entriesQuery.data.map((entry, i) => (
                       <View
                         key={entry.id}
-                        style={i > 0 ? { borderTopWidth: 6, borderTopColor: colors.border.subtle } : undefined}
+                        style={i > 0 ? { borderTopWidth: 1, borderTopColor: colors.border.subtle } : undefined}
                       >
                         <EntryCard
                           entry={entry}
