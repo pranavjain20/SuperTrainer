@@ -29,7 +29,9 @@ export function useEndSession({ sessionId, isSessionEnded }: UseEndSessionOption
         ended_at: (endedAt ?? new Date()).toISOString(),
       });
     },
-    onSuccess: () => {
+    onSuccess: (updatedSession) => {
+      // Immediately update the cached session so the UI transitions to ended state
+      queryClient.setQueryData(["sessions", sessionId], updatedSession);
       queryClient.invalidateQueries({ queryKey: ["sessions"] });
     },
     onError: (err) => {
