@@ -32,8 +32,9 @@ Organized by the trainer's actual day. Build order follows dependencies top to b
 
 | # | Item | Status | What it means | Depends on |
 |---|------|--------|--------------|------------|
-| 3 | **Plan creation from app** | Backend CRUD exists, no mobile UI | Create a plan via voice or text before a session. Currently plans are read-only in the app. | — |
-| 4 | **Plan modification on the fly** | Backend CRUD exists, no mobile UI | When things change mid-session, modify the plan. Trainers plan ahead but adapt in real time. | #3 |
+| 3 | **Plan creation from app** | DONE (Apr 16) | Natural language input (type or speak) → Claude parses → structured exercises (name/sets/reps/weight). Full CRUD from Plans tab. Voice auto-parses to edit mode. Parser: plan_parser.py with tool_use. Display matches session compact format. **Missing:** plan not shown during session — needs wiring into recording screen. | — |
+| 3b | **Wire plans into session flow** | Not built | Show today's plan on recording screen when starting a session. Auto-link plan via plan_id FK. Fix "Done" button on ended session. | #3 |
+| 4 | **Plan modification on the fly** | Not built | When things change mid-session, modify the plan. Trainers plan ahead but adapt in real time. | #3b |
 | 5 | **End-session plan dictation** | Not built | "Anything to note for next time?" -> voice input -> saved as next session's plan. The natural end to every session. | #3 |
 
 #### Setup / infrastructure

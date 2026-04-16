@@ -177,54 +177,139 @@ function SessionsTab({
   );
 }
 
-function PlanCard({ plan }: { plan: SessionPlan }) {
-  const lines = plan.plan_text
-    .split(/\.\s+/)
-    .map((s) => s.replace(/\.$/, "").trim())
-    .filter((s) => s.length > 0);
+function PlanCard({ plan, clientId }: { plan: SessionPlan; clientId: string }) {
+  const router = useRouter();
+  const pe = plan.planned_exercises as import("@/src/api/types").PlannedExercisesPayload | null;
+  const hasStructured = pe && pe.exercises && pe.exercises.length > 0;
+
+  // Legacy plans: split plan_text by periods
+  const legacyLines = hasStructured
+    ? []
+    : plan.plan_text
+        .split(/\.\s+/)
+        .map((s) => s.replace(/\.$/, "").trim())
+        .filter((s) => s.length > 0);
 
   return (
     <View
-      className="rounded-xl mb-3.5 mx-4 overflow-hidden"
-      style={{ backgroundColor: colors.bg.surface1, ...cardBorder }}
+      style={{
+        marginHorizontal: 16,
+        marginBottom: 20,
+        borderWidth: 2,
+        borderColor: colors.border.strong,
+        borderRadius: 14,
+        backgroundColor: colors.bg.surface1,
+        overflow: "hidden",
+      }}
     >
-      <View className="px-5 py-3" style={{ backgroundColor: colors.blue.alpha12, borderBottomWidth: 1, borderBottomColor: colors.border.subtle }}>
-        <ThemedText variant="body-small" color={colors.blue[500]} style={{ fontFamily: "Inter-SemiBold" }}>
-          {formatPlanDate(plan.planned_for_date)}
-        </ThemedText>
+    <Pressable
+      onPress={() => router.push(`/plans/form?clientId=${clientId}&planId=${plan.id}`)}
+      style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
+    >
+      {/* Header — date + pencil icon, matches session card pattern */}
+      <View className="flex-row items-center px-5" style={{ paddingTop: 12, paddingBottom: hasStructured ? 6 : 12 }}>
+        <View className="flex-1">
+          <ThemedText variant="title-3">{formatPlanDate(plan.planned_for_date)}</ThemedText>
+        </View>
+        <FontAwesome name="pencil" size={12} color={colors.text.tertiary} />
       </View>
 
-      {lines.map((line, i) => (
-        <View
-          key={`line-${i}`}
-          className="px-5 py-3.5"
-          style={i < lines.length - 1 ? { borderBottomWidth: 1, borderBottomColor: colors.border.subtle } : undefined}
-        >
-          <View className="flex-row">
-            <ThemedText variant="data" color={colors.text.tertiary} style={{ fontSize: 14, marginRight: 12, marginTop: 1 }}>{i + 1}</ThemedText>
-            <ThemedText variant="body-small" style={{ flex: 1, lineHeight: 20 }}>{line}</ThemedText>
-          </View>
+      {/* Structured exercises — matches session card summary view */}
+      {hasStructured && (
+        <View className="px-5" style={{ paddingBottom: 14 }}>
+          {/* Workout type — small uppercase blue label */}
+          {pe!.workout_type && (
+            <ThemedText variant="body-small" color={colors.blue[400]} style={{ fontFamily: "Inter-Bold", marginBottom: 6, letterSpacing: 0.5 }}>
+              {pe!.workout_type.toUpperCase()}
+            </ThemedText>
+          )}
+
+          {/* Exercise list — exact same format as session compact view */}
+          {pe!.exercises.map((ex: any, i: number) => {
+            // Expand plan targets into individual set strings
+            // matching formatCompactSet: "10kg×10, 10kg×10, 10kg×10"
+            const numSets = parseInt(ex.sets, 10) || 0;
+            const repsArr = (ex.reps || "").split(",").map((s: string) => s.trim()).filter(Boolean);
+            const weightArr = (ex.weight || "").split(",").map((s: string) => s.trim()).filter(Boolean);
+
+            let compactSets = "";
+            if (numSets > 0) {
+              const setParts: string[] = [];
+              for (let s = 0; s < numSets; s++) {
+                const r = repsArr[s] || repsArr[0] || "";
+                const w = weightArr[s] || weightArr[0] || "";
+                if (w && r) setParts.push(`${w}×${r}`);
+                else if (r) setParts.push(r);
+                else if (w) setParts.push(w);
+              }
+              compactSets = setParts.join(", ");
+            } else if (ex.prescription) {
+              compactSets = ex.prescription;
+            }
+
+            return (
+              <View key={`ex-${i}`} style={{ marginBottom: i < pe!.exercises.length - 1 ? 6 : 0 }}>
+                <ThemedText variant="body" style={{ fontFamily: "Inter-SemiBold" }}>
+                  {ex.exercise_name}
+                </ThemedText>
+                {compactSets ? (
+                  <ThemedText variant="data" color={colors.text.secondary} style={{ marginTop: 2 }}>
+                    {compactSets}
+                  </ThemedText>
+                ) : null}
+              </View>
+            );
+          })}
         </View>
-      ))}
+      )}
+
+      {/* Legacy text lines */}
+      {!hasStructured &&
+        legacyLines.map((line, i) => (
+          <View
+            key={`line-${i}`}
+            className="px-5 py-3.5"
+            style={i < legacyLines.length - 1 ? { borderBottomWidth: 1, borderBottomColor: colors.border.subtle } : undefined}
+          >
+            <View className="flex-row">
+              <ThemedText variant="data" color={colors.text.tertiary} style={{ fontSize: 14, marginRight: 12, marginTop: 1 }}>{i + 1}</ThemedText>
+              <ThemedText variant="body-small" style={{ flex: 1, lineHeight: 20 }}>{line}</ThemedText>
+            </View>
+          </View>
+        ))}
+    </Pressable>
     </View>
   );
 }
 
-function PlansTab({ plans }: { plans: SessionPlan[] }) {
-  if (plans.length === 0) {
-    return (
-      <View className="items-center py-10">
-        <FontAwesome name="clipboard" size={40} color={colors.text.tertiary} />
-        <ThemedText variant="body" color={colors.text.secondary} style={{ marginTop: 12 }}>No plans yet</ThemedText>
-      </View>
-    );
-  }
+function PlansTab({ plans, clientId }: { plans: SessionPlan[]; clientId: string }) {
+  const router = useRouter();
 
   return (
     <View className="pt-4 pb-8">
-      {plans.map((plan) => (
-        <PlanCard key={plan.id} plan={plan} />
-      ))}
+      {/* New Plan button */}
+      <Pressable
+        onPress={() => router.push(`/plans/form?clientId=${clientId}`)}
+        className="rounded-xl py-4 mx-4 mb-4 flex-row items-center justify-center"
+        style={{ backgroundColor: colors.blue[500] }}
+      >
+        <FontAwesome name="plus" size={14} color={colors.text.inverse} />
+        <ThemedText variant="body-medium" color={colors.text.inverse} style={{ fontFamily: "Inter-Bold", marginLeft: 8 }}>
+          New Plan
+        </ThemedText>
+      </Pressable>
+
+      {plans.length === 0 ? (
+        <View className="items-center py-6">
+          <ThemedText variant="body" color={colors.text.secondary}>
+            Create your first plan
+          </ThemedText>
+        </View>
+      ) : (
+        plans.map((plan) => (
+          <PlanCard key={plan.id} plan={plan} clientId={clientId} />
+        ))
+      )}
     </View>
   );
 }
@@ -402,7 +487,7 @@ export default function ClientDetailScreen() {
         />
       )}
       {activeTab === "Plans" && (
-        <PlansTab plans={plans} />
+        <PlansTab plans={plans} clientId={id!} />
       )}
     </ScrollView>
   );

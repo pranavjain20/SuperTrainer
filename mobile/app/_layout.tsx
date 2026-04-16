@@ -56,6 +56,7 @@ export default function RootLayout() {
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="recording" options={{ headerShown: false, gestureEnabled: !isRecording }} />
+        <Stack.Screen name="plans" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />
       </Stack>
     </QueryClientProvider>

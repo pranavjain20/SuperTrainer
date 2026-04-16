@@ -272,14 +272,28 @@ class SessionEntryListResponse(BaseModel):
 # --- SessionPlan ---
 
 
+class PlannedExercise(BaseModel):
+    exercise_name: str
+    sets: str = ""
+    reps: str = ""
+    weight: str = ""
+
+
+class PlannedExercisesPayload(BaseModel):
+    workout_type: str | None = None
+    exercises: list[PlannedExercise] = []
+
+
 class SessionPlanCreate(BaseModel):
     client_id: uuid.UUID
     plan_text: str = Field(..., min_length=1)
+    planned_exercises: dict | None = None
     planned_for_date: date | None = None
 
 
 class SessionPlanUpdate(BaseModel):
     plan_text: str | None = Field(None, min_length=1)
+    planned_exercises: dict | None = None
     planned_for_date: date | None = None
 
 
@@ -290,6 +304,7 @@ class SessionPlanResponse(BaseModel):
     client_id: uuid.UUID
     trainer_id: uuid.UUID
     plan_text: str
+    planned_exercises: dict | None = None
     planned_for_date: date | None
     created_at: datetime
 
@@ -297,6 +312,15 @@ class SessionPlanResponse(BaseModel):
 class SessionPlanListResponse(BaseModel):
     data: list[SessionPlanResponse]
     meta: PaginationMeta = PaginationMeta()
+
+
+class ParsePlanRequest(BaseModel):
+    text: str = Field(..., min_length=1)
+
+
+class ParsePlanResponse(BaseModel):
+    workout_type: str | None = None
+    exercises: list[PlannedExercise]
 
 
 # --- InjuryFlag ---

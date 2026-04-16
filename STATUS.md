@@ -2,11 +2,11 @@
 
 ## Current Phase
 
-v1 implementation in progress. Live exercise history built. iOS simulator workflow established.
+v1 implementation in progress. Plan creation built (natural language → structured exercises). Live exercise history built.
 
-## Last Session (Apr 15, 2026)
+## Last Session (Apr 16, 2026)
 
-Built live exercise history — the #1 daily trainer action (8-15x/session). Recording screen now has [This Session] | [History] segmented control. History tab shows client's past sessions as expandable cards: collapsed shows date + workout type + exercise names, tap to expand for full compact set data. No backend changes needed — reuses existing client session/entry hooks. Also redesigned the session header (aligned status + end session buttons), extracted ExpandableSessionCard into shared component, and disabled end-time picker in dev mode.
+Built plan creation with natural language input → AI parsing → structured editable exercises. Trainer types or speaks freely, Claude parses into exercise name + sets + reps + weight as separate editable fields. Full CRUD (create/edit/delete) from client profile Plans tab. Voice input auto-parses and skips to edit mode. Competitive research across 8 trainer apps (TrueCoach, Trainerize, Everfit, etc.) — no one does voice-first plan creation on the coach side. Plan display matches session compact format (same visual language).
 
 ## Blockers
 
@@ -14,9 +14,11 @@ None currently.
 
 ## Next Steps
 
-1. Plan creation/modification UI (#3-5 on todo)
-2. Settings screen (weight units)
-3. Session summaries -> flag system -> briefing (intelligence layer)
+1. Wire plans into session flow — show today's plan on recording screen, auto-link via plan_id
+2. Fix "Done" button on ended session (should navigate back)
+3. Plan modification on the fly (#4 on todo)
+4. End-session plan dictation (#5 on todo)
+5. Settings screen (weight units)
 
 ## Project Timeline
 

@@ -213,11 +213,24 @@ export interface SessionEntryUpdate {
 // Session Plan
 // ---------------------------------------------------------------------------
 
+export interface PlannedExercise {
+  exercise_name: string;
+  sets: string;
+  reps: string;
+  weight: string;
+}
+
+export interface PlannedExercisesPayload {
+  workout_type: string | null;
+  exercises: PlannedExercise[];
+}
+
 export interface SessionPlan {
   id: string;
   client_id: string;
   trainer_id: string;
   plan_text: string;
+  planned_exercises: PlannedExercisesPayload | null;
   planned_for_date: string | null;
   created_at: string;
 }
@@ -225,12 +238,19 @@ export interface SessionPlan {
 export interface SessionPlanCreate {
   client_id: string;
   plan_text: string;
+  planned_exercises?: PlannedExercisesPayload;
   planned_for_date?: string;
 }
 
 export interface SessionPlanUpdate {
   plan_text?: string;
+  planned_exercises?: PlannedExercisesPayload;
   planned_for_date?: string;
+}
+
+export interface ParsePlanResponse {
+  workout_type: string | null;
+  exercises: PlannedExercise[];
 }
 
 // ---------------------------------------------------------------------------

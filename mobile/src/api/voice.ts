@@ -10,7 +10,7 @@
  */
 
 import { apiPost, apiUpload } from "./client";
-import type { DataResponse, VoiceClipResponse } from "./types";
+import type { DataResponse, TranscribeResponse, VoiceClipResponse } from "./types";
 
 /**
  * Upload a voice clip for processing.
@@ -55,6 +55,27 @@ export async function processTextEntry(
   const res = await apiPost<DataResponse<VoiceClipResponse>>(
     `/api/v1/sessions/${sessionId}/text-entry`,
     { text },
+  );
+  return res.data;
+}
+
+/**
+ * Transcribe audio to text only — no parsing or persistence.
+ *
+ * Used for plan dictation: trainer speaks, we return the raw transcript
+ * so they can review/edit before saving.
+ */
+export async function transcribeAudio(audioUri: string): Promise<TranscribeResponse> {
+  const formData = new FormData();
+  formData.append("audio", {
+    uri: audioUri,
+    type: "audio/mp4",
+    name: "recording.m4a",
+  } as any);
+
+  const res = await apiUpload<DataResponse<TranscribeResponse>>(
+    "/api/v1/transcribe",
+    formData,
   );
   return res.data;
 }

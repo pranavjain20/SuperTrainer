@@ -107,6 +107,7 @@ class SessionPlan(Base):
     client_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("clients.id", ondelete="CASCADE"), nullable=False)
     trainer_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("trainers.id", ondelete="CASCADE"), nullable=False)
     plan_text: Mapped[str] = mapped_column(Text, nullable=False)
+    planned_exercises: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
     plan_text_embedding = mapped_column(Vector(1536), nullable=True)
     planned_for_date: Mapped[date | None] = mapped_column(Date)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

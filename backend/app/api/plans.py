@@ -8,12 +8,15 @@ from app.database import get_db
 from app.schemas import (
     DataResponse,
     PaginationMeta,
+    ParsePlanRequest,
+    ParsePlanResponse,
     SessionPlanCreate,
     SessionPlanListResponse,
     SessionPlanResponse,
     SessionPlanUpdate,
 )
 from app.services import plan_service
+from app.services.plan_parser import parse_plan_text
 
 router = APIRouter(tags=["plans"])
 
@@ -79,3 +82,29 @@ async def delete_plan(
 ):
     plan = await validate_plan_ownership(db, plan_id)
     await plan_service.delete_plan(db, plan)
+
+
+@router.post("/plans/parse", response_model=DataResponse[ParsePlanResponse])
+async def parse_plan(body: ParsePlanRequest):
+    """Parse natural language plan text into structured exercises.
+
+    Takes freeform text like "legs day, squats 4x8 at 60, RDLs 3x10"
+    and returns structured exercises with compact prescriptions.
+    No auth or DB needed — pure LLM parsing.
+    """
+    result = await parse_plan_text(body.text)
+    return {
+        "data": ParsePlanResponse(
+            workout_type=result.workout_type,
+            exercises=[
+                {
+                    "exercise_name": ex.exercise_name,
+                    "sets": ex.sets,
+                    "reps": ex.reps,
+                    "weight": ex.weight,
+                }
+                for ex in result.exercises
+            ],
+        ),
+        "meta": {},
+    }
