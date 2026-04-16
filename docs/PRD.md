@@ -206,6 +206,8 @@ Show exercise name, sets, reps, weight. Each set is a row. Notes can attach to i
 **Observation Cards — Freeform:**
 For things that don't attach neatly to a specific exercise. Pain reported between exercises, general fatigue observations, coaching notes about the client's state today. Visually distinct from exercise cards.
 
+**Important: Observations are for the Brain, not for browsing.** Trainers won't scroll through observation lists — they'll ask the Brain natural language questions like "has this client mentioned knee pain before?" or "what did I notice about their form last month?" The Brain surfaces relevant observations across sessions via RAG. The observation table view in session detail is fine for review, but the primary consumer of observation data is the conversational AI agent.
+
 The AI decides which type to create based on what the trainer said. If it can attach something to a specific set, it does. If it cannot, it creates an observation card. The timeline order reflects the actual order of the session.
 
 Example timeline structure:
