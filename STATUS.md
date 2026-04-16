@@ -2,22 +2,21 @@
 
 ## Current Phase
 
-v1 implementation in progress. iOS simulator workflow established. Exercise display redesigned.
+v1 implementation in progress. Live exercise history built. iOS simulator workflow established.
 
 ## Last Session (Apr 15, 2026)
 
-Resumed after ~10 day break. All 734 backend tests pass. Set up iOS simulator workflow — Claude can screenshot the simulator and review UI proactively. Fixed environment: Node 22 (not 25), EXPO_NO_TELEMETRY=1, project at ~/supertrainer (iCloud evicts files from Desktop). Created `/fire-it-up` skill. Redesigned session summary cards: workout type heading, exercise names bold on own line, sets below. Tightened exercise detail table rows. Config switched to localhost for simulator.
+Built live exercise history — the #1 daily trainer action (8-15x/session). Recording screen now has [This Session] | [History] segmented control. History tab shows client's past sessions as expandable cards: collapsed shows date + workout type + exercise names, tap to expand for full compact set data. No backend changes needed — reuses existing client session/entry hooks. Also redesigned the session header (aligned status + end session buttons), extracted ExpandableSessionCard into shared component, and disabled end-time picker in dev mode.
 
 ## Blockers
 
-- Live exercise history build (next up)
+None currently.
 
 ## Next Steps
 
-1. Build live exercise history (the #1 daily action)
-2. Plan creation/modification UI
-3. Settings screen (weight units)
-4. Session summaries -> flag system -> briefing
+1. Plan creation/modification UI (#3-5 on todo)
+2. Settings screen (weight units)
+3. Session summaries -> flag system -> briefing (intelligence layer)
 
 ## Project Timeline
 

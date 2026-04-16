@@ -26,7 +26,7 @@ Organized by the trainer's actual day. Build order follows dependencies top to b
 | # | Item | Status | What it means | Depends on |
 |---|------|--------|--------------|------------|
 | 1 | **Compact exercise format** | DONE (Apr 15) | The "4kg x10, 3kg x8" one-liner format. Redesigned summary cards: workout type heading, exercise names bold on own line, sets below. Detail table rows tightened. | — |
-| 2 | **Live exercise history** (notebook replacement) | Scoped, not built | Trainer searches or triggers lookup -> instantly sees what client did last 1-3 times for that exercise. The #1 daily action — happens 8-15x per session. Must be faster than flipping a page in GoodNotes. | #1 |
+| 2 | **Live exercise history** (notebook replacement) | DONE (Apr 15) | [This Session] / [History] tab on recording screen. History shows past sessions as expandable cards: collapsed = date + workout type + exercise names, expanded = exercises with full compact sets. No backend changes — reuses existing hooks. Extracted ExpandableSessionCard as shared component. | #1 |
 
 #### During the session — "Record and coach"
 
