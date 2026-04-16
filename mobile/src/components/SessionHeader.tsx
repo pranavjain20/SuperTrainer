@@ -43,30 +43,32 @@ export function SessionHeader({
       className="pb-4 px-5"
       style={{ backgroundColor: colors.bg.surface1, paddingTop: insets.top + 8 }}
     >
+      {/* Back button */}
       <Pressable
         onPress={onBack}
         className="flex-row items-center mb-3 -ml-1"
         hitSlop={{ top: 16, bottom: 16, left: 12, right: 24 }}
       >
-        <FontAwesome name="chevron-left" size={20} color={colors.blue[500]} />
-        <ThemedText variant="title-3" color={colors.blue[500]} style={{ marginLeft: 8 }}>
+        <FontAwesome name="chevron-left" size={16} color={colors.blue[500]} />
+        <ThemedText variant="body-medium" color={colors.blue[500]} style={{ marginLeft: 6 }}>
           Back
         </ThemedText>
       </Pressable>
 
-      <ThemedText variant="display" style={{ fontSize: 28 }}>{clientName}</ThemedText>
+      {/* Client name */}
+      <ThemedText variant="display" style={{ fontSize: 30, letterSpacing: -0.5 }}>{clientName}</ThemedText>
 
-      <View className="flex-row items-end mt-2.5">
-        <ThemedText variant="body-medium" color={colors.text.secondary}>{sessionTime}</ThemedText>
+      {/* Status row */}
+      <View className="flex-row items-center mt-3" style={{ gap: 10 }}>
         <View
-          className="flex-row items-center px-4 py-2 rounded-full ml-3"
-          style={{ backgroundColor: status.color + "25" }}
+          className="flex-row items-center flex-1 rounded-xl justify-center py-3"
+          style={{ backgroundColor: status.color + "20" }}
         >
           <View
-            className="w-2.5 h-2.5 rounded-full mr-2"
+            className="w-2.5 h-2.5 rounded-full mr-2.5"
             style={{ backgroundColor: status.color }}
           />
-          <ThemedText variant="body-medium" color={status.color} style={{ fontSize: 14 }}>
+          <ThemedText variant="body-medium" color={status.color} style={{ fontFamily: "Inter-Bold", fontSize: 15 }}>
             {status.label}
           </ThemedText>
         </View>
@@ -75,14 +77,14 @@ export function SessionHeader({
           <Pressable
             onPress={onEndPress}
             disabled={isEnding}
-            className="ml-auto rounded-xl items-center justify-center px-5 py-3.5"
+            className="flex-1 rounded-xl items-center justify-center py-3"
             style={{
               backgroundColor: colors.red[500],
               opacity: isEnding ? 0.5 : 1,
             }}
           >
-            <ThemedText variant="caption" color={colors.text.primary}>
-              END SESSION
+            <ThemedText variant="body-medium" color="#FFFFFF" style={{ fontFamily: "Inter-Bold", fontSize: 15 }}>
+              End Session
             </ThemedText>
           </Pressable>
         )}

@@ -11,6 +11,7 @@ import { ErrorState } from "@/src/components/ErrorState";
 import { LoadingState } from "@/src/components/LoadingState";
 import { RecordButton } from "@/src/components/RecordButton";
 import { SessionHeader } from "@/src/components/SessionHeader";
+import { SessionHistoryTab } from "@/src/components/SessionHistoryTab";
 import { SessionSummary } from "@/src/components/SessionSummary";
 import { Timeline } from "@/src/components/Timeline";
 import { ThemedText } from "@/src/components/ThemedText";
@@ -33,8 +34,8 @@ import {
   numberExercises,
 } from "@/src/utils/sessions";
 
-// 2h in production, 30s in dev for easy testing
-const SESSION_DURATION_THRESHOLD_MS = __DEV__ ? 30_000 : 2 * 60 * 60 * 1000;
+// Skip end-time picker in dev; 2h threshold in production (for forgotten sessions)
+const SESSION_DURATION_THRESHOLD_MS = __DEV__ ? Infinity : 2 * 60 * 60 * 1000;
 
 // ---------------------------------------------------------------------------
 // Screen
@@ -58,6 +59,7 @@ export default function SessionRecordingScreen() {
 
   const [showEndConfirm, setShowEndConfirm] = useState(false);
   const [showEndTimePicker, setShowEndTimePicker] = useState(false);
+  const [activeTab, setActiveTab] = useState<"session" | "history">("session");
 
   const session = sessionQuery.data;
   const isSessionEnded = !!session?.ended_at;
@@ -300,19 +302,56 @@ export default function SessionRecordingScreen() {
         onEndPress={() => setShowEndConfirm(true)}
       />
 
-      {/* Timeline — entries + processing state */}
-      {recorder.error ? (
-        <View className="flex-1 items-center justify-center px-10">
-          <FontAwesome name="exclamation-circle" size={48} color={colors.red[500]} />
-          <ThemedText variant="body" color={colors.text.secondary} style={{ marginTop: 16, textAlign: "center" }}>
-            {recorder.error}
-          </ThemedText>
-        </View>
-      ) : (
-        <Timeline
-          sessionId={sessionId!}
-          onRetry={upload}
-          onStartRecording={handleRecordPress}
+      {/* ── Tab bar: This Session / History ── */}
+      <View
+        className="flex-row mx-4 mt-3 mb-2 rounded-xl overflow-hidden"
+        style={{ backgroundColor: colors.bg.surface2, padding: 4 }}
+      >
+        {(["session", "history"] as const).map((tab) => {
+          const isActive = activeTab === tab;
+          const label = tab === "session" ? "This Session" : "History";
+          return (
+            <Pressable
+              key={tab}
+              onPress={() => setActiveTab(tab)}
+              className="flex-1 items-center py-3 rounded-lg"
+              style={isActive ? { backgroundColor: colors.blue[500] } : undefined}
+            >
+              <ThemedText
+                variant="body-medium"
+                color={isActive ? colors.text.inverse : colors.text.secondary}
+                style={{ fontSize: 15, fontFamily: "Inter-SemiBold" }}
+              >
+                {label}
+              </ThemedText>
+            </Pressable>
+          );
+        })}
+      </View>
+
+      {/* ── Tab content ── */}
+      {activeTab === "session" && (
+        recorder.error ? (
+          <View className="flex-1 items-center justify-center px-10">
+            <FontAwesome name="exclamation-circle" size={48} color={colors.red[500]} />
+            <ThemedText variant="body" color={colors.text.secondary} style={{ marginTop: 16, textAlign: "center" }}>
+              {recorder.error}
+            </ThemedText>
+          </View>
+        ) : (
+          <Timeline
+            sessionId={sessionId!}
+            onRetry={upload}
+            onStartRecording={handleRecordPress}
+            bottomPadding={120}
+          />
+        )
+      )}
+      {activeTab === "history" && clientQuery.data && (
+        <SessionHistoryTab
+          clientId={clientQuery.data.id}
+          currentSessionId={sessionId!}
+          weightUnit={clientQuery.data.preferred_weight_unit ?? "kg"}
           bottomPadding={120}
         />
       )}

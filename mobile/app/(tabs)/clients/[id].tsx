@@ -1,5 +1,5 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useMemo, useState } from "react";
 import {
@@ -12,23 +12,19 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { getSessionEntries } from "@/src/api/entries";
 import { createSession } from "@/src/api/sessions";
 import type { Session, SessionEntry, SessionPlan, WeightUnit } from "@/src/api/types";
-import { EntryCard } from "@/src/components/EntryCard";
 import { ErrorState } from "@/src/components/ErrorState";
+import { ExpandableSessionCard } from "@/src/components/ExpandableSessionCard";
 import { LoadingState } from "@/src/components/LoadingState";
 import { ThemedText } from "@/src/components/ThemedText";
 import { colors } from "@/src/constants/tokens";
 import { cardBorder } from "@/src/constants/styles";
 import { groupEntriesBySession, useClient, useClientEntries, useClientPlans, useClientSessions } from "@/src/hooks/useClient";
-import { useEditableEntries } from "@/src/hooks/useEditableEntries";
 import { sessionsQueryKey } from "@/src/hooks/useSessions";
 import { useRecordingStore } from "@/src/stores/recordingStore";
-import { formatMemberSince, formatPlanDate, formatSessionDate, formatTime } from "@/src/utils/dates";
+import { formatMemberSince, formatPlanDate } from "@/src/utils/dates";
 import { getInitials, getInitialsColor } from "@/src/utils/initials";
-import { classifyWorkoutFromEntries, formatDurationMinutes, numberExercises } from "@/src/utils/sessions";
-import { formatCompactExercise, formatCompactExerciseParts, formatCompactSet } from "@/src/utils/sets";
 
 // ---------------------------------------------------------------------------
 // Tab bar
@@ -91,172 +87,6 @@ function GoalPill({ goal }: { goal: string }) {
         {goal.charAt(0).toUpperCase() + goal.slice(1)}
       </ThemedText>
     </View>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// Expandable session card
-// ---------------------------------------------------------------------------
-
-type CardView = "collapsed" | "summary" | "detail";
-
-function ExpandableSessionCard({
-  session,
-  compactEntries,
-  weightUnit,
-}: {
-  session: Session;
-  compactEntries?: SessionEntry[];
-  weightUnit: WeightUnit;
-}) {
-  const [view, setView] = useState<CardView>("collapsed");
-
-  const entriesQuery = useQuery({
-    queryKey: ["entries", "session", session.id],
-    queryFn: async () => {
-      const res = await getSessionEntries(session.id);
-      return res.data;
-    },
-    enabled: view === "detail",
-    staleTime: 5 * 60 * 1000,
-  });
-
-  const { setEditingEntry, editModals } = useEditableEntries(session.id);
-
-  const time = formatTime(session.scheduled_for ?? session.started_at);
-  const date = formatSessionDate(session.started_at);
-  const isCompleted = !!session.ended_at;
-
-  const exerciseEntries = compactEntries?.filter((e) => e.entry_type === "exercise_card") ?? [];
-  const hasCompactData = isCompleted && exerciseEntries.length > 0;
-
-  const handleHeaderTap = () => {
-    if (view === "collapsed") {
-      setView(hasCompactData ? "summary" : "detail");
-    } else {
-      setView("collapsed");
-    }
-  };
-
-  return (
-    <>
-      <View
-        className="rounded-xl mx-4 mb-3.5 overflow-hidden"
-        style={{ backgroundColor: colors.bg.surface1, ...cardBorder }}
-      >
-        {/* Session header — tap to toggle */}
-        <Pressable onPress={handleHeaderTap} className="flex-row items-center px-5 py-4">
-          <View className="flex-1">
-            <ThemedText variant="title-3">{date}</ThemedText>
-            <ThemedText variant="body-small" color={colors.text.secondary} style={{ marginTop: 2 }}>{time}</ThemedText>
-          </View>
-          <View className="flex-row items-center">
-            {isCompleted && session.duration_minutes != null && (
-              <ThemedText variant="data" color={colors.text.secondary} style={{ fontSize: 14, marginRight: 10 }}>
-                {formatDurationMinutes(session.duration_minutes!)}
-              </ThemedText>
-            )}
-            <FontAwesome
-              name={view === "collapsed" ? "chevron-down" : "chevron-up"}
-              size={12}
-              color={colors.text.tertiary}
-            />
-          </View>
-        </Pressable>
-
-        {/* ── Summary view ── */}
-        {view === "summary" && hasCompactData && (
-          <View style={{ paddingHorizontal: 20, paddingBottom: 16 }}>
-            <ThemedText variant="title-3" color={colors.blue[400]} style={{ fontFamily: "Inter-Bold", marginBottom: 4 }}>
-              {classifyWorkoutFromEntries(exerciseEntries)}
-            </ThemedText>
-            {exerciseEntries.map((entry, i) => {
-              const { name, sets } = formatCompactExerciseParts(entry, weightUnit);
-              return (
-                <View key={entry.id} style={{ marginBottom: i < exerciseEntries.length - 1 ? 6 : 0 }}>
-                  <ThemedText variant="body-small" style={{ fontFamily: "Inter-SemiBold", fontSize: 15 }}>
-                    {name}
-                  </ThemedText>
-                  {sets.length > 0 && (
-                    <ThemedText variant="body-small" color={colors.text.secondary} style={{ fontSize: 15, marginTop: 1 }}>
-                      {sets}
-                    </ThemedText>
-                  )}
-                </View>
-              );
-            })}
-
-            <Pressable
-              onPress={() => setView("detail")}
-              className="flex-row items-center justify-center self-end rounded-full"
-              style={{ marginTop: 12, backgroundColor: colors.blue.alpha12, paddingHorizontal: 16, paddingVertical: 8 }}
-            >
-              <ThemedText variant="body-medium" color={colors.blue[500]} style={{ fontFamily: "Inter-Bold" }}>
-                View full workout
-              </ThemedText>
-              <FontAwesome name="angle-right" size={16} color={colors.blue[500]} style={{ marginLeft: 6 }} />
-            </Pressable>
-          </View>
-        )}
-
-        {/* ── Detail view — full entry cards ── */}
-        {view === "detail" && (
-          <View style={{ borderTopWidth: 1, borderTopColor: colors.border.subtle }}>
-            {entriesQuery.isLoading && (
-              <View className="py-6 items-center">
-                <ActivityIndicator size="small" color={colors.blue[500]} />
-              </View>
-            )}
-
-            {entriesQuery.isError && (
-              <View className="py-4 items-center">
-                <ThemedText variant="body-small" color={colors.text.secondary}>Failed to load entries</ThemedText>
-              </View>
-            )}
-
-            {entriesQuery.data && entriesQuery.data.length === 0 && (
-              <View className="py-4 items-center">
-                <ThemedText variant="body-small" color={colors.text.secondary}>No entries recorded</ThemedText>
-              </View>
-            )}
-
-            {entriesQuery.data && entriesQuery.data.length > 0 && (() => {
-              const exerciseNumbers = numberExercises(entriesQuery.data);
-              return (
-                <>
-                  {/* ── Exercise cards in a bordered container ── */}
-                  <View
-                    style={{
-                      margin: 12,
-                      borderWidth: 1,
-                      borderColor: colors.border.subtle,
-                      borderRadius: 12,
-                      overflow: "hidden",
-                    }}
-                  >
-                    {entriesQuery.data.map((entry, i) => (
-                      <View
-                        key={entry.id}
-                        style={i > 0 ? { borderTopWidth: 1, borderTopColor: colors.border.subtle } : undefined}
-                      >
-                        <EntryCard
-                          entry={entry}
-                          exerciseNumber={exerciseNumbers.get(entry.id)}
-                          onPress={() => setEditingEntry(entry)}
-                          contained
-                        />
-                      </View>
-                    ))}
-                  </View>
-                </>
-              );
-            })()}
-          </View>
-        )}
-      </View>
-
-      {editModals}
-    </>
   );
 }
 
