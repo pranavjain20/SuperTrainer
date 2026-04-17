@@ -169,7 +169,7 @@ export default function SessionRecordingScreen() {
   );
 
   const handleDone = useCallback(() => {
-    router.back();
+    router.replace("/");
   }, [router]);
 
   // Loading
