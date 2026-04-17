@@ -2,11 +2,15 @@
 
 ## Current Phase
 
-v1 implementation in progress. Plan creation built (natural language → structured exercises). Live exercise history built.
+v1 implementation in progress. Plan creation built (natural language → structured exercises). Live exercise history built. Cleanup pass on nav, voice pipeline, and plan display done.
 
-## Last Session (Apr 16, 2026)
+## Last Session (Apr 17, 2026)
 
-Built plan creation with natural language input → AI parsing → structured editable exercises. Trainer types or speaks freely, Claude parses into exercise name + sets + reps + weight as separate editable fields. Full CRUD (create/edit/delete) from client profile Plans tab. Voice input auto-parses and skips to edit mode. Competitive research across 8 trainer apps (TrueCoach, Trainerize, Everfit, etc.) — no one does voice-first plan creation on the coach side. Plan display matches session compact format (same visual language).
+Four root-cause fixes from hands-on phone testing:
+- "Back to Home" on ended session was `router.back()`, dropping trainer on client profile instead of home. Switched to `router.replace("/")`.
+- Voice pipeline was 404'ing — parser had a hallucinated `claude-sonnet-4-6-20250627` model ID. Fixed to alias `claude-sonnet-4-6`, DRY'd across parser/plan_parser, and added defense-in-depth: `model_health.py` pings `ACTIVE_MODELS` on FastAPI startup (blocks bad deploys) plus a marked `pytest -m smoke` test for explicit CI invocation.
+- Plan creation polish: weight field no longer truncates long lists (fixed-width Sets/Reps chips + multiline Weight); new plan now appears on Plans tab after save (swapped `refetchQueries` for `setQueryData` — refetch doesn't reliably match observers across push-nav boundaries); `formatPlanDate` no longer shifts Jan 31 → Jan 30 (UTC-to-local day shift).
+- Plan set rendering: parser sometimes emits inconsistent sets counts (sets=6 with 3 weights). Old code silently padded with first value, producing nonsense. New `formatPlannedSets` utility trusts the arrays over sets count, collapses uniform sets to "4 × 10kg×8". 9 unit tests added.
 
 ## Blockers
 
@@ -14,17 +18,17 @@ None currently.
 
 ## Next Steps
 
-1. Wire plans into session flow — show today's plan on recording screen, auto-link via plan_id
-2. Fix "Done" button on ended session (should navigate back)
-3. Plan modification on the fly (#4 on todo)
-4. End-session plan dictation (#5 on todo)
-5. Settings screen (weight units)
+1. Tier 1 #3b — wire plans into session flow (show today's plan on recording screen, auto-link via plan_id). "Back to Home" was the smaller half.
+2. Restyle "Start over" / "Delete plan" secondary actions on edit form (small text links → proper outlined buttons).
+3. Plan modification on the fly (todo #4)
+4. End-session plan dictation (todo #5)
+5. Settings screen — weight units (todo #6)
 
 ## Project Timeline
 
 - **Phase 1a: Backend Foundation** — COMPLETE (306 tests). 10 models, full CRUD, ownership validation, seed data.
 - **Phase 1b: Voice Pipeline** — COMPLETE (683 tests). Deepgram STT + Claude parser, 142 exercises, 25/25 live scenarios.
-- **Phase 2a: Mobile App** — COMPLETE (734 tests, 12 days). Full React Native + Expo app: home, clients, profile, session recording, voice pipeline, inline editing, clarification UX, active session banner.
+- **Phase 2a: Mobile App** — COMPLETE (734 backend tests, mobile unit tests for formatters, 12 days). Full React Native + Expo app: home, clients, profile, session recording, voice pipeline, inline editing, clarification UX, active session banner.
 - **Design System Polish** — COMPLETE (Mar 1). Centralized tokens, ThemedText, Inter + JetBrains Mono, all components migrated.
 - **Business Pitch** — COMPLETE (Mar 8). Market data, sourced statistics, trainer-enablement thesis.
 - **v1 Scope** — FINALIZED (Apr 3). Notebook replacement + intelligence layer. See tasks/todo.md for full breakdown.
