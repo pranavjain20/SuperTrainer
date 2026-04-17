@@ -183,3 +183,27 @@ Pranav has native Postgres on port 5432. Docker dev DB uses port 5434, test DB u
 
 ### Schema Update Validators Need Entry Type Context
 `SessionEntryUpdate` cross-field validation only runs when `entry_type` is in the update payload. Without it, we can't know the current type from the schema alone. Deliberate design choice, not a gap.
+
+### React Query refetchQueries is Unreliable Across Push-Nav Boundaries
+**Mistake**: Used `refetchQueries({ queryKey })` in plan mutation hooks. New plan saved, backend confirmed, cache invalidated — but the Plans list didn't update. Two rounds of investigation before root cause.
+**Root Cause**: `refetchQueries` defaults to `type: "active"` — only matches queries with active observers. When a mutation fires from a pushed screen (root-stack form) over a parent screen (tab), the parent's observer isn't reliably matched across the push-nav boundary.
+**Correct Approach**: For create-and-list flows, write the server response directly into the cache via `setQueryData` (prepend on create, map-replace on update, filter on delete). Add `invalidateQueries` as a backstop. Never rely on `refetchQueries` to update a list a push-screen away. This is the React Query-recommended pattern.
+**Fixed In**: `mobile/src/hooks/usePlans.ts` (Apr 17).
+
+### Parser Model IDs Must Be Aliases, Not Dated Suffixes
+**Mistake**: `DEFAULT_MODEL = "claude-sonnet-4-6-20250627"` — a hallucinated dated suffix. Sonnet 4.5 dropped Sep 29 2025, so a June 2025 Sonnet 4.6 is impossible. Anthropic returned 404, voice clips processed but produced no exercise cards. Zero tests caught it because every call site mocked the SDK.
+**Root Cause**: LLM-generated code can invent model IDs that look plausible. Mocked tests never hit the real API, so the ID was never validated.
+**Correct Approach**: (1) Use model *aliases* (`claude-sonnet-4-6`), not dated suffixes. (2) Maintain a single `DEFAULT_MODEL` source (import across files, don't copy). (3) Ping `ACTIVE_MODELS` on FastAPI startup via `lifespan` — 404s block bad deploys before traffic. (4) Add a `pytest -m smoke` real-API parametrized test as explicit pre-deploy backstop.
+**Fixed In**: `backend/app/services/parser.py`, `backend/app/services/model_health.py`, `backend/tests/test_smoke_models.py` (Apr 17).
+
+### ISO Date Strings Need Local-Midnight Anchor
+**Mistake**: `new Date("2026-01-31").toLocaleDateString("en-US")` rendered "Jan 30, 2026" in EST. Date parsed as UTC midnight, then converted to local (EST is 5h behind) — prior day.
+**Root Cause**: JS Date parses bare ISO dates as UTC. Locale rendering applies the local offset.
+**Correct Approach**: Append `T00:00:00` to anchor the date to local midnight: `new Date(isoDate + "T00:00:00")`. Apply consistently wherever an ISO date is rendered.
+**Fixed In**: `mobile/src/utils/dates.ts::formatPlanDate` (Apr 17).
+
+### Trust Arrays Over Declared Counts
+**Mistake**: Plan display rendered 6 Lunges sets from `sets=6` + `weight="12kg, 14kg, 16kg"` — old expansion code silently padded missing slots with the first array value, producing "12kg×12, 14kg×14, 16kg×16, 12kg×12, 12kg×12, 12kg×12". Nonsense data that looked like real data.
+**Root Cause**: When a declared count (`sets=N`) conflicts with the actual array lengths, silently padding fabricates data. The parser's count field is less trustworthy than the arrays.
+**Correct Approach**: When weight/reps arrays vary, use `max(weight.length, reps.length)` as the true set count. Ignore the sets field. When arrays are uniform (single value), collapse to `"N × weight×reps"` for readability. Write tests covering array-trumps-count conflicts, not just the happy path.
+**Fixed In**: `mobile/src/utils/plans.ts::formatPlannedSets` + 9 unit tests (Apr 17).
