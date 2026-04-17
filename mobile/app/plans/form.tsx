@@ -470,10 +470,10 @@ export default function PlanFormScreen() {
                   />
                 </View>
 
-                {/* Sets / Reps / Weight — three inline fields */}
-                <View className="flex-row px-4 pb-3" style={{ gap: 8 }}>
+                {/* Sets / Reps (fixed compact) + Weight (flex, wraps) */}
+                <View className="flex-row px-4 pb-3" style={{ gap: 8, alignItems: "flex-start" }}>
                   {/* Sets */}
-                  <View style={{ flex: 1 }}>
+                  <View style={{ width: 64 }}>
                     <ThemedText variant="body-small" color={colors.text.tertiary} style={{ fontSize: 11, marginBottom: 3, marginLeft: 4 }}>
                       Sets
                     </ThemedText>
@@ -497,7 +497,7 @@ export default function PlanFormScreen() {
                   </View>
 
                   {/* Reps */}
-                  <View style={{ flex: 2 }}>
+                  <View style={{ width: 64 }}>
                     <ThemedText variant="body-small" color={colors.text.tertiary} style={{ fontSize: 11, marginBottom: 3, marginLeft: 4 }}>
                       Reps
                     </ThemedText>
@@ -519,8 +519,8 @@ export default function PlanFormScreen() {
                     />
                   </View>
 
-                  {/* Weight */}
-                  <View style={{ flex: 2 }}>
+                  {/* Weight — flex, wraps to multi-line for long lists */}
+                  <View style={{ flex: 1 }}>
                     <ThemedText variant="body-small" color={colors.text.tertiary} style={{ fontSize: 11, marginBottom: 3, marginLeft: 4 }}>
                       Weight
                     </ThemedText>
@@ -529,15 +529,17 @@ export default function PlanFormScreen() {
                       onChangeText={(v) => updateExercise(i, "weight", v)}
                       placeholder="—"
                       placeholderTextColor={colors.text.tertiary}
+                      multiline
                       style={{
                         color: colors.blue[400],
                         fontFamily: "Inter-SemiBold",
                         fontSize: 15,
                         backgroundColor: colors.bg.surface2,
                         borderRadius: 8,
-                        paddingHorizontal: 10,
+                        paddingHorizontal: 12,
                         paddingVertical: 8,
-                        textAlign: "center",
+                        textAlign: "left",
+                        minHeight: 36,
                       }}
                     />
                   </View>

@@ -51,10 +51,15 @@ export function formatSessionDate(isoString: string): string {
 
 /**
  * "Feb 25, 2026" — date for session plans.
+ *
+ * planned_for_date is a calendar date ("2026-01-31"), not an instant.
+ * Parsing it as-is defaults to UTC midnight, which in westward
+ * timezones renders as the previous day. Append "T00:00:00" to
+ * anchor it to local midnight.
  */
 export function formatPlanDate(isoDate: string | null): string {
   if (!isoDate) return "No date";
-  const date = new Date(isoDate);
+  const date = new Date(isoDate + "T00:00:00");
   return date.toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
