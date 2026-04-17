@@ -11,6 +11,7 @@ from dataclasses import dataclass
 import anthropic
 
 from app.config import settings
+from app.services.parser import DEFAULT_MODEL
 
 # ---------------------------------------------------------------------------
 # Tool schema
@@ -156,7 +157,7 @@ async def parse_plan_text(text: str) -> PlanParseResult:
     client = anthropic.AsyncAnthropic(api_key=settings.anthropic_api_key)
 
     response = await client.messages.create(
-        model="claude-sonnet-4-6-20250627",
+        model=DEFAULT_MODEL,
         max_tokens=1024,
         system=PLAN_PARSER_SYSTEM_PROMPT,
         tools=[PLAN_PARSER_TOOL],

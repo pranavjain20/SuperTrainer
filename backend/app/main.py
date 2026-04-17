@@ -1,5 +1,6 @@
 import logging
 import time
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
@@ -13,10 +14,18 @@ from app.api.injury_flags import router as injury_flags_router
 from app.api.plans import router as plans_router
 from app.api.sessions import router as sessions_router
 from app.api.voice import router as voice_router
+from app.services.model_health import verify_active_models
 
 logger = logging.getLogger("supertrainer")
 
-app = FastAPI(title="SuperTrainer API", version="0.1.0")
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await verify_active_models()
+    yield
+
+
+app = FastAPI(title="SuperTrainer API", version="0.1.0", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,

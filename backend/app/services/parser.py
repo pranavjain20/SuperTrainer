@@ -695,7 +695,7 @@ class ParserResult:
 # Parsing
 # ---------------------------------------------------------------------------
 
-DEFAULT_MODEL = "claude-sonnet-4-6-20250627"
+DEFAULT_MODEL = "claude-sonnet-4-6"
 
 
 def _build_exercise_card(tool_input: dict) -> ParsedExerciseCard:
@@ -854,7 +854,7 @@ async def parse_transcript(
         session_context: Optional list of prior session entry dicts. Each dict
             should have 'entry_type' plus relevant fields. Entries are numbered
             [1], [2], etc. for Claude to reference.
-        model: Claude model to use. Defaults to claude-sonnet-4-6-20250627.
+        model: Claude model to use. Defaults to claude-sonnet-4-6.
 
     Returns:
         ParserResult with exercise cards, observation cards, and raw tool calls.
