@@ -25,6 +25,7 @@ import { sessionsQueryKey } from "@/src/hooks/useSessions";
 import { useRecordingStore } from "@/src/stores/recordingStore";
 import { formatMemberSince, formatPlanDate } from "@/src/utils/dates";
 import { getInitials, getInitialsColor } from "@/src/utils/initials";
+import { formatPlannedSets } from "@/src/utils/plans";
 
 // ---------------------------------------------------------------------------
 // Tab bar
@@ -226,26 +227,7 @@ function PlanCard({ plan, clientId }: { plan: SessionPlan; clientId: string }) {
 
           {/* Exercise list — exact same format as session compact view */}
           {pe!.exercises.map((ex: any, i: number) => {
-            // Expand plan targets into individual set strings
-            // matching formatCompactSet: "10kg×10, 10kg×10, 10kg×10"
-            const numSets = parseInt(ex.sets, 10) || 0;
-            const repsArr = (ex.reps || "").split(",").map((s: string) => s.trim()).filter(Boolean);
-            const weightArr = (ex.weight || "").split(",").map((s: string) => s.trim()).filter(Boolean);
-
-            let compactSets = "";
-            if (numSets > 0) {
-              const setParts: string[] = [];
-              for (let s = 0; s < numSets; s++) {
-                const r = repsArr[s] || repsArr[0] || "";
-                const w = weightArr[s] || weightArr[0] || "";
-                if (w && r) setParts.push(`${w}×${r}`);
-                else if (r) setParts.push(r);
-                else if (w) setParts.push(w);
-              }
-              compactSets = setParts.join(", ");
-            } else if (ex.prescription) {
-              compactSets = ex.prescription;
-            }
+            const compactSets = formatPlannedSets(ex);
 
             return (
               <View key={`ex-${i}`} style={{ marginBottom: i < pe!.exercises.length - 1 ? 6 : 0 }}>
