@@ -633,21 +633,45 @@ export default function PlanFormScreen() {
               )}
             </Pressable>
 
-            {/* Secondary actions */}
-            <View className="flex-row justify-center" style={{ gap: 20 }}>
-              <Pressable onPress={() => setMode("input")} className="py-2">
-                <ThemedText variant="body-small" color={colors.text.tertiary}>
-                  Start over
+            {/* Secondary actions — outlined buttons, same visual weight as Save */}
+            <View className="flex-row" style={{ gap: 10 }}>
+              <Pressable
+                onPress={() => setMode("input")}
+                className="rounded-xl py-4 items-center"
+                style={{
+                  flex: 1,
+                  borderWidth: 1.5,
+                  borderColor: colors.border.strong,
+                  backgroundColor: "transparent",
+                }}
+              >
+                <ThemedText
+                  variant="body-medium"
+                  color={colors.text.primary}
+                  style={{ fontFamily: "Inter-Bold" }}
+                >
+                  Start Over
                 </ThemedText>
               </Pressable>
               {isEditing && (
                 <Pressable
                   onPress={handleDelete}
                   disabled={deletePlan.isPending}
-                  className="py-2"
+                  className="rounded-xl py-4 items-center"
+                  style={{
+                    flex: 1,
+                    borderWidth: 1.5,
+                    borderColor: colors.red[500],
+                    backgroundColor: "transparent",
+                    opacity: deletePlan.isPending ? 0.5 : 1,
+                  }}
                 >
-                  <ThemedText variant="body-small" color={colors.red[500]}>
-                    Delete plan
+                  <ThemedText
+                    variant="body-medium"
+                    color={colors.red[500]}
+                    style={{ fontFamily: "Inter-Bold" }}
+                  >
+                    Delete Plan
                   </ThemedText>
                 </Pressable>
               )}
