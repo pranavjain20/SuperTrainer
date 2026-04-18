@@ -1,5 +1,7 @@
 # SuperTrainer — Current Status
 
+_Last updated: Apr 18, 2026_
+
 ## Current Phase
 
 v1 implementation in progress. Plan creation built (natural language → structured exercises). Live exercise history built. Cleanup pass on nav, voice pipeline, and plan display done.
