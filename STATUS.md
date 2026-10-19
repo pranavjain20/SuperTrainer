@@ -26,6 +26,14 @@ None currently.
 3. End-session plan dictation (todo #5)
 4. Settings screen — weight units (todo #6)
 
+## Future (after v1) — WHOOP-aware exercise recommender
+
+Idea from Oct 19, 2026, not started. Recommend each client's session from three inputs: their logged history in SuperTrainer, their goals and injuries, and their WHOOP data for the day (recovery, sleep, strain, via WHOOP's API). Red recovery mainly lowers volume and intensity; it doesn't just swap exercises. Natural first surface: the pre-session briefing (todo #9).
+
+- Pairs with Attuned: two products on WHOOP data, SuperTrainer for training and Attuned for how you feel.
+- Built from scratch. Apollo's exercise database, tags and rules are Apollo's; only the lessons carry over.
+- Open question: is the user the trainer (a SuperTrainer feature) or someone training alone (a separate app)?
+
 ## Project Timeline
 
 - **Phase 1a: Backend Foundation** — COMPLETE (306 tests). 10 models, full CRUD, ownership validation, seed data.
