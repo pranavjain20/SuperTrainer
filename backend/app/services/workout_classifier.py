@@ -82,6 +82,26 @@ def _classify_muscle(muscle_name: str) -> str | None:
     return None
 
 
+def exercise_region(ex: dict) -> str | None:
+    """The one region an exercise counts toward, or None if no muscle maps."""
+    # Conditioning category overrides muscle-based classification
+    if ex.get("category") == "conditioning":
+        return "conditioning"
+
+    # Classify by primary muscles — find the dominant region for this exercise.
+    # An exercise like Overhead Press has 3 push muscles + 1 pull muscle;
+    # it should count as "push," not split across regions.
+    muscle_region_tally: dict[str, int] = {}
+    for muscle in ex.get("primary_muscles", []):
+        region = _classify_muscle(muscle)
+        if region:
+            muscle_region_tally[region] = muscle_region_tally.get(region, 0) + 1
+
+    if not muscle_region_tally:
+        return None
+    return max(muscle_region_tally, key=muscle_region_tally.get)  # type: ignore[arg-type]
+
+
 def classify_workout(exercise_canonical_names: list[str]) -> str:
     """Classify a workout from its exercise canonical names.
 
@@ -110,25 +130,9 @@ def classify_workout(exercise_canonical_names: list[str]) -> str:
         ex = exercise_map.get(name.lower().replace("_", " "))
         if ex is None:
             continue
-
-        # Conditioning category overrides muscle-based classification
-        if ex.get("category") == "conditioning":
-            region_counts["conditioning"] = region_counts.get("conditioning", 0) + 1
-            total_classified += 1
-            continue
-
-        # Classify by primary muscles — find the dominant region for this exercise.
-        # An exercise like Overhead Press has 3 push muscles + 1 pull muscle;
-        # it should count as "push," not split across regions.
-        muscle_region_tally: dict[str, int] = {}
-        for muscle in ex.get("primary_muscles", []):
-            region = _classify_muscle(muscle)
-            if region:
-                muscle_region_tally[region] = muscle_region_tally.get(region, 0) + 1
-
-        if muscle_region_tally:
-            dominant = max(muscle_region_tally, key=muscle_region_tally.get)  # type: ignore[arg-type]
-            region_counts[dominant] = region_counts.get(dominant, 0) + 1
+        region = exercise_region(ex)
+        if region:
+            region_counts[region] = region_counts.get(region, 0) + 1
             total_classified += 1
 
     if total_classified == 0:

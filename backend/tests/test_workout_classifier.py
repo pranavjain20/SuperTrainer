@@ -6,7 +6,7 @@ is a pure function with no I/O beyond reading the bundled JSON file.
 
 import pytest
 
-from app.services.workout_classifier import classify_workout
+from app.services.workout_classifier import classify_workout, exercise_region
 
 
 class TestClassifyWorkout:
@@ -139,3 +139,22 @@ class TestClassifyWorkout:
             "Barbell Back Squat",
         ]
         assert classify_workout(exercises) == "Full Body"
+
+
+class TestExerciseRegion:
+    """The single region one exercise counts toward."""
+
+    def test_dominant_muscle_region_wins(self):
+        """3 push muscles + 1 pull muscle → push, not split."""
+        ex = {"primary_muscles": ["Anterior Deltoid", "Medial Deltoid", "Triceps Brachii", "Trapezius"]}
+        assert exercise_region(ex) == "push"
+
+    def test_conditioning_category_overrides_muscles(self):
+        ex = {"category": "conditioning", "primary_muscles": ["Quadriceps"]}
+        assert exercise_region(ex) == "conditioning"
+
+    def test_unmapped_muscles_have_no_region(self):
+        assert exercise_region({"primary_muscles": ["Forearm Flexors"]}) is None
+
+    def test_no_muscles_have_no_region(self):
+        assert exercise_region({}) is None
