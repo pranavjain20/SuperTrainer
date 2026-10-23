@@ -58,6 +58,7 @@ function paginate<T extends { id: string }>(
   items: T[],
   sortKey: keyof T,
   query: URLSearchParams,
+  serialize: (item: T) => unknown = (item) => item,
 ) {
   const limit = Number(query.get("limit") ?? 20);
   const sorted = [...items].sort((a, b) => {
@@ -71,7 +72,7 @@ function paginate<T extends { id: string }>(
   const page = sorted.slice(start, start + limit);
   const hasMore = sorted.length > start + limit;
   return json({
-    data: page,
+    data: page.map(serialize),
     meta: {
       cursor: page.length ? page[page.length - 1].id : null,
       limit,
@@ -101,6 +102,17 @@ export function totalVolume(sets: SetData[]): number | null {
     }
   }
   return hasWeight ? Math.round(total * 10) / 10 : null;
+}
+
+/** session_service.to_responses: workout_type is derived from the exercises on every read. */
+export function withWorkoutType(session: Session): Session {
+  const names = getState()
+    .entries.filter(
+      (e) => e.session_id === session.id && e.entry_type === "exercise_card",
+    )
+    .sort((a, b) => a.sequence_order - b.sequence_order)
+    .flatMap((e) => (e.exercise_canonical ? [e.exercise_canonical] : []));
+  return { ...session, workout_type: classifyWorkout(names, fixture.exercise_regions) };
 }
 
 /** The calendar date of `iso` in IANA zone `tz`, as YYYY-MM-DD. */
@@ -212,6 +224,35 @@ async function replayVoiceClip(session: Session) {
   );
 }
 
+/**
+ * POST /sessions/{id}/summary. Seeded sessions carry the summary Claude wrote
+ * for them. A visitor's session gets the summary Claude wrote for the same
+ * client after the same number of sample clips. Unlike the backend, an edit doesn't clear it: the
+ * demo can only replay what was recorded.
+ */
+async function replaySummary(session: Session) {
+  if (!session.ended_at) throw new HttpError(409, "Session has not ended yet");
+  if (session.ai_summary === null) {
+    // Recorded per client: the summary names the client and compares with their history
+    const recordings: Array<{ ai_summary: string | null; ms: number }> =
+      (
+        fixture.session_clip_summaries as Record<
+          string,
+          Array<{ ai_summary: string | null; ms: number }>
+        >
+      )[session.client_id] ?? [];
+    const clips = getState().clipsUsed[session.id] ?? 0;
+    const recorded =
+      clips > 0 ? recordings[Math.min(clips, recordings.length) - 1] : undefined;
+    if (recorded) {
+      await sleep(recorded.ms);
+      session.ai_summary = recorded.ai_summary;
+      save();
+    }
+  }
+  return data({ ai_summary: session.ai_summary });
+}
+
 const normalize = (text: string) => text.trim().toLowerCase().replace(/\s+/g, " ");
 
 // ---------------------------------------------------------------------------
@@ -285,6 +326,7 @@ const routes: Array<[string, RegExp, Handler]> = [
         getState().sessions.filter((s) => s.client_id === id),
         "started_at",
         query,
+        withWorkoutType,
       );
     },
   ],
@@ -326,7 +368,7 @@ const routes: Array<[string, RegExp, Handler]> = [
           localDate(s.started_at, tz) === date ||
           (s.scheduled_for !== null && localDate(s.scheduled_for, tz) === date),
       );
-      return paginate(sessions, "started_at", query);
+      return paginate(sessions, "started_at", query, withWorkoutType);
     },
   ],
   [
@@ -355,6 +397,8 @@ const routes: Array<[string, RegExp, Handler]> = [
         raw_transcript: null,
         processing_status: "pending",
         trainer_edited: false,
+        ai_summary: null,
+        workout_type: "Session",
         created_at: now,
         updated_at: now,
       };
@@ -366,7 +410,7 @@ const routes: Array<[string, RegExp, Handler]> = [
   [
     "GET",
     /^\/sessions\/([^/]+)$/,
-    ([id]) => data(findOr404(getState().sessions, id, "Session")),
+    ([id]) => data(withWorkoutType(findOr404(getState().sessions, id, "Session"))),
   ],
   [
     "PATCH",
@@ -382,7 +426,7 @@ const routes: Array<[string, RegExp, Handler]> = [
       }
       applyPatch(session, { ...patch, updated_at: new Date().toISOString() });
       save();
-      return data(session);
+      return data(withWorkoutType(session));
     },
   ],
   [
@@ -399,14 +443,8 @@ const routes: Array<[string, RegExp, Handler]> = [
   ],
   [
     "POST",
-    /^\/sessions\/([^/]+)\/classify$/,
-    ([id]) => {
-      findOr404(getState().sessions, id, "Session");
-      const names = getState()
-        .entries.filter((e) => e.session_id === id && e.entry_type === "exercise_card")
-        .flatMap((e) => (e.exercise_canonical ? [e.exercise_canonical] : []));
-      return data({ workout_type: classifyWorkout(names, fixture.exercise_regions) });
-    },
+    /^\/sessions\/([^/]+)\/summary$/,
+    ([id]) => replaySummary(findOr404(getState().sessions, id, "Session")),
   ],
   [
     "GET",
@@ -538,6 +576,24 @@ const routes: Array<[string, RegExp, Handler]> = [
       state.plans = state.plans.filter((p) => p.id !== id);
       save();
       return new Response(null, { status: 204 });
+    },
+  ],
+
+  // --- Brain: the real Brain's recorded answers to the suggested questions ---
+  [
+    "POST",
+    /^\/brain\/ask$/,
+    async (_, { body }) => {
+      const question = normalize(String(body.question ?? ""));
+      const recorded = fixture.brain.find((b) => normalize(b.question) === question);
+      if (!recorded) {
+        throw new HttpError(
+          422,
+          "In this demo the Brain answers the suggested questions below. Their answers were written by the real Brain from this data.",
+        );
+      }
+      await sleep(recorded.ms);
+      return data({ answer: recorded.answer });
     },
   ],
 

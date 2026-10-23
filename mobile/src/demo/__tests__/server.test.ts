@@ -154,11 +154,14 @@ describe("voice clips replay the recorded pipeline", () => {
     });
     expect(created.id).not.toBe(recorded.entries_created[0].id);
 
+    await recordClip(id); // the knee note about the squats
     await recordClip(id);
     const entries = (await call("GET", `/sessions/${id}/entries`)).body.data;
     expect(
-      entries.map((e: { exercise_canonical: string }) => e.exercise_canonical),
-    ).toEqual(["Goblet Squat", "Romanian Deadlift"]);
+      entries.map((e: { entry_type: string; exercise_canonical: string | null }) =>
+        e.entry_type === "exercise_card" ? e.exercise_canonical : "note",
+      ),
+    ).toEqual(["Goblet Squat", "note", "Romanian Deadlift"]);
   });
 
   it("applies a correction to the entry it corrects", async () => {
@@ -173,10 +176,10 @@ describe("voice clips replay the recorded pipeline", () => {
   it("skips a correction whose entry was deleted", async () => {
     const id = await startSession();
     await recordClip(id);
+    await recordClip(id);
     const rdl = (await recordClip(id)).body.data.entries_created[0];
     await call("DELETE", `/entries/${rdl.id}`);
-    await recordClip(id);
-    const res = await recordClip(id);
+    const res = await recordClip(id); // "that last set was 30 kilos"
     expect(res.body.data.entries_modified).toEqual([]);
   });
 
@@ -247,21 +250,99 @@ describe("totalVolume", () => {
   });
 });
 
-describe("classify", () => {
-  it("labels a session by its exercises", async () => {
+describe("workout_type", () => {
+  it("labels a session by its exercises, as it changes", async () => {
     const id = await startSession();
-    await recordClip(id);
-    await recordClip(id);
-    expect(
-      (await call("POST", `/sessions/${id}/classify`, {})).body.data.workout_type,
-    ).toBe("Lower Body");
+    const label = async () =>
+      (await call("GET", `/sessions/${id}`)).body.data.workout_type;
+    expect(await label()).toBe("Session");
+    for (let i = 0; i < 3; i++) await recordClip(id);
+    expect(await label()).toBe("Lower Body");
+    for (let i = 0; i < 3; i++) await recordClip(id); // + push-ups and plank
+    expect(await label()).toBe("Full Body");
   });
 
-  it("labels an empty session 'Session'", async () => {
+  it("labels every session in a list", async () => {
+    const { body } = await call("GET", `/clients/${sarah.id}/sessions`);
+    for (const s of body.data) expect(typeof s.workout_type).toBe("string");
+  });
+});
+
+describe("summary", () => {
+  const endSession = (id: string) =>
+    call("PATCH", `/sessions/${id}`, { ended_at: new Date().toISOString() });
+  const summary = async (id: string) => call("POST", `/sessions/${id}/summary`, {});
+  const recordedFor = (clientId: string, clips: number) =>
+    (
+      fixture.session_clip_summaries as Record<
+        string,
+        Array<{ ai_summary: string | null }>
+      >
+    )[clientId][clips - 1].ai_summary;
+
+  it("refuses a session that hasn't ended", async () => {
     const id = await startSession();
-    expect(
-      (await call("POST", `/sessions/${id}/classify`, {})).body.data.workout_type,
-    ).toBe("Session");
+    expect((await summary(id)).status).toBe(409);
+  });
+
+  it("replays this client's summary for the clips recorded", async () => {
+    const id = await startSession();
+    await recordClip(id);
+    await recordClip(id);
+    await endSession(id);
+    const res = await summary(id);
+    expect(res.body.data.ai_summary).toBe(recordedFor(sarah.id, 2));
+    expect((await call("GET", `/sessions/${id}`)).body.data.ai_summary).toBe(
+      recordedFor(sarah.id, 2),
+    );
+  });
+
+  it("uses the last recorded summary once the clips start over", async () => {
+    const id = await startSession();
+    for (let i = 0; i < fixture.session_clips.length + 2; i++) await recordClip(id);
+    await endSession(id);
+    expect((await summary(id)).body.data.ai_summary).toBe(
+      recordedFor(sarah.id, fixture.session_clips.length),
+    );
+  });
+
+  it("has none for a session with no clips", async () => {
+    const id = await startSession();
+    await endSession(id);
+    expect((await summary(id)).body.data.ai_summary).toBeNull();
+  });
+
+  it("keeps a seeded session's own summary", async () => {
+    const seeded = fixture.sessions.find((s) => s.ended_at && s.ai_summary)!;
+    expect((await summary(seeded.id)).body.data.ai_summary).toBe(seeded.ai_summary);
+  });
+
+  it("was recorded for every client and every number of clips", () => {
+    for (const client of fixture.clients) {
+      const recordings = (fixture.session_clip_summaries as Record<string, unknown[]>)[
+        client.id
+      ];
+      expect(recordings).toHaveLength(fixture.session_clips.length);
+    }
+  });
+});
+
+describe("brain", () => {
+  it("answers each suggested question with the recorded answer", async () => {
+    for (const { question, answer } of fixture.brain) {
+      const res = await call("POST", "/brain/ask", {
+        question: ` ${question.toLowerCase()} `,
+      });
+      expect(res.body.data.answer).toBe(answer);
+    }
+  });
+
+  it("explains that other questions aren't available", async () => {
+    const res = await call("POST", "/brain/ask", {
+      question: "What's Sarah's max deadlift?",
+    });
+    expect(res.status).toBe(422);
+    expect(res.body.error.message).toMatch(/suggested questions/);
   });
 });
 

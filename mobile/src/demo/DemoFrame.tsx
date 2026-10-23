@@ -20,6 +20,15 @@ const BEZEL = 10;
 const WIDE_SCREEN_MIN = 760;
 const REPO_URL = "https://github.com/pranavjain20/SuperTrainer";
 
+const TRY_IT = [
+  [
+    "Log a session by voice",
+    "Open a client, start a session and tap the mic. A sample clip plays; tap stop and it turns into an exercise card.",
+  ],
+  ["Get an AI summary", "End the session and Claude sums up how it went."],
+  ["Ask the Brain", "Ask about any client, like how Jake's bench press is going."],
+] as const;
+
 export function DemoFrame({ children }: { children: ReactNode }) {
   const { width, height } = useWindowDimensions();
   const [embedded] = useState(() => window.self !== window.top);
@@ -52,25 +61,31 @@ export function DemoFrame({ children }: { children: ReactNode }) {
           color={colors.text.primary}
           style={{ marginTop: 14, fontSize: 18, lineHeight: 27 }}
         >
-          A trainer says what their client just did, and it becomes a clean workout log.
+          Most personal trainers still log sessions in a notebook. With SuperTrainer they
+          just say what their client did, and it becomes a clean workout log.
         </ThemedText>
+        {TRY_IT.map(([title, detail], i) => (
+          <View key={title} style={{ marginTop: i === 0 ? 26 : 14 }}>
+            <ThemedText variant="body-medium" color={colors.text.primary}>
+              {title}
+            </ThemedText>
+            <ThemedText
+              variant="body"
+              color={colors.text.secondary}
+              style={{ marginTop: 2, lineHeight: 22 }}
+            >
+              {detail}
+            </ThemedText>
+          </View>
+        ))}
         <ThemedText
-          variant="body"
-          color={colors.text.secondary}
-          style={{ marginTop: 22, lineHeight: 23 }}
-        >
-          Try it: open a client, start a session and tap the record button. A sample clip
-          plays. Tap stop, and a few seconds later it appears as an exercise card you can
-          edit.
-        </ThemedText>
-        <ThemedText
-          variant="body"
+          variant="body-small"
           color={colors.text.tertiary}
-          style={{ marginTop: 16, lineHeight: 23 }}
+          style={{ marginTop: 22, lineHeight: 20 }}
         >
-          This demo runs entirely in your browser. Each sample clip went through the real
-          pipeline once (Deepgram for speech to text, then Claude), and its result is
-          replayed here at the speed it ran. Your changes are saved in this browser only.
+          This demo runs in your browser. Every clip, summary and answer here was produced
+          once by the real pipeline (Deepgram for speech, Claude for the rest) and is
+          replayed at the speed it ran. What you change stays in this browser.
         </ThemedText>
 
         <View style={{ flexDirection: "row", gap: 12, marginTop: 28 }}>
