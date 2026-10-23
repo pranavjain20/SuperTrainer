@@ -11,6 +11,8 @@
 import { Audio } from "expo-av";
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { IS_DEMO } from "@/src/demo/config";
+import { useDemoRecorder } from "@/src/demo/useDemoRecorder";
 import { useRecordingStore } from "@/src/stores/recordingStore";
 
 interface VoiceRecorderState {
@@ -28,7 +30,7 @@ interface VoiceRecorderActions {
 
 export type VoiceRecorder = VoiceRecorderState & VoiceRecorderActions;
 
-export function useVoiceRecorder(): VoiceRecorder {
+function useMicRecorder(): VoiceRecorder {
   const setGlobalRecording = useRecordingStore((s) => s.setIsRecording);
   const setGlobalStop = useRecordingStore((s) => s.setStopRecording);
   const [isRecording, setIsRecording] = useState(false);
@@ -156,3 +158,8 @@ export function useVoiceRecorder(): VoiceRecorder {
     resetRecording,
   };
 }
+
+// The web demo plays sample clips instead of using the microphone
+export const useVoiceRecorder: () => VoiceRecorder = IS_DEMO
+  ? useDemoRecorder
+  : useMicRecorder;

@@ -7,6 +7,9 @@ import { StatusBar } from "expo-status-bar";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 
+import { IS_DEMO } from "@/src/demo/config";
+import { DemoFrame } from "@/src/demo/DemoFrame";
+import { DemoOverlays } from "@/src/demo/DemoOverlays";
 import { useRecordingStore } from "@/src/stores/recordingStore";
 
 // Keep splash screen visible while fonts load
@@ -50,15 +53,27 @@ export default function RootLayout() {
     return null;
   }
 
-  return (
+  const app = (
     <QueryClientProvider client={queryClient}>
       <StatusBar style="light" />
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="recording" options={{ headerShown: false, gestureEnabled: !isRecording }} />
+        <Stack.Screen
+          name="recording"
+          options={{ headerShown: false, gestureEnabled: !isRecording }}
+        />
         <Stack.Screen name="plans" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />
       </Stack>
     </QueryClientProvider>
+  );
+
+  if (!IS_DEMO) return app;
+
+  return (
+    <DemoFrame>
+      {app}
+      <DemoOverlays />
+    </DemoFrame>
   );
 }
