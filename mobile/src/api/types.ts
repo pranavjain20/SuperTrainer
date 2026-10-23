@@ -278,11 +278,15 @@ export interface InjuryFlag {
 }
 
 // ---------------------------------------------------------------------------
-// Session Summary
+// Session Summary + Brain
 // ---------------------------------------------------------------------------
 
 export interface SessionSummaryResponse {
   ai_summary: string | null;
+}
+
+export interface BrainAnswer {
+  answer: string;
 }
 
 // ---------------------------------------------------------------------------
