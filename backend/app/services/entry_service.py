@@ -1,9 +1,10 @@
 import uuid
+from datetime import datetime, timezone
 
-from sqlalchemy import func, select
+from sqlalchemy import func, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models import SessionEntry
+from app.models import Session, SessionEntry
 from app.services.pagination import paginate
 
 
@@ -21,11 +22,25 @@ async def get_next_sequence_order(db: AsyncSession, session_id: uuid.UUID) -> in
     return (current_max or 0) + 1
 
 
+async def _clear_summary(db: AsyncSession, session_id: uuid.UUID) -> None:
+    """A changed session needs a new recap; the next summary request writes it.
+
+    updated_at is set here, not left to the column's onupdate, so a Session
+    already loaded in this db session is updated in place rather than expired.
+    """
+    await db.execute(
+        update(Session)
+        .where(Session.id == session_id)
+        .values(ai_summary=None, updated_at=datetime.now(timezone.utc))
+    )
+
+
 async def create_entry(
     db: AsyncSession, session_id: uuid.UUID, client_id: uuid.UUID, **kwargs
 ) -> SessionEntry:
     entry = SessionEntry(session_id=session_id, client_id=client_id, **kwargs)
     db.add(entry)
+    await _clear_summary(db, session_id)
     await db.commit()
     await db.refresh(entry)
     return entry
@@ -72,6 +87,7 @@ async def update_entry(db: AsyncSession, entry: SessionEntry, **kwargs) -> Sessi
                 has_weight = True
         entry.total_volume_kg = round(total, 1) if has_weight else None
 
+    await _clear_summary(db, entry.session_id)
     await db.commit()
     await db.refresh(entry)
     return entry
@@ -79,4 +95,5 @@ async def update_entry(db: AsyncSession, entry: SessionEntry, **kwargs) -> Sessi
 
 async def delete_entry(db: AsyncSession, entry: SessionEntry) -> None:
     await db.delete(entry)
+    await _clear_summary(db, entry.session_id)
     await db.commit()

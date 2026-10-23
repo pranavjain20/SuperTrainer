@@ -145,6 +145,9 @@ class SessionResponse(BaseModel):
     processing_status: ProcessingStatusEnum
     trainer_edited: bool
     plan_id: uuid.UUID | None
+    ai_summary: str | None = None
+    # Derived from the session's exercises, not stored: see session_service.to_responses
+    workout_type: str = "Session"
     created_at: datetime
     updated_at: datetime
 
@@ -451,11 +454,11 @@ class BrainConversationListResponse(BaseModel):
 # --- BrainMessage ---
 
 
-# --- Workout Classification ---
+# --- Session Summary ---
 
 
-class WorkoutClassificationResponse(BaseModel):
-    workout_type: str
+class SessionSummaryResponse(BaseModel):
+    ai_summary: str | None
 
 
 # --- Voice Clip ---

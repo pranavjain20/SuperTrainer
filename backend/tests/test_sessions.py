@@ -799,11 +799,11 @@ async def test_update_session_wrong_client_plan_422(client, trainer_and_client, 
     assert response.status_code == 422
 
 
-# --- Classify Endpoint ---
+# --- workout_type (derived from exercises on every read) ---
 
 
-async def test_classify_session_with_exercises(client, trainer_and_client, db_session):
-    """Classify returns workout type based on exercise entries."""
+async def test_workout_type_from_exercises(client, trainer_and_client, db_session):
+    """workout_type is derived from the exercise entries."""
     trainer, db_client = trainer_and_client
 
     session = Session(
@@ -823,14 +823,14 @@ async def test_classify_session_with_exercises(client, trainer_and_client, db_se
         db_session.add(entry)
     await db_session.flush()
 
-    response = await client.post(f"/api/v1/sessions/{session.id}/classify")
+    response = await client.get(f"/api/v1/sessions/{session.id}")
     assert response.status_code == 200
     data = response.json()["data"]
     assert data["workout_type"] == "Upper Body Push"
 
 
-async def test_classify_session_empty(client, trainer_and_client, db_session):
-    """Classify with no entries returns 'Session' fallback."""
+async def test_workout_type_empty_session(client, trainer_and_client, db_session):
+    """No entries → 'Session' fallback."""
     trainer, db_client = trainer_and_client
 
     session = Session(
@@ -840,13 +840,13 @@ async def test_classify_session_empty(client, trainer_and_client, db_session):
     db_session.add(session)
     await db_session.flush()
 
-    response = await client.post(f"/api/v1/sessions/{session.id}/classify")
+    response = await client.get(f"/api/v1/sessions/{session.id}")
     assert response.status_code == 200
     assert response.json()["data"]["workout_type"] == "Session"
 
 
-async def test_classify_session_observations_only(client, trainer_and_client, db_session):
-    """Classify with only observation entries returns 'Session' fallback."""
+async def test_workout_type_observations_only(client, trainer_and_client, db_session):
+    """Only observation entries → 'Session' fallback."""
     trainer, db_client = trainer_and_client
 
     session = Session(
@@ -864,35 +864,40 @@ async def test_classify_session_observations_only(client, trainer_and_client, db
     db_session.add(entry)
     await db_session.flush()
 
-    response = await client.post(f"/api/v1/sessions/{session.id}/classify")
+    response = await client.get(f"/api/v1/sessions/{session.id}")
     assert response.status_code == 200
     assert response.json()["data"]["workout_type"] == "Session"
 
 
-async def test_classify_other_trainers_session_404(client, trainer_and_client, db_session):
-    """Classifying another trainer's session returns 404."""
-    other_trainer = Trainer(
-        email=f"other-cl-{uuid.uuid4().hex[:8]}@test.com", name="Other CL Trainer",
-    )
-    db_session.add(other_trainer)
+async def test_workout_type_on_every_session_in_a_list(client, trainer_and_client, db_session):
+    """List endpoints label each session from its own exercises."""
+    trainer, db_client = trainer_and_client
+    labelled = {}
+    for hour, names in [(10, ["Barbell Back Squat", "Leg Press"]), (11, ["Barbell Row", "Barbell Curl"])]:
+        session = Session(
+            trainer_id=trainer.id, client_id=db_client.id,
+            started_at=datetime(2026, 2, 22, hour, 0, 0, tzinfo=timezone.utc),
+        )
+        db_session.add(session)
+        await db_session.flush()
+        for i, name in enumerate(names, start=1):
+            db_session.add(SessionEntry(
+                session_id=session.id, client_id=db_client.id,
+                entry_type="exercise_card", sequence_order=i,
+                exercise_name=name, exercise_canonical=name,
+            ))
+        labelled[str(session.id)] = "Lower Body" if hour == 10 else "Upper Body Pull"
     await db_session.flush()
 
-    other_client = Client(trainer_id=other_trainer.id, name="Other CL Client")
-    db_session.add(other_client)
-    await db_session.flush()
-
-    other_session = Session(
-        trainer_id=other_trainer.id, client_id=other_client.id,
-        started_at=datetime(2026, 2, 22, 10, 0, 0, tzinfo=timezone.utc),
-    )
-    db_session.add(other_session)
-    await db_session.flush()
-
-    response = await client.post(f"/api/v1/sessions/{other_session.id}/classify")
-    assert response.status_code == 404
+    for path in ["/api/v1/sessions", f"/api/v1/clients/{db_client.id}/sessions"]:
+        response = await client.get(path)
+        assert response.status_code == 200
+        got = {s["id"]: s["workout_type"] for s in response.json()["data"]}
+        assert got == labelled
 
 
-async def test_classify_nonexistent_session_404(client, trainer_and_client):
-    """Classifying a non-existent session returns 404."""
-    response = await client.post(f"/api/v1/sessions/{uuid.uuid4()}/classify")
-    assert response.status_code == 404
+async def test_classify_endpoint_is_gone(client, trainer_client_session):
+    """workout_type on the session replaced POST /classify."""
+    _, _, session = trainer_client_session
+    response = await client.post(f"/api/v1/sessions/{session.id}/classify")
+    assert response.status_code in (404, 405)

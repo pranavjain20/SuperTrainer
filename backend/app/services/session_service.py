@@ -5,8 +5,10 @@ from sqlalchemy import cast, func, or_, select
 from sqlalchemy.dialects.postgresql import DATE
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models import Session
+from app.models import EntryTypeEnum, Session, SessionEntry
+from app.schemas import SessionResponse
 from app.services.pagination import paginate
+from app.services.workout_classifier import classify_workout
 
 
 async def list_sessions_by_client(
@@ -75,3 +77,36 @@ async def update_session(db: AsyncSession, session: Session, **kwargs) -> Sessio
 async def delete_session(db: AsyncSession, session: Session) -> None:
     await db.delete(session)
     await db.commit()
+
+
+async def to_responses(db: AsyncSession, sessions: list[Session]) -> list[SessionResponse]:
+    """Serialize sessions with workout_type filled in.
+
+    workout_type is derived from each session's exercises on every read, so
+    the history card and the end-of-session screen always show the same label,
+    and it stays right after an edit. One query covers the whole page.
+    """
+    if not sessions:
+        return []
+    rows = await db.execute(
+        select(SessionEntry.session_id, SessionEntry.exercise_canonical)
+        .where(
+            SessionEntry.session_id.in_([s.id for s in sessions]),
+            SessionEntry.entry_type == EntryTypeEnum.exercise_card,
+            SessionEntry.exercise_canonical.is_not(None),
+        )
+        .order_by(SessionEntry.sequence_order)
+    )
+    names: dict[uuid.UUID, list[str]] = {}
+    for session_id, canonical in rows:
+        names.setdefault(session_id, []).append(canonical)
+    return [
+        SessionResponse.model_validate(s).model_copy(
+            update={"workout_type": classify_workout(names.get(s.id, []))}
+        )
+        for s in sessions
+    ]
+
+
+async def to_response(db: AsyncSession, session: Session) -> SessionResponse:
+    return (await to_responses(db, [session]))[0]

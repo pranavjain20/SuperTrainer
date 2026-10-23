@@ -7,7 +7,7 @@ from app.api.dependencies import get_trainer_id, validate_client_ownership
 from app.database import get_db
 from app.schemas import (
     ClientCreate, ClientListResponse, ClientResponse, ClientUpdate,
-    DataResponse, PaginationMeta, SessionListResponse, SessionResponse,
+    DataResponse, PaginationMeta, SessionListResponse,
 )
 from app.services import client_service, session_service
 
@@ -85,6 +85,6 @@ async def list_client_sessions(
     )
     last_id = str(sessions[-1].id) if sessions else None
     return SessionListResponse(
-        data=[SessionResponse.model_validate(s) for s in sessions],
+        data=await session_service.to_responses(db, sessions),
         meta=PaginationMeta(cursor=last_id, limit=limit, has_more=has_more),
     )

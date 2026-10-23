@@ -1,23 +1,24 @@
 import uuid
 from datetime import date
 
+import anthropic
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.dependencies import get_trainer_id, validate_client_ownership, validate_session_ownership
 from app.database import get_db
-from app.models import EntryTypeEnum, SessionPlan
+from app.models import SessionPlan
 from app.schemas import (
     DataResponse,
     PaginationMeta,
     SessionCreate,
     SessionListResponse,
     SessionResponse,
+    SessionSummaryResponse,
     SessionUpdate,
-    WorkoutClassificationResponse,
 )
-from app.services import entry_service, session_service
-from app.services.workout_classifier import classify_workout
+from app.services import session_service
+from app.services.session_summary import summarize_session
 
 router = APIRouter(prefix="/sessions", tags=["sessions"])
 
@@ -36,7 +37,7 @@ async def list_sessions(
     )
     last_id = str(sessions[-1].id) if sessions else None
     return SessionListResponse(
-        data=[SessionResponse.model_validate(s) for s in sessions],
+        data=await session_service.to_responses(db, sessions),
         meta=PaginationMeta(cursor=last_id, limit=limit, has_more=has_more),
     )
 
@@ -59,7 +60,7 @@ async def create_session(
     session = await session_service.create_session(
         db, trainer_id=client.trainer_id, **body.model_dump()
     )
-    return {"data": SessionResponse.model_validate(session), "meta": {}}
+    return {"data": await session_service.to_response(db, session), "meta": {}}
 
 
 @router.get("/{session_id}", response_model=DataResponse[SessionResponse])
@@ -68,7 +69,7 @@ async def get_session(
     db: AsyncSession = Depends(get_db),
 ):
     session = await validate_session_ownership(db, session_id)
-    return {"data": SessionResponse.model_validate(session), "meta": {}}
+    return {"data": await session_service.to_response(db, session), "meta": {}}
 
 
 @router.patch("/{session_id}", response_model=DataResponse[SessionResponse])
@@ -94,26 +95,30 @@ async def update_session(
             raise HTTPException(status_code=422, detail="Plan does not belong to this client")
 
     updated = await session_service.update_session(db, session, **data)
-    return {"data": SessionResponse.model_validate(updated), "meta": {}}
+    return {"data": await session_service.to_response(db, updated), "meta": {}}
 
 
-@router.post("/{session_id}/classify", response_model=DataResponse[WorkoutClassificationResponse])
-async def classify_session_workout(
+@router.post("/{session_id}/summary", response_model=DataResponse[SessionSummaryResponse])
+async def summarize(
     session_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
 ):
-    await validate_session_ownership(db, session_id)
-    entries = await entry_service.list_entries_by_session(db, session_id)
-    canonical_names = [
-        e.exercise_canonical
-        for e in entries
-        if e.entry_type == EntryTypeEnum.exercise_card and e.exercise_canonical
-    ]
-    workout_type = classify_workout(canonical_names)
-    return {
-        "data": WorkoutClassificationResponse(workout_type=workout_type),
-        "meta": {},
-    }
+    """Claude's recap of a finished session, written on first request and stored.
+
+    Editing an entry clears it (entry_service), so the next request rewrites it.
+    A session with nothing recorded has no recap.
+    """
+    session = await validate_session_ownership(db, session_id)
+    if session.ended_at is None:
+        raise HTTPException(status_code=409, detail="Session has not ended yet")
+    if session.ai_summary is None:
+        try:
+            session.ai_summary = await summarize_session(db, session)
+        except anthropic.APIError as e:
+            raise HTTPException(status_code=502, detail="Could not write the summary right now") from e
+        await db.commit()
+        await db.refresh(session)
+    return {"data": SessionSummaryResponse(ai_summary=session.ai_summary), "meta": {}}
 
 
 @router.delete("/{session_id}", status_code=204)

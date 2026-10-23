@@ -136,6 +136,8 @@ class Session(Base):
     trainer_edited: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     plan_id: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), ForeignKey("session_plans.id", ondelete="SET NULL"))
     transcript_embedding = mapped_column(Vector(1536), nullable=True)
+    # Claude's 2-3 sentence recap, written once the session ends; cleared when an entry changes
+    ai_summary: Mapped[str | None] = mapped_column(Text)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 
