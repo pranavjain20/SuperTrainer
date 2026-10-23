@@ -1,0 +1,7498 @@
+{
+ "captured_at": "2026-10-23T03:17:16.422268+00:00",
+ "clients": [
+  {
+   "id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "trainer_id": "d249f14e-d3c0-4fa7-bda5-97d07c3b5179",
+   "name": "Elena Vasquez",
+   "email": "elena.v@email.com",
+   "phone": "+1-555-0205",
+   "birth_date": "1975-12-30",
+   "training_start_date": "2025-03-01",
+   "goals": [
+    "bone density",
+    "balance",
+    "maintain independence"
+   ],
+   "injury_history": "Osteoporosis diagnosis. Right hip replacement (2023). Chronic shoulder impingement left side.",
+   "preferred_weight_unit": "kg",
+   "archived": false,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "3fbdac27-fea3-4952-919a-a6d8ede40301",
+   "trainer_id": "d249f14e-d3c0-4fa7-bda5-97d07c3b5179",
+   "name": "Sarah Chen",
+   "email": "sarah.chen@email.com",
+   "phone": "+1-555-0201",
+   "birth_date": "1996-04-15",
+   "training_start_date": "2025-09-01",
+   "goals": [
+    "lose weight",
+    "build strength",
+    "run a 5K"
+   ],
+   "injury_history": "Mild lower back pain from desk job. No surgeries.",
+   "preferred_weight_unit": "kg",
+   "archived": false,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "trainer_id": "d249f14e-d3c0-4fa7-bda5-97d07c3b5179",
+   "name": "Jake Morrison",
+   "email": "jake.m@email.com",
+   "phone": "+1-555-0204",
+   "birth_date": "2001-02-08",
+   "training_start_date": "2025-11-01",
+   "goals": [
+    "muscle gain",
+    "improve posture"
+   ],
+   "injury_history": "None.",
+   "preferred_weight_unit": "kg",
+   "archived": false,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "c427b9bc-1744-400c-aea4-2514e178e6d4",
+   "trainer_id": "d249f14e-d3c0-4fa7-bda5-97d07c3b5179",
+   "name": "Marcus Johnson",
+   "email": "marcus.j@email.com",
+   "phone": "+1-555-0202",
+   "birth_date": "1990-11-03",
+   "training_start_date": "2025-06-15",
+   "goals": [
+    "powerlifting competition",
+    "increase squat to 200kg"
+   ],
+   "injury_history": "ACL repair right knee (2022). Cleared for full activity.",
+   "preferred_weight_unit": "kg",
+   "archived": false,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "d6e6a691-6bb7-47c8-b79d-fe5b90665855",
+   "trainer_id": "d249f14e-d3c0-4fa7-bda5-97d07c3b5179",
+   "name": "Aisha Patel",
+   "email": "aisha.p@email.com",
+   "phone": "+1-555-0203",
+   "birth_date": "1988-07-22",
+   "training_start_date": "2026-01-10",
+   "goals": [
+    "post-pregnancy recovery",
+    "core strength",
+    "general fitness"
+   ],
+   "injury_history": "Diastasis recti. C-section 8 months ago.",
+   "preferred_weight_unit": "kg",
+   "archived": false,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  }
+ ],
+ "sessions": [
+  {
+   "id": "0d773dde-e44c-4550-bfe0-3cbe8974a6c9",
+   "trainer_id": "d249f14e-d3c0-4fa7-bda5-97d07c3b5179",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "started_at": "2026-10-16T03:14:00.619709Z",
+   "ended_at": "2026-10-16T03:54:00.619709Z",
+   "scheduled_for": null,
+   "duration_minutes": 40,
+   "audio_url": null,
+   "audio_duration_seconds": null,
+   "raw_transcript": "Elena session 15 \u2014 steady progression",
+   "processing_status": "completed",
+   "trainer_edited": false,
+   "plan_id": "13b80797-c6a1-48f1-b2eb-a34f2e759688",
+   "created_at": "2026-10-23T03:14:00.368922Z",
+   "updated_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "a2e73b38-cf9b-49a4-8b4f-65c11e936445",
+   "trainer_id": "d249f14e-d3c0-4fa7-bda5-97d07c3b5179",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "started_at": "2026-10-09T03:14:00.619657Z",
+   "ended_at": "2026-10-09T03:54:00.619658Z",
+   "scheduled_for": null,
+   "duration_minutes": 40,
+   "audio_url": null,
+   "audio_duration_seconds": null,
+   "raw_transcript": "Elena session 14 \u2014 steady progression",
+   "processing_status": "completed",
+   "trainer_edited": false,
+   "plan_id": "13b80797-c6a1-48f1-b2eb-a34f2e759688",
+   "created_at": "2026-10-23T03:14:00.368922Z",
+   "updated_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "77f7a7dd-3786-4756-9df3-7fb93a801b07",
+   "trainer_id": "d249f14e-d3c0-4fa7-bda5-97d07c3b5179",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "started_at": "2026-10-02T03:14:00.619585Z",
+   "ended_at": "2026-10-02T03:54:00.619586Z",
+   "scheduled_for": null,
+   "duration_minutes": 40,
+   "audio_url": null,
+   "audio_duration_seconds": null,
+   "raw_transcript": "Elena session 13 \u2014 steady progression",
+   "processing_status": "completed",
+   "trainer_edited": false,
+   "plan_id": "13b80797-c6a1-48f1-b2eb-a34f2e759688",
+   "created_at": "2026-10-23T03:14:00.368922Z",
+   "updated_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "481067b1-b08f-4ba5-9250-865326616035",
+   "trainer_id": "d249f14e-d3c0-4fa7-bda5-97d07c3b5179",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "started_at": "2026-09-25T03:14:00.619532Z",
+   "ended_at": "2026-09-25T03:54:00.619533Z",
+   "scheduled_for": null,
+   "duration_minutes": 40,
+   "audio_url": null,
+   "audio_duration_seconds": null,
+   "raw_transcript": "Elena session 12 \u2014 steady progression",
+   "processing_status": "completed",
+   "trainer_edited": false,
+   "plan_id": "13b80797-c6a1-48f1-b2eb-a34f2e759688",
+   "created_at": "2026-10-23T03:14:00.368922Z",
+   "updated_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "df1ddf4b-9776-408e-aa04-205b05ab1908",
+   "trainer_id": "d249f14e-d3c0-4fa7-bda5-97d07c3b5179",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "started_at": "2026-09-18T03:14:00.619452Z",
+   "ended_at": "2026-09-18T03:54:00.619453Z",
+   "scheduled_for": null,
+   "duration_minutes": 40,
+   "audio_url": null,
+   "audio_duration_seconds": null,
+   "raw_transcript": "Elena session 11 \u2014 steady progression",
+   "processing_status": "completed",
+   "trainer_edited": false,
+   "plan_id": "13b80797-c6a1-48f1-b2eb-a34f2e759688",
+   "created_at": "2026-10-23T03:14:00.368922Z",
+   "updated_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "6a5507b7-5f46-47c3-8d24-7fdf45d1d88c",
+   "trainer_id": "d249f14e-d3c0-4fa7-bda5-97d07c3b5179",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "started_at": "2026-09-11T03:14:00.619400Z",
+   "ended_at": "2026-09-11T03:54:00.619401Z",
+   "scheduled_for": null,
+   "duration_minutes": 40,
+   "audio_url": null,
+   "audio_duration_seconds": null,
+   "raw_transcript": "Elena session 10 \u2014 steady progression",
+   "processing_status": "completed",
+   "trainer_edited": false,
+   "plan_id": "12c64024-00ca-4e49-925c-43dbf58f670e",
+   "created_at": "2026-10-23T03:14:00.368922Z",
+   "updated_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "96b073ec-f9bc-42e0-8a8d-75c550c61b5f",
+   "trainer_id": "d249f14e-d3c0-4fa7-bda5-97d07c3b5179",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "started_at": "2026-09-04T03:14:00.619326Z",
+   "ended_at": "2026-09-04T03:54:00.619327Z",
+   "scheduled_for": null,
+   "duration_minutes": 40,
+   "audio_url": null,
+   "audio_duration_seconds": null,
+   "raw_transcript": "Elena session 9 \u2014 steady progression",
+   "processing_status": "completed",
+   "trainer_edited": false,
+   "plan_id": "12c64024-00ca-4e49-925c-43dbf58f670e",
+   "created_at": "2026-10-23T03:14:00.368922Z",
+   "updated_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "59706c09-afde-4e97-b0ca-da3fcd263418",
+   "trainer_id": "d249f14e-d3c0-4fa7-bda5-97d07c3b5179",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "started_at": "2026-08-28T03:14:00.619274Z",
+   "ended_at": "2026-08-28T03:54:00.619275Z",
+   "scheduled_for": null,
+   "duration_minutes": 40,
+   "audio_url": null,
+   "audio_duration_seconds": null,
+   "raw_transcript": "Elena session 8 \u2014 steady progression",
+   "processing_status": "completed",
+   "trainer_edited": false,
+   "plan_id": "12c64024-00ca-4e49-925c-43dbf58f670e",
+   "created_at": "2026-10-23T03:14:00.368922Z",
+   "updated_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "b78c97a0-f0f1-4d35-8a36-3f3fa2f4bd37",
+   "trainer_id": "d249f14e-d3c0-4fa7-bda5-97d07c3b5179",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "started_at": "2026-08-21T03:14:00.619201Z",
+   "ended_at": "2026-08-21T03:54:00.619202Z",
+   "scheduled_for": null,
+   "duration_minutes": 40,
+   "audio_url": null,
+   "audio_duration_seconds": null,
+   "raw_transcript": "Elena session 7 \u2014 steady progression",
+   "processing_status": "completed",
+   "trainer_edited": false,
+   "plan_id": "12c64024-00ca-4e49-925c-43dbf58f670e",
+   "created_at": "2026-10-23T03:14:00.368922Z",
+   "updated_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "53118cce-6686-41c1-981b-e99adc1de93c",
+   "trainer_id": "d249f14e-d3c0-4fa7-bda5-97d07c3b5179",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "started_at": "2026-08-14T03:14:00.619148Z",
+   "ended_at": "2026-08-14T03:54:00.619149Z",
+   "scheduled_for": null,
+   "duration_minutes": 40,
+   "audio_url": null,
+   "audio_duration_seconds": null,
+   "raw_transcript": "Elena session 6 \u2014 steady progression",
+   "processing_status": "completed",
+   "trainer_edited": false,
+   "plan_id": "12c64024-00ca-4e49-925c-43dbf58f670e",
+   "created_at": "2026-10-23T03:14:00.368922Z",
+   "updated_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "31652af3-9d98-4d1b-b443-0c18d83442b1",
+   "trainer_id": "d249f14e-d3c0-4fa7-bda5-97d07c3b5179",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "started_at": "2026-08-07T03:14:00.619074Z",
+   "ended_at": "2026-08-07T03:54:00.619075Z",
+   "scheduled_for": null,
+   "duration_minutes": 40,
+   "audio_url": null,
+   "audio_duration_seconds": null,
+   "raw_transcript": "Elena session 5 \u2014 steady progression",
+   "processing_status": "completed",
+   "trainer_edited": false,
+   "plan_id": "dad214d6-c55e-400f-8124-50db1adc4a9d",
+   "created_at": "2026-10-23T03:14:00.368922Z",
+   "updated_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "7a9f5522-29bd-45bc-9384-3f63ce5d7957",
+   "trainer_id": "d249f14e-d3c0-4fa7-bda5-97d07c3b5179",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "started_at": "2026-07-31T03:14:00.619020Z",
+   "ended_at": "2026-07-31T03:54:00.619021Z",
+   "scheduled_for": null,
+   "duration_minutes": 40,
+   "audio_url": null,
+   "audio_duration_seconds": null,
+   "raw_transcript": "Elena session 4 \u2014 steady progression",
+   "processing_status": "completed",
+   "trainer_edited": false,
+   "plan_id": "dad214d6-c55e-400f-8124-50db1adc4a9d",
+   "created_at": "2026-10-23T03:14:00.368922Z",
+   "updated_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "1f0a3ae3-c6b8-4e1d-8441-7b804291cd1f",
+   "trainer_id": "d249f14e-d3c0-4fa7-bda5-97d07c3b5179",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "started_at": "2026-07-24T03:14:00.618940Z",
+   "ended_at": "2026-07-24T03:54:00.618941Z",
+   "scheduled_for": null,
+   "duration_minutes": 40,
+   "audio_url": null,
+   "audio_duration_seconds": null,
+   "raw_transcript": "Elena session 3 \u2014 steady progression",
+   "processing_status": "completed",
+   "trainer_edited": false,
+   "plan_id": "dad214d6-c55e-400f-8124-50db1adc4a9d",
+   "created_at": "2026-10-23T03:14:00.368922Z",
+   "updated_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "6b0820d6-bd6f-41f9-b23e-5f9eda0e4311",
+   "trainer_id": "d249f14e-d3c0-4fa7-bda5-97d07c3b5179",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "started_at": "2026-07-17T03:14:00.618881Z",
+   "ended_at": "2026-07-17T03:54:00.618882Z",
+   "scheduled_for": null,
+   "duration_minutes": 40,
+   "audio_url": null,
+   "audio_duration_seconds": null,
+   "raw_transcript": "Elena session 2 \u2014 steady progression",
+   "processing_status": "completed",
+   "trainer_edited": false,
+   "plan_id": "dad214d6-c55e-400f-8124-50db1adc4a9d",
+   "created_at": "2026-10-23T03:14:00.368922Z",
+   "updated_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "14bc3e53-174c-4f5a-afd0-00e365c67b14",
+   "trainer_id": "d249f14e-d3c0-4fa7-bda5-97d07c3b5179",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "started_at": "2026-07-10T03:14:00.618781Z",
+   "ended_at": "2026-07-10T03:54:00.618782Z",
+   "scheduled_for": null,
+   "duration_minutes": 40,
+   "audio_url": null,
+   "audio_duration_seconds": null,
+   "raw_transcript": "Elena session 1 \u2014 steady progression",
+   "processing_status": "completed",
+   "trainer_edited": false,
+   "plan_id": "dad214d6-c55e-400f-8124-50db1adc4a9d",
+   "created_at": "2026-10-23T03:14:00.368922Z",
+   "updated_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "57ee37f7-c5f7-45c8-abc8-13086d03df95",
+   "trainer_id": "d249f14e-d3c0-4fa7-bda5-97d07c3b5179",
+   "client_id": "3fbdac27-fea3-4952-919a-a6d8ede40301",
+   "started_at": "2026-10-20T03:14:00.543447Z",
+   "ended_at": "2026-10-20T04:04:00.543455Z",
+   "scheduled_for": null,
+   "duration_minutes": 50,
+   "audio_url": null,
+   "audio_duration_seconds": null,
+   "raw_transcript": "Sarah assessment session \u2014 movement screening, baseline measurements",
+   "processing_status": "completed",
+   "trainer_edited": false,
+   "plan_id": null,
+   "created_at": "2026-10-23T03:14:00.368922Z",
+   "updated_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "01ed850a-1ba3-461b-93d9-93792994c993",
+   "trainer_id": "d249f14e-d3c0-4fa7-bda5-97d07c3b5179",
+   "client_id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "started_at": "2026-10-16T03:14:00.602778Z",
+   "ended_at": "2026-10-16T04:14:00.602779Z",
+   "scheduled_for": null,
+   "duration_minutes": 60,
+   "audio_url": null,
+   "audio_duration_seconds": null,
+   "raw_transcript": "Jake session 10 \u2014 lower body",
+   "processing_status": "completed",
+   "trainer_edited": false,
+   "plan_id": "05e78b1f-f118-4044-bca7-4a0a842261a4",
+   "created_at": "2026-10-23T03:14:00.368922Z",
+   "updated_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "ea84cfb3-137e-48d7-adce-7540cef54e00",
+   "trainer_id": "d249f14e-d3c0-4fa7-bda5-97d07c3b5179",
+   "client_id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "started_at": "2026-10-09T03:14:00.602700Z",
+   "ended_at": "2026-10-09T04:14:00.602701Z",
+   "scheduled_for": null,
+   "duration_minutes": 60,
+   "audio_url": null,
+   "audio_duration_seconds": null,
+   "raw_transcript": "Jake session 9 \u2014 upper body",
+   "processing_status": "completed",
+   "trainer_edited": false,
+   "plan_id": "05e78b1f-f118-4044-bca7-4a0a842261a4",
+   "created_at": "2026-10-23T03:14:00.368922Z",
+   "updated_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "0089e60a-58a4-4bad-bfaf-36df6f7ebdea",
+   "trainer_id": "d249f14e-d3c0-4fa7-bda5-97d07c3b5179",
+   "client_id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "started_at": "2026-10-02T03:14:00.602631Z",
+   "ended_at": "2026-10-02T04:14:00.602632Z",
+   "scheduled_for": null,
+   "duration_minutes": 60,
+   "audio_url": null,
+   "audio_duration_seconds": null,
+   "raw_transcript": "Jake session 8 \u2014 lower body",
+   "processing_status": "completed",
+   "trainer_edited": false,
+   "plan_id": "05e78b1f-f118-4044-bca7-4a0a842261a4",
+   "created_at": "2026-10-23T03:14:00.368922Z",
+   "updated_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "942febdf-05ee-40be-851a-6799430a8013",
+   "trainer_id": "d249f14e-d3c0-4fa7-bda5-97d07c3b5179",
+   "client_id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "started_at": "2026-09-25T03:14:00.602566Z",
+   "ended_at": "2026-09-25T04:14:00.602567Z",
+   "scheduled_for": null,
+   "duration_minutes": 60,
+   "audio_url": null,
+   "audio_duration_seconds": null,
+   "raw_transcript": "Jake session 7 \u2014 upper body",
+   "processing_status": "completed",
+   "trainer_edited": false,
+   "plan_id": "05e78b1f-f118-4044-bca7-4a0a842261a4",
+   "created_at": "2026-10-23T03:14:00.368922Z",
+   "updated_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "f7ae8eb2-8752-4e01-9663-1c86ffbdd901",
+   "trainer_id": "d249f14e-d3c0-4fa7-bda5-97d07c3b5179",
+   "client_id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "started_at": "2026-09-18T03:14:00.602490Z",
+   "ended_at": "2026-09-18T04:14:00.602491Z",
+   "scheduled_for": null,
+   "duration_minutes": 60,
+   "audio_url": null,
+   "audio_duration_seconds": null,
+   "raw_transcript": "Jake session 6 \u2014 lower body",
+   "processing_status": "completed",
+   "trainer_edited": false,
+   "plan_id": "05e78b1f-f118-4044-bca7-4a0a842261a4",
+   "created_at": "2026-10-23T03:14:00.368922Z",
+   "updated_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "7c8029af-a1a8-437c-a271-5934f9e04a8f",
+   "trainer_id": "d249f14e-d3c0-4fa7-bda5-97d07c3b5179",
+   "client_id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "started_at": "2026-09-11T03:14:00.602423Z",
+   "ended_at": "2026-09-11T04:14:00.602424Z",
+   "scheduled_for": null,
+   "duration_minutes": 60,
+   "audio_url": null,
+   "audio_duration_seconds": null,
+   "raw_transcript": "Jake session 5 \u2014 upper body",
+   "processing_status": "completed",
+   "trainer_edited": false,
+   "plan_id": "8cd2113c-ca53-4eec-b7ad-42fdac92ca0f",
+   "created_at": "2026-10-23T03:14:00.368922Z",
+   "updated_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "92c00e18-8ba4-4248-a995-a8d2d249d2a1",
+   "trainer_id": "d249f14e-d3c0-4fa7-bda5-97d07c3b5179",
+   "client_id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "started_at": "2026-09-04T03:14:00.602353Z",
+   "ended_at": "2026-09-04T04:14:00.602355Z",
+   "scheduled_for": null,
+   "duration_minutes": 60,
+   "audio_url": null,
+   "audio_duration_seconds": null,
+   "raw_transcript": "Jake session 4 \u2014 lower body",
+   "processing_status": "completed",
+   "trainer_edited": false,
+   "plan_id": "8cd2113c-ca53-4eec-b7ad-42fdac92ca0f",
+   "created_at": "2026-10-23T03:14:00.368922Z",
+   "updated_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "73200f28-1fb3-4bc9-8221-9d23d60886ef",
+   "trainer_id": "d249f14e-d3c0-4fa7-bda5-97d07c3b5179",
+   "client_id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "started_at": "2026-08-28T03:14:00.602269Z",
+   "ended_at": "2026-08-28T04:14:00.602270Z",
+   "scheduled_for": null,
+   "duration_minutes": 60,
+   "audio_url": null,
+   "audio_duration_seconds": null,
+   "raw_transcript": "Jake session 3 \u2014 upper body",
+   "processing_status": "completed",
+   "trainer_edited": false,
+   "plan_id": "8cd2113c-ca53-4eec-b7ad-42fdac92ca0f",
+   "created_at": "2026-10-23T03:14:00.368922Z",
+   "updated_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "5fe8dce5-396c-4bc5-90f4-2592694daa0d",
+   "trainer_id": "d249f14e-d3c0-4fa7-bda5-97d07c3b5179",
+   "client_id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "started_at": "2026-08-21T03:14:00.602194Z",
+   "ended_at": "2026-08-21T04:14:00.602196Z",
+   "scheduled_for": null,
+   "duration_minutes": 60,
+   "audio_url": null,
+   "audio_duration_seconds": null,
+   "raw_transcript": "Jake session 2 \u2014 lower body",
+   "processing_status": "completed",
+   "trainer_edited": false,
+   "plan_id": "8cd2113c-ca53-4eec-b7ad-42fdac92ca0f",
+   "created_at": "2026-10-23T03:14:00.368922Z",
+   "updated_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "af871d14-3f96-401d-bb4a-e165a7802375",
+   "trainer_id": "d249f14e-d3c0-4fa7-bda5-97d07c3b5179",
+   "client_id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "started_at": "2026-08-14T03:14:00.602097Z",
+   "ended_at": "2026-08-14T04:14:00.602099Z",
+   "scheduled_for": null,
+   "duration_minutes": 60,
+   "audio_url": null,
+   "audio_duration_seconds": null,
+   "raw_transcript": "Jake session 1 \u2014 upper body",
+   "processing_status": "completed",
+   "trainer_edited": false,
+   "plan_id": "8cd2113c-ca53-4eec-b7ad-42fdac92ca0f",
+   "created_at": "2026-10-23T03:14:00.368922Z",
+   "updated_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "3e8af800-bb11-4f68-ba4c-de3119981479",
+   "trainer_id": "d249f14e-d3c0-4fa7-bda5-97d07c3b5179",
+   "client_id": "c427b9bc-1744-400c-aea4-2514e178e6d4",
+   "started_at": "2026-10-16T03:14:00.575581Z",
+   "ended_at": "2026-10-16T04:29:00.575582Z",
+   "scheduled_for": null,
+   "duration_minutes": 75,
+   "audio_url": null,
+   "audio_duration_seconds": null,
+   "raw_transcript": "Marcus session 3 \u2014 heavy compound day",
+   "processing_status": "completed",
+   "trainer_edited": false,
+   "plan_id": null,
+   "created_at": "2026-10-23T03:14:00.368922Z",
+   "updated_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "f653ece9-8ca2-44a0-9484-7651d886c51d",
+   "trainer_id": "d249f14e-d3c0-4fa7-bda5-97d07c3b5179",
+   "client_id": "c427b9bc-1744-400c-aea4-2514e178e6d4",
+   "started_at": "2026-10-09T03:14:00.575476Z",
+   "ended_at": "2026-10-09T04:29:00.575479Z",
+   "scheduled_for": null,
+   "duration_minutes": 75,
+   "audio_url": null,
+   "audio_duration_seconds": null,
+   "raw_transcript": "Marcus session 2 \u2014 heavy compound day",
+   "processing_status": "completed",
+   "trainer_edited": false,
+   "plan_id": null,
+   "created_at": "2026-10-23T03:14:00.368922Z",
+   "updated_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "0028cf12-9313-4f19-8418-da4cd7907d6c",
+   "trainer_id": "d249f14e-d3c0-4fa7-bda5-97d07c3b5179",
+   "client_id": "c427b9bc-1744-400c-aea4-2514e178e6d4",
+   "started_at": "2026-10-02T03:14:00.575315Z",
+   "ended_at": "2026-10-02T04:29:00.575322Z",
+   "scheduled_for": null,
+   "duration_minutes": 75,
+   "audio_url": null,
+   "audio_duration_seconds": null,
+   "raw_transcript": "Marcus session 1 \u2014 heavy compound day",
+   "processing_status": "completed",
+   "trainer_edited": false,
+   "plan_id": null,
+   "created_at": "2026-10-23T03:14:00.368922Z",
+   "updated_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "5aa91adb-c280-43ee-ab69-e8641d6257a3",
+   "trainer_id": "d249f14e-d3c0-4fa7-bda5-97d07c3b5179",
+   "client_id": "d6e6a691-6bb7-47c8-b79d-fe5b90665855",
+   "started_at": "2026-10-21T03:14:00.586138Z",
+   "ended_at": "2026-10-21T03:59:00.586139Z",
+   "scheduled_for": null,
+   "duration_minutes": 45,
+   "audio_url": null,
+   "audio_duration_seconds": null,
+   "raw_transcript": "Aisha session 5 \u2014 post-natal recovery",
+   "processing_status": "completed",
+   "trainer_edited": false,
+   "plan_id": "1a8f5194-ca93-456b-9e26-723e0dcef216",
+   "created_at": "2026-10-23T03:14:00.368922Z",
+   "updated_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "24cb344d-33ab-48b3-8efe-9484e2c7754b",
+   "trainer_id": "d249f14e-d3c0-4fa7-bda5-97d07c3b5179",
+   "client_id": "d6e6a691-6bb7-47c8-b79d-fe5b90665855",
+   "started_at": "2026-10-16T03:14:00.586064Z",
+   "ended_at": "2026-10-16T03:59:00.586065Z",
+   "scheduled_for": null,
+   "duration_minutes": 45,
+   "audio_url": null,
+   "audio_duration_seconds": null,
+   "raw_transcript": "Aisha session 4 \u2014 post-natal recovery",
+   "processing_status": "completed",
+   "trainer_edited": false,
+   "plan_id": "1a8f5194-ca93-456b-9e26-723e0dcef216",
+   "created_at": "2026-10-23T03:14:00.368922Z",
+   "updated_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "06369595-6fe8-43b0-986f-d295b84854b1",
+   "trainer_id": "d249f14e-d3c0-4fa7-bda5-97d07c3b5179",
+   "client_id": "d6e6a691-6bb7-47c8-b79d-fe5b90665855",
+   "started_at": "2026-10-09T03:14:00.585988Z",
+   "ended_at": "2026-10-09T03:59:00.585989Z",
+   "scheduled_for": null,
+   "duration_minutes": 45,
+   "audio_url": null,
+   "audio_duration_seconds": null,
+   "raw_transcript": "Aisha session 3 \u2014 post-natal recovery",
+   "processing_status": "completed",
+   "trainer_edited": false,
+   "plan_id": "1a8f5194-ca93-456b-9e26-723e0dcef216",
+   "created_at": "2026-10-23T03:14:00.368922Z",
+   "updated_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "74c65068-4bb0-4ff4-9acd-e2e1d9b91019",
+   "trainer_id": "d249f14e-d3c0-4fa7-bda5-97d07c3b5179",
+   "client_id": "d6e6a691-6bb7-47c8-b79d-fe5b90665855",
+   "started_at": "2026-10-02T03:14:00.585921Z",
+   "ended_at": "2026-10-02T03:59:00.585922Z",
+   "scheduled_for": null,
+   "duration_minutes": 45,
+   "audio_url": null,
+   "audio_duration_seconds": null,
+   "raw_transcript": "Aisha session 2 \u2014 post-natal recovery",
+   "processing_status": "completed",
+   "trainer_edited": false,
+   "plan_id": null,
+   "created_at": "2026-10-23T03:14:00.368922Z",
+   "updated_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "6dbb7574-5e18-4c41-9b7b-b91cf58d99c9",
+   "trainer_id": "d249f14e-d3c0-4fa7-bda5-97d07c3b5179",
+   "client_id": "d6e6a691-6bb7-47c8-b79d-fe5b90665855",
+   "started_at": "2026-09-25T03:14:00.585826Z",
+   "ended_at": "2026-09-25T03:59:00.585829Z",
+   "scheduled_for": null,
+   "duration_minutes": 45,
+   "audio_url": null,
+   "audio_duration_seconds": null,
+   "raw_transcript": "Aisha session 1 \u2014 post-natal recovery",
+   "processing_status": "completed",
+   "trainer_edited": false,
+   "plan_id": null,
+   "created_at": "2026-10-23T03:14:00.368922Z",
+   "updated_at": "2026-10-23T03:14:00.368922Z"
+  }
+ ],
+ "entries": [
+  {
+   "id": "883653d6-ae6e-4c72-8997-02bf94eed620",
+   "session_id": "0d773dde-e44c-4550-bfe0-3cbe8974a6c9",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "exercise_card",
+   "sequence_order": 1,
+   "exercise_name": "Leg Press",
+   "exercise_canonical": "leg_press",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 12,
+     "weight_kg": 55.0
+    },
+    {
+     "set": 2,
+     "reps": 12,
+     "weight_kg": 55.0
+    },
+    {
+     "set": 3,
+     "reps": 12,
+     "weight_kg": 55.0
+    }
+   ],
+   "total_volume_kg": 1980.0,
+   "form_notes": [
+    "monitoring right hip"
+   ],
+   "cues_given": [
+    "don't lock knees",
+    "controlled descent"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "c830ebb9-ff1c-4b9b-95ea-23acc51c342e",
+   "session_id": "0d773dde-e44c-4550-bfe0-3cbe8974a6c9",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "exercise_card",
+   "sequence_order": 2,
+   "exercise_name": "Seated Row",
+   "exercise_canonical": "seated_row",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 12,
+     "weight_kg": 20.0
+    },
+    {
+     "set": 2,
+     "reps": 12,
+     "weight_kg": 20.0
+    },
+    {
+     "set": 3,
+     "reps": 12,
+     "weight_kg": 20.0
+    }
+   ],
+   "total_volume_kg": 720.0,
+   "form_notes": [
+    "good retraction"
+   ],
+   "cues_given": [
+    "squeeze shoulder blades",
+    "pull to belly button"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "a5930104-c57b-4e54-aa31-d89cf481e597",
+   "session_id": "0d773dde-e44c-4550-bfe0-3cbe8974a6c9",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "exercise_card",
+   "sequence_order": 3,
+   "exercise_name": "Step-Ups",
+   "exercise_canonical": "step_ups",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 8,
+     "weight_kg": 0
+    },
+    {
+     "set": 2,
+     "reps": 8,
+     "weight_kg": 0
+    },
+    {
+     "set": 3,
+     "reps": 8,
+     "weight_kg": 0
+    }
+   ],
+   "total_volume_kg": 0.0,
+   "form_notes": [
+    "balance improving"
+   ],
+   "cues_given": [
+    "drive through heel",
+    "stand tall at top"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "ce7c9e24-c4ce-460d-aba1-cd3ea9f47568",
+   "session_id": "0d773dde-e44c-4550-bfe0-3cbe8974a6c9",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "observation_card",
+   "sequence_order": 4,
+   "exercise_name": null,
+   "exercise_canonical": null,
+   "sets": null,
+   "total_volume_kg": null,
+   "form_notes": null,
+   "cues_given": null,
+   "cue_effectiveness": null,
+   "observation_text": "Great session. 15 weeks in \u2014 visible improvements in posture and confidence.",
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "f1882824-54f0-49b1-98a1-0e5ca57f5c26",
+   "session_id": "a2e73b38-cf9b-49a4-8b4f-65c11e936445",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "exercise_card",
+   "sequence_order": 1,
+   "exercise_name": "Leg Press",
+   "exercise_canonical": "leg_press",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 12,
+     "weight_kg": 52.5
+    },
+    {
+     "set": 2,
+     "reps": 12,
+     "weight_kg": 52.5
+    },
+    {
+     "set": 3,
+     "reps": 12,
+     "weight_kg": 52.5
+    }
+   ],
+   "total_volume_kg": 1890.0,
+   "form_notes": [
+    "monitoring right hip"
+   ],
+   "cues_given": [
+    "don't lock knees",
+    "controlled descent"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "93d01a62-7243-4392-bb4c-d002b5ad870e",
+   "session_id": "a2e73b38-cf9b-49a4-8b4f-65c11e936445",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "exercise_card",
+   "sequence_order": 2,
+   "exercise_name": "Seated Row",
+   "exercise_canonical": "seated_row",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 12,
+     "weight_kg": 20.0
+    },
+    {
+     "set": 2,
+     "reps": 12,
+     "weight_kg": 20.0
+    },
+    {
+     "set": 3,
+     "reps": 12,
+     "weight_kg": 20.0
+    }
+   ],
+   "total_volume_kg": 720.0,
+   "form_notes": [
+    "good retraction"
+   ],
+   "cues_given": [
+    "squeeze shoulder blades",
+    "pull to belly button"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "3d378bde-b404-4ae7-ac98-7a11cb669dd5",
+   "session_id": "77f7a7dd-3786-4756-9df3-7fb93a801b07",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "exercise_card",
+   "sequence_order": 1,
+   "exercise_name": "Leg Press",
+   "exercise_canonical": "leg_press",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 12,
+     "weight_kg": 50.0
+    },
+    {
+     "set": 2,
+     "reps": 12,
+     "weight_kg": 50.0
+    },
+    {
+     "set": 3,
+     "reps": 12,
+     "weight_kg": 50.0
+    }
+   ],
+   "total_volume_kg": 1800.0,
+   "form_notes": [
+    "monitoring right hip"
+   ],
+   "cues_given": [
+    "don't lock knees",
+    "controlled descent"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "2e9c5c78-51b0-4549-b938-ed8f19f30b6c",
+   "session_id": "77f7a7dd-3786-4756-9df3-7fb93a801b07",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "exercise_card",
+   "sequence_order": 2,
+   "exercise_name": "Seated Row",
+   "exercise_canonical": "seated_row",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 12,
+     "weight_kg": 20.0
+    },
+    {
+     "set": 2,
+     "reps": 12,
+     "weight_kg": 20.0
+    },
+    {
+     "set": 3,
+     "reps": 12,
+     "weight_kg": 20.0
+    }
+   ],
+   "total_volume_kg": 720.0,
+   "form_notes": [
+    "good retraction"
+   ],
+   "cues_given": [
+    "squeeze shoulder blades",
+    "pull to belly button"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "22c8cc00-eb5a-4c80-ad45-d2da48e3f336",
+   "session_id": "77f7a7dd-3786-4756-9df3-7fb93a801b07",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "exercise_card",
+   "sequence_order": 3,
+   "exercise_name": "Step-Ups",
+   "exercise_canonical": "step_ups",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 8,
+     "weight_kg": 0
+    },
+    {
+     "set": 2,
+     "reps": 8,
+     "weight_kg": 0
+    },
+    {
+     "set": 3,
+     "reps": 8,
+     "weight_kg": 0
+    }
+   ],
+   "total_volume_kg": 0.0,
+   "form_notes": [
+    "balance improving"
+   ],
+   "cues_given": [
+    "drive through heel",
+    "stand tall at top"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "81cdde58-700d-4d4f-8010-b11c7dc3cf2b",
+   "session_id": "77f7a7dd-3786-4756-9df3-7fb93a801b07",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "observation_card",
+   "sequence_order": 4,
+   "exercise_name": null,
+   "exercise_canonical": null,
+   "sets": null,
+   "total_volume_kg": null,
+   "form_notes": null,
+   "cues_given": null,
+   "cue_effectiveness": null,
+   "observation_text": "Hip still bothering her but manageable. Leg press feels strong at 50kg.",
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "d0a02813-6b05-44ac-89e8-9ce7bbc95d92",
+   "session_id": "481067b1-b08f-4ba5-9250-865326616035",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "exercise_card",
+   "sequence_order": 1,
+   "exercise_name": "Leg Press",
+   "exercise_canonical": "leg_press",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 12,
+     "weight_kg": 50.0
+    },
+    {
+     "set": 2,
+     "reps": 12,
+     "weight_kg": 50.0
+    },
+    {
+     "set": 3,
+     "reps": 12,
+     "weight_kg": 50.0
+    }
+   ],
+   "total_volume_kg": 1800.0,
+   "form_notes": [
+    "monitoring right hip"
+   ],
+   "cues_given": [
+    "don't lock knees",
+    "controlled descent"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "768f95b4-c524-4bad-b290-73d301a02c6a",
+   "session_id": "481067b1-b08f-4ba5-9250-865326616035",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "exercise_card",
+   "sequence_order": 2,
+   "exercise_name": "Seated Row",
+   "exercise_canonical": "seated_row",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 12,
+     "weight_kg": 20.0
+    },
+    {
+     "set": 2,
+     "reps": 12,
+     "weight_kg": 20.0
+    },
+    {
+     "set": 3,
+     "reps": 12,
+     "weight_kg": 20.0
+    }
+   ],
+   "total_volume_kg": 720.0,
+   "form_notes": [
+    "good retraction"
+   ],
+   "cues_given": [
+    "squeeze shoulder blades",
+    "pull to belly button"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "93bb724c-833f-45a1-9ecd-77b1a9f55c45",
+   "session_id": "df1ddf4b-9776-408e-aa04-205b05ab1908",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "exercise_card",
+   "sequence_order": 1,
+   "exercise_name": "Leg Press",
+   "exercise_canonical": "leg_press",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 12,
+     "weight_kg": 47.5
+    },
+    {
+     "set": 2,
+     "reps": 12,
+     "weight_kg": 47.5
+    },
+    {
+     "set": 3,
+     "reps": 12,
+     "weight_kg": 47.5
+    }
+   ],
+   "total_volume_kg": 1710.0,
+   "form_notes": [
+    "full ROM",
+    "no hip pain"
+   ],
+   "cues_given": [
+    "don't lock knees",
+    "controlled descent"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "0a82c83c-5466-4459-8043-8ffba5dd8ca5",
+   "session_id": "df1ddf4b-9776-408e-aa04-205b05ab1908",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "exercise_card",
+   "sequence_order": 2,
+   "exercise_name": "Seated Row",
+   "exercise_canonical": "seated_row",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 12,
+     "weight_kg": 20.0
+    },
+    {
+     "set": 2,
+     "reps": 12,
+     "weight_kg": 20.0
+    },
+    {
+     "set": 3,
+     "reps": 12,
+     "weight_kg": 20.0
+    }
+   ],
+   "total_volume_kg": 720.0,
+   "form_notes": [
+    "good retraction"
+   ],
+   "cues_given": [
+    "squeeze shoulder blades",
+    "pull to belly button"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "c0d60e85-2e40-4e39-895f-dfba7b03c378",
+   "session_id": "df1ddf4b-9776-408e-aa04-205b05ab1908",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "exercise_card",
+   "sequence_order": 3,
+   "exercise_name": "Step-Ups",
+   "exercise_canonical": "step_ups",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 8,
+     "weight_kg": 0
+    },
+    {
+     "set": 2,
+     "reps": 8,
+     "weight_kg": 0
+    },
+    {
+     "set": 3,
+     "reps": 8,
+     "weight_kg": 0
+    }
+   ],
+   "total_volume_kg": 0.0,
+   "form_notes": [
+    "balance improving"
+   ],
+   "cues_given": [
+    "drive through heel",
+    "stand tall at top"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "bd01573b-ab9b-4d0d-8dfa-5f1f52b6d234",
+   "session_id": "df1ddf4b-9776-408e-aa04-205b05ab1908",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "observation_card",
+   "sequence_order": 4,
+   "exercise_name": null,
+   "exercise_canonical": null,
+   "sets": null,
+   "total_volume_kg": null,
+   "form_notes": null,
+   "cues_given": null,
+   "cue_effectiveness": null,
+   "observation_text": "Mentioned right hip stiffness after gardening. Reducing step-up box height.",
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "577d44ee-10eb-436d-a6fe-1114bd969a8d",
+   "session_id": "6a5507b7-5f46-47c3-8d24-7fdf45d1d88c",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "exercise_card",
+   "sequence_order": 1,
+   "exercise_name": "Leg Press",
+   "exercise_canonical": "leg_press",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 10,
+     "weight_kg": 47.5
+    },
+    {
+     "set": 2,
+     "reps": 10,
+     "weight_kg": 47.5
+    },
+    {
+     "set": 3,
+     "reps": 10,
+     "weight_kg": 47.5
+    }
+   ],
+   "total_volume_kg": 1425.0,
+   "form_notes": [
+    "full ROM",
+    "no hip pain"
+   ],
+   "cues_given": [
+    "don't lock knees",
+    "controlled descent"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "f54c4b9d-2e58-42be-b272-1b8166ad34df",
+   "session_id": "6a5507b7-5f46-47c3-8d24-7fdf45d1d88c",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "exercise_card",
+   "sequence_order": 2,
+   "exercise_name": "Seated Row",
+   "exercise_canonical": "seated_row",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 12,
+     "weight_kg": 20.0
+    },
+    {
+     "set": 2,
+     "reps": 12,
+     "weight_kg": 20.0
+    },
+    {
+     "set": 3,
+     "reps": 12,
+     "weight_kg": 20.0
+    }
+   ],
+   "total_volume_kg": 720.0,
+   "form_notes": [
+    "good retraction"
+   ],
+   "cues_given": [
+    "squeeze shoulder blades",
+    "pull to belly button"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "2185a41e-8c7d-4f47-9b19-836d1dea22f0",
+   "session_id": "96b073ec-f9bc-42e0-8a8d-75c550c61b5f",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "exercise_card",
+   "sequence_order": 1,
+   "exercise_name": "Leg Press",
+   "exercise_canonical": "leg_press",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 10,
+     "weight_kg": 45.0
+    },
+    {
+     "set": 2,
+     "reps": 10,
+     "weight_kg": 45.0
+    },
+    {
+     "set": 3,
+     "reps": 10,
+     "weight_kg": 45.0
+    }
+   ],
+   "total_volume_kg": 1350.0,
+   "form_notes": [
+    "full ROM",
+    "no hip pain"
+   ],
+   "cues_given": [
+    "don't lock knees",
+    "controlled descent"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "22122e86-d68b-4e40-8913-a772556ebaef",
+   "session_id": "96b073ec-f9bc-42e0-8a8d-75c550c61b5f",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "exercise_card",
+   "sequence_order": 2,
+   "exercise_name": "Seated Row",
+   "exercise_canonical": "seated_row",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 12,
+     "weight_kg": 20.0
+    },
+    {
+     "set": 2,
+     "reps": 12,
+     "weight_kg": 20.0
+    },
+    {
+     "set": 3,
+     "reps": 12,
+     "weight_kg": 20.0
+    }
+   ],
+   "total_volume_kg": 720.0,
+   "form_notes": [
+    "good retraction"
+   ],
+   "cues_given": [
+    "squeeze shoulder blades",
+    "pull to belly button"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "4498dc65-b654-411c-aa2c-1c9f375b4d01",
+   "session_id": "96b073ec-f9bc-42e0-8a8d-75c550c61b5f",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "exercise_card",
+   "sequence_order": 3,
+   "exercise_name": "Step-Ups",
+   "exercise_canonical": "step_ups",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 8,
+     "weight_kg": 0
+    },
+    {
+     "set": 2,
+     "reps": 8,
+     "weight_kg": 0
+    },
+    {
+     "set": 3,
+     "reps": 8,
+     "weight_kg": 0
+    }
+   ],
+   "total_volume_kg": 0.0,
+   "form_notes": [
+    "balance improving"
+   ],
+   "cues_given": [
+    "drive through heel",
+    "stand tall at top"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "e2991339-98f4-45d2-9c0e-a680c92701a8",
+   "session_id": "96b073ec-f9bc-42e0-8a8d-75c550c61b5f",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "observation_card",
+   "sequence_order": 4,
+   "exercise_name": null,
+   "exercise_canonical": null,
+   "sets": null,
+   "total_volume_kg": null,
+   "form_notes": null,
+   "cues_given": null,
+   "cue_effectiveness": null,
+   "observation_text": "Steady progress. Balance on step-ups much improved. Confident in the gym now.",
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "612f9fa2-028f-49ed-8324-b119e723e97a",
+   "session_id": "59706c09-afde-4e97-b0ca-da3fcd263418",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "exercise_card",
+   "sequence_order": 1,
+   "exercise_name": "Leg Press",
+   "exercise_canonical": "leg_press",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 10,
+     "weight_kg": 45.0
+    },
+    {
+     "set": 2,
+     "reps": 10,
+     "weight_kg": 45.0
+    },
+    {
+     "set": 3,
+     "reps": 10,
+     "weight_kg": 45.0
+    }
+   ],
+   "total_volume_kg": 1350.0,
+   "form_notes": [
+    "full ROM",
+    "no hip pain"
+   ],
+   "cues_given": [
+    "don't lock knees",
+    "controlled descent"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "0877b74c-501f-4deb-9a94-a4c79cae5f73",
+   "session_id": "59706c09-afde-4e97-b0ca-da3fcd263418",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "exercise_card",
+   "sequence_order": 2,
+   "exercise_name": "Seated Row",
+   "exercise_canonical": "seated_row",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 12,
+     "weight_kg": 20.0
+    },
+    {
+     "set": 2,
+     "reps": 12,
+     "weight_kg": 20.0
+    },
+    {
+     "set": 3,
+     "reps": 12,
+     "weight_kg": 20.0
+    }
+   ],
+   "total_volume_kg": 720.0,
+   "form_notes": [
+    "good retraction"
+   ],
+   "cues_given": [
+    "squeeze shoulder blades",
+    "pull to belly button"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "e473a8b9-9ae4-4153-a180-d3986ae4825a",
+   "session_id": "b78c97a0-f0f1-4d35-8a36-3f3fa2f4bd37",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "exercise_card",
+   "sequence_order": 1,
+   "exercise_name": "Leg Press",
+   "exercise_canonical": "leg_press",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 10,
+     "weight_kg": 42.5
+    },
+    {
+     "set": 2,
+     "reps": 10,
+     "weight_kg": 42.5
+    },
+    {
+     "set": 3,
+     "reps": 10,
+     "weight_kg": 42.5
+    }
+   ],
+   "total_volume_kg": 1275.0,
+   "form_notes": [
+    "full ROM",
+    "no hip pain"
+   ],
+   "cues_given": [
+    "don't lock knees",
+    "controlled descent"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "3ff7ccc9-5491-421c-b11b-8e371569f3d5",
+   "session_id": "b78c97a0-f0f1-4d35-8a36-3f3fa2f4bd37",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "exercise_card",
+   "sequence_order": 2,
+   "exercise_name": "Seated Row",
+   "exercise_canonical": "seated_row",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 12,
+     "weight_kg": 20.0
+    },
+    {
+     "set": 2,
+     "reps": 12,
+     "weight_kg": 20.0
+    },
+    {
+     "set": 3,
+     "reps": 12,
+     "weight_kg": 20.0
+    }
+   ],
+   "total_volume_kg": 720.0,
+   "form_notes": [
+    "good retraction"
+   ],
+   "cues_given": [
+    "squeeze shoulder blades",
+    "pull to belly button"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "4f2679c8-74e2-46ca-b923-047826877205",
+   "session_id": "b78c97a0-f0f1-4d35-8a36-3f3fa2f4bd37",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "exercise_card",
+   "sequence_order": 3,
+   "exercise_name": "Step-Ups",
+   "exercise_canonical": "step_ups",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 8,
+     "weight_kg": 0
+    },
+    {
+     "set": 2,
+     "reps": 8,
+     "weight_kg": 0
+    },
+    {
+     "set": 3,
+     "reps": 8,
+     "weight_kg": 0
+    }
+   ],
+   "total_volume_kg": 0.0,
+   "form_notes": [
+    "balance improving"
+   ],
+   "cues_given": [
+    "drive through heel",
+    "stand tall at top"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "58c0ca2e-2f1c-49c3-88b3-6210465322bc",
+   "session_id": "b78c97a0-f0f1-4d35-8a36-3f3fa2f4bd37",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "observation_card",
+   "sequence_order": 4,
+   "exercise_name": null,
+   "exercise_canonical": null,
+   "sets": null,
+   "total_volume_kg": null,
+   "form_notes": null,
+   "cues_given": null,
+   "cue_effectiveness": null,
+   "observation_text": "Shoulder feeling better. Added band pull-aparts as prehab. Good session.",
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "4b7877b1-138e-4c69-b005-99604f510d7d",
+   "session_id": "53118cce-6686-41c1-981b-e99adc1de93c",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "exercise_card",
+   "sequence_order": 1,
+   "exercise_name": "Leg Press",
+   "exercise_canonical": "leg_press",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 10,
+     "weight_kg": 42.5
+    },
+    {
+     "set": 2,
+     "reps": 10,
+     "weight_kg": 42.5
+    },
+    {
+     "set": 3,
+     "reps": 10,
+     "weight_kg": 42.5
+    }
+   ],
+   "total_volume_kg": 1275.0,
+   "form_notes": [
+    "full ROM",
+    "no hip pain"
+   ],
+   "cues_given": [
+    "don't lock knees",
+    "controlled descent"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "156f37a2-e83c-485a-9afd-77b5a28c0983",
+   "session_id": "53118cce-6686-41c1-981b-e99adc1de93c",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "exercise_card",
+   "sequence_order": 2,
+   "exercise_name": "Seated Row",
+   "exercise_canonical": "seated_row",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 12,
+     "weight_kg": 20.0
+    },
+    {
+     "set": 2,
+     "reps": 12,
+     "weight_kg": 20.0
+    },
+    {
+     "set": 3,
+     "reps": 12,
+     "weight_kg": 20.0
+    }
+   ],
+   "total_volume_kg": 720.0,
+   "form_notes": [
+    "good retraction"
+   ],
+   "cues_given": [
+    "squeeze shoulder blades",
+    "pull to belly button"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "5867d812-55ad-4cf4-96d8-edad807e962b",
+   "session_id": "31652af3-9d98-4d1b-b443-0c18d83442b1",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "exercise_card",
+   "sequence_order": 1,
+   "exercise_name": "Leg Press",
+   "exercise_canonical": "leg_press",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 10,
+     "weight_kg": 40.0
+    },
+    {
+     "set": 2,
+     "reps": 10,
+     "weight_kg": 40.0
+    },
+    {
+     "set": 3,
+     "reps": 10,
+     "weight_kg": 40.0
+    }
+   ],
+   "total_volume_kg": 1200.0,
+   "form_notes": [
+    "full ROM",
+    "no hip pain"
+   ],
+   "cues_given": [
+    "don't lock knees",
+    "controlled descent"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "34aeddc8-4293-4a1c-85f3-f9f9bb739f62",
+   "session_id": "31652af3-9d98-4d1b-b443-0c18d83442b1",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "exercise_card",
+   "sequence_order": 2,
+   "exercise_name": "Seated Row",
+   "exercise_canonical": "seated_row",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 12,
+     "weight_kg": 20.0
+    },
+    {
+     "set": 2,
+     "reps": 12,
+     "weight_kg": 20.0
+    },
+    {
+     "set": 3,
+     "reps": 12,
+     "weight_kg": 20.0
+    }
+   ],
+   "total_volume_kg": 720.0,
+   "form_notes": [
+    "good retraction"
+   ],
+   "cues_given": [
+    "squeeze shoulder blades",
+    "pull to belly button"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "336a869f-d164-4732-be11-b104f6ae1420",
+   "session_id": "31652af3-9d98-4d1b-b443-0c18d83442b1",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "exercise_card",
+   "sequence_order": 3,
+   "exercise_name": "Step-Ups",
+   "exercise_canonical": "step_ups",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 8,
+     "weight_kg": 0
+    },
+    {
+     "set": 2,
+     "reps": 8,
+     "weight_kg": 0
+    },
+    {
+     "set": 3,
+     "reps": 8,
+     "weight_kg": 0
+    }
+   ],
+   "total_volume_kg": 0.0,
+   "form_notes": [
+    "using rail for support"
+   ],
+   "cues_given": [
+    "drive through heel",
+    "stand tall at top"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "cf8a629c-6211-4e3c-92c7-c8e7ec23917f",
+   "session_id": "31652af3-9d98-4d1b-b443-0c18d83442b1",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "observation_card",
+   "sequence_order": 4,
+   "exercise_name": null,
+   "exercise_canonical": null,
+   "sets": null,
+   "total_volume_kg": null,
+   "form_notes": null,
+   "cues_given": null,
+   "cue_effectiveness": null,
+   "observation_text": "Left shoulder flaring \u2014 avoided overhead movements. Using ice after sessions.",
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "9a263935-dfa9-4d14-abf4-7bfa81b64e58",
+   "session_id": "7a9f5522-29bd-45bc-9384-3f63ce5d7957",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "exercise_card",
+   "sequence_order": 1,
+   "exercise_name": "Leg Press",
+   "exercise_canonical": "leg_press",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 10,
+     "weight_kg": 37.5
+    },
+    {
+     "set": 2,
+     "reps": 10,
+     "weight_kg": 37.5
+    },
+    {
+     "set": 3,
+     "reps": 10,
+     "weight_kg": 37.5
+    }
+   ],
+   "total_volume_kg": 1125.0,
+   "form_notes": [
+    "full ROM",
+    "no hip pain"
+   ],
+   "cues_given": [
+    "don't lock knees",
+    "controlled descent"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "8ea4726e-c376-467b-8c2f-c3576f1230f3",
+   "session_id": "7a9f5522-29bd-45bc-9384-3f63ce5d7957",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "exercise_card",
+   "sequence_order": 2,
+   "exercise_name": "Seated Row",
+   "exercise_canonical": "seated_row",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 12,
+     "weight_kg": 20.0
+    },
+    {
+     "set": 2,
+     "reps": 12,
+     "weight_kg": 20.0
+    },
+    {
+     "set": 3,
+     "reps": 12,
+     "weight_kg": 20.0
+    }
+   ],
+   "total_volume_kg": 720.0,
+   "form_notes": [
+    "pulling with arms, cueing lats"
+   ],
+   "cues_given": [
+    "squeeze shoulder blades",
+    "pull to belly button"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "eecb52b9-3cdb-4f1d-8482-5c3e1b00a1b9",
+   "session_id": "1f0a3ae3-c6b8-4e1d-8441-7b804291cd1f",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "exercise_card",
+   "sequence_order": 1,
+   "exercise_name": "Leg Press",
+   "exercise_canonical": "leg_press",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 10,
+     "weight_kg": 35.0
+    },
+    {
+     "set": 2,
+     "reps": 10,
+     "weight_kg": 35.0
+    },
+    {
+     "set": 3,
+     "reps": 10,
+     "weight_kg": 35.0
+    }
+   ],
+   "total_volume_kg": 1050.0,
+   "form_notes": [
+    "full ROM",
+    "no hip pain"
+   ],
+   "cues_given": [
+    "don't lock knees",
+    "controlled descent"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "1b471a5d-14ef-4b19-9276-89e4bb949896",
+   "session_id": "1f0a3ae3-c6b8-4e1d-8441-7b804291cd1f",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "exercise_card",
+   "sequence_order": 2,
+   "exercise_name": "Seated Row",
+   "exercise_canonical": "seated_row",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 12,
+     "weight_kg": 20.0
+    },
+    {
+     "set": 2,
+     "reps": 12,
+     "weight_kg": 20.0
+    },
+    {
+     "set": 3,
+     "reps": 12,
+     "weight_kg": 20.0
+    }
+   ],
+   "total_volume_kg": 720.0,
+   "form_notes": [
+    "pulling with arms, cueing lats"
+   ],
+   "cues_given": [
+    "squeeze shoulder blades",
+    "pull to belly button"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "33234aee-ad5b-4cc3-ab89-0b4d1b7c4f47",
+   "session_id": "1f0a3ae3-c6b8-4e1d-8441-7b804291cd1f",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "exercise_card",
+   "sequence_order": 3,
+   "exercise_name": "Step-Ups",
+   "exercise_canonical": "step_ups",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 8,
+     "weight_kg": 0
+    },
+    {
+     "set": 2,
+     "reps": 8,
+     "weight_kg": 0
+    },
+    {
+     "set": 3,
+     "reps": 8,
+     "weight_kg": 0
+    }
+   ],
+   "total_volume_kg": 0.0,
+   "form_notes": [
+    "using rail for support"
+   ],
+   "cues_given": [
+    "drive through heel",
+    "stand tall at top"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "a02d3df3-bf17-441e-af65-3c12e305ea4c",
+   "session_id": "1f0a3ae3-c6b8-4e1d-8441-7b804291cd1f",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "observation_card",
+   "sequence_order": 4,
+   "exercise_name": null,
+   "exercise_canonical": null,
+   "sets": null,
+   "total_volume_kg": null,
+   "form_notes": null,
+   "cues_given": null,
+   "cue_effectiveness": null,
+   "observation_text": "Settling into routine. Likes the seated row. Energy good today.",
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "a15e1420-62a1-443b-922a-9da56b63a6b8",
+   "session_id": "6b0820d6-bd6f-41f9-b23e-5f9eda0e4311",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "exercise_card",
+   "sequence_order": 1,
+   "exercise_name": "Leg Press",
+   "exercise_canonical": "leg_press",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 10,
+     "weight_kg": 32.5
+    },
+    {
+     "set": 2,
+     "reps": 10,
+     "weight_kg": 32.5
+    },
+    {
+     "set": 3,
+     "reps": 10,
+     "weight_kg": 32.5
+    }
+   ],
+   "total_volume_kg": 975.0,
+   "form_notes": [
+    "full ROM",
+    "no hip pain"
+   ],
+   "cues_given": [
+    "don't lock knees",
+    "controlled descent"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "d6b396db-6855-4841-8778-6dbc8767d390",
+   "session_id": "6b0820d6-bd6f-41f9-b23e-5f9eda0e4311",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "exercise_card",
+   "sequence_order": 2,
+   "exercise_name": "Seated Row",
+   "exercise_canonical": "seated_row",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 12,
+     "weight_kg": 20.0
+    },
+    {
+     "set": 2,
+     "reps": 12,
+     "weight_kg": 20.0
+    },
+    {
+     "set": 3,
+     "reps": 12,
+     "weight_kg": 20.0
+    }
+   ],
+   "total_volume_kg": 720.0,
+   "form_notes": [
+    "pulling with arms, cueing lats"
+   ],
+   "cues_given": [
+    "squeeze shoulder blades",
+    "pull to belly button"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "f5a27b22-10b3-4a2f-b698-d72cfed8ded1",
+   "session_id": "14bc3e53-174c-4f5a-afd0-00e365c67b14",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "exercise_card",
+   "sequence_order": 1,
+   "exercise_name": "Leg Press",
+   "exercise_canonical": "leg_press",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 10,
+     "weight_kg": 30.0
+    },
+    {
+     "set": 2,
+     "reps": 10,
+     "weight_kg": 30.0
+    },
+    {
+     "set": 3,
+     "reps": 10,
+     "weight_kg": 30.0
+    }
+   ],
+   "total_volume_kg": 900.0,
+   "form_notes": [
+    "full ROM",
+    "no hip pain"
+   ],
+   "cues_given": [
+    "don't lock knees",
+    "controlled descent"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "f9d64c4d-2a9f-46f4-ab4d-7ab56478b05f",
+   "session_id": "14bc3e53-174c-4f5a-afd0-00e365c67b14",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "exercise_card",
+   "sequence_order": 2,
+   "exercise_name": "Seated Row",
+   "exercise_canonical": "seated_row",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 12,
+     "weight_kg": 20.0
+    },
+    {
+     "set": 2,
+     "reps": 12,
+     "weight_kg": 20.0
+    },
+    {
+     "set": 3,
+     "reps": 12,
+     "weight_kg": 20.0
+    }
+   ],
+   "total_volume_kg": 720.0,
+   "form_notes": [
+    "pulling with arms, cueing lats"
+   ],
+   "cues_given": [
+    "squeeze shoulder blades",
+    "pull to belly button"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "83f8aabd-a365-44d3-9849-7928ecf3cf90",
+   "session_id": "14bc3e53-174c-4f5a-afd0-00e365c67b14",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "exercise_card",
+   "sequence_order": 3,
+   "exercise_name": "Step-Ups",
+   "exercise_canonical": "step_ups",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 8,
+     "weight_kg": 0
+    },
+    {
+     "set": 2,
+     "reps": 8,
+     "weight_kg": 0
+    },
+    {
+     "set": 3,
+     "reps": 8,
+     "weight_kg": 0
+    }
+   ],
+   "total_volume_kg": 0.0,
+   "form_notes": [
+    "using rail for support"
+   ],
+   "cues_given": [
+    "drive through heel",
+    "stand tall at top"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "ef88cf91-f351-433c-ab3d-e222185978d7",
+   "session_id": "14bc3e53-174c-4f5a-afd0-00e365c67b14",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "entry_type": "observation_card",
+   "sequence_order": 4,
+   "exercise_name": null,
+   "exercise_canonical": null,
+   "sets": null,
+   "total_volume_kg": null,
+   "form_notes": null,
+   "cues_given": null,
+   "cue_effectiveness": null,
+   "observation_text": "First session. Nervous but determined. Good baseline strength for her age. Hip ROM acceptable.",
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "4732d4bc-5d3f-4079-8521-3201468b78fa",
+   "session_id": "57ee37f7-c5f7-45c8-abc8-13086d03df95",
+   "client_id": "3fbdac27-fea3-4952-919a-a6d8ede40301",
+   "entry_type": "observation_card",
+   "sequence_order": 1,
+   "exercise_name": null,
+   "exercise_canonical": null,
+   "sets": null,
+   "total_volume_kg": null,
+   "form_notes": null,
+   "cues_given": null,
+   "cue_effectiveness": null,
+   "observation_text": "Sarah hasn't slept much, energy levels below baseline.",
+   "attached_to_set": null,
+   "flag_color": "yellow",
+   "flag_reason": "Low Energy",
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "05435f5d-bbaf-4df8-b223-377e8917b3cb",
+   "session_id": "57ee37f7-c5f7-45c8-abc8-13086d03df95",
+   "client_id": "3fbdac27-fea3-4952-919a-a6d8ede40301",
+   "entry_type": "exercise_card",
+   "sequence_order": 2,
+   "exercise_name": "Goblet Squat",
+   "exercise_canonical": "goblet_squat",
+   "sets": [
+    {
+     "rpe": 5,
+     "set": 1,
+     "reps": 8,
+     "weight_kg": 8.0
+    },
+    {
+     "rpe": 6,
+     "set": 2,
+     "reps": 8,
+     "notes": "left glute felt tight",
+     "weight_kg": 8.0
+    },
+    {
+     "rpe": 6,
+     "set": 3,
+     "reps": 8,
+     "weight_kg": 8.0
+    }
+   ],
+   "total_volume_kg": 192.0,
+   "form_notes": null,
+   "cues_given": null,
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "5660f256-c824-484c-b868-ad2a88d23fc2",
+   "session_id": "57ee37f7-c5f7-45c8-abc8-13086d03df95",
+   "client_id": "3fbdac27-fea3-4952-919a-a6d8ede40301",
+   "entry_type": "exercise_card",
+   "sequence_order": 3,
+   "exercise_name": "Romanian Deadlift",
+   "exercise_canonical": "romanian_deadlift",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 10,
+     "weight_kg": 0
+    },
+    {
+     "set": 2,
+     "reps": 10,
+     "notes": "rounding at bottom of rep",
+     "weight_kg": 0
+    },
+    {
+     "set": 3,
+     "reps": 8,
+     "notes": "cut short, felt dizzy",
+     "weight_kg": 0
+    }
+   ],
+   "total_volume_kg": 0.0,
+   "form_notes": null,
+   "cues_given": null,
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "3170890b-6df2-4922-a671-34502e169503",
+   "session_id": "57ee37f7-c5f7-45c8-abc8-13086d03df95",
+   "client_id": "3fbdac27-fea3-4952-919a-a6d8ede40301",
+   "entry_type": "observation_card",
+   "sequence_order": 4,
+   "exercise_name": null,
+   "exercise_canonical": null,
+   "sets": null,
+   "total_volume_kg": null,
+   "form_notes": null,
+   "cues_given": null,
+   "cue_effectiveness": null,
+   "observation_text": "After goblet squat and Romanian deadlift, Sarah reported energy levels even lower. Slowing pace for remaining exercises.",
+   "attached_to_set": null,
+   "flag_color": "yellow",
+   "flag_reason": "Fatigue Warning",
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "516f8682-f16d-4013-8707-fa4f869a7715",
+   "session_id": "57ee37f7-c5f7-45c8-abc8-13086d03df95",
+   "client_id": "3fbdac27-fea3-4952-919a-a6d8ede40301",
+   "entry_type": "exercise_card",
+   "sequence_order": 5,
+   "exercise_name": "Push-Up",
+   "exercise_canonical": "push_up",
+   "sets": [
+    {
+     "rpe": 7,
+     "set": 1,
+     "reps": 8
+    },
+    {
+     "rpe": 8,
+     "set": 2,
+     "reps": 6,
+     "notes": "stopped early, arms shaking"
+    },
+    {
+     "rpe": 9,
+     "set": 3,
+     "reps": 5
+    }
+   ],
+   "total_volume_kg": 0.0,
+   "form_notes": null,
+   "cues_given": null,
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "cc4aeee6-7437-4ce2-b532-2d290161ed8d",
+   "session_id": "57ee37f7-c5f7-45c8-abc8-13086d03df95",
+   "client_id": "3fbdac27-fea3-4952-919a-a6d8ede40301",
+   "entry_type": "exercise_card",
+   "sequence_order": 6,
+   "exercise_name": "Plank",
+   "exercise_canonical": "plank",
+   "sets": [
+    {
+     "set": 1,
+     "duration_seconds": 30
+    },
+    {
+     "set": 2,
+     "notes": "hip sagging at 20s",
+     "duration_seconds": 25
+    },
+    {
+     "set": 3,
+     "notes": "cut short, fatigued",
+     "duration_seconds": 20
+    }
+   ],
+   "total_volume_kg": 0.0,
+   "form_notes": null,
+   "cues_given": null,
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "45a45b0a-1a38-418a-b3d2-ce6c739ede5c",
+   "session_id": "01ed850a-1ba3-461b-93d9-93792994c993",
+   "client_id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "entry_type": "exercise_card",
+   "sequence_order": 1,
+   "exercise_name": "Barbell Back Squat",
+   "exercise_canonical": "barbell_back_squat",
+   "sets": [
+    {
+     "rpe": 8.7,
+     "set": 1,
+     "reps": 8,
+     "weight_kg": 70.0
+    },
+    {
+     "rpe": 8.7,
+     "set": 2,
+     "reps": 8,
+     "weight_kg": 70.0
+    },
+    {
+     "rpe": 8.7,
+     "set": 3,
+     "reps": 8,
+     "weight_kg": 70.0
+    },
+    {
+     "rpe": 8.7,
+     "set": 4,
+     "reps": 8,
+     "weight_kg": 70.0
+    }
+   ],
+   "total_volume_kg": 2240.0,
+   "form_notes": [
+    "depth improving"
+   ],
+   "cues_given": [
+    "chest up",
+    "push knees out"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "dba13b36-0bb8-4dbd-b1ec-9de7502eab5c",
+   "session_id": "01ed850a-1ba3-461b-93d9-93792994c993",
+   "client_id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "entry_type": "exercise_card",
+   "sequence_order": 2,
+   "exercise_name": "Romanian Deadlift",
+   "exercise_canonical": "romanian_deadlift",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 10,
+     "weight_kg": 62.5
+    },
+    {
+     "set": 2,
+     "reps": 10,
+     "weight_kg": 62.5
+    },
+    {
+     "set": 3,
+     "reps": 10,
+     "weight_kg": 62.5
+    }
+   ],
+   "total_volume_kg": 1875.0,
+   "form_notes": [
+    "hinge improving"
+   ],
+   "cues_given": [
+    "push hips back",
+    "soft knees"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "f93371e4-15f7-4a27-9963-8b226d839064",
+   "session_id": "01ed850a-1ba3-461b-93d9-93792994c993",
+   "client_id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "entry_type": "exercise_card",
+   "sequence_order": 3,
+   "exercise_name": "Lunges",
+   "exercise_canonical": "lunges",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 12,
+     "weight_kg": 19
+    },
+    {
+     "set": 2,
+     "reps": 12,
+     "weight_kg": 19
+    },
+    {
+     "set": 3,
+     "reps": 12,
+     "weight_kg": 19
+    }
+   ],
+   "total_volume_kg": 684.0,
+   "form_notes": null,
+   "cues_given": null,
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "292ecaf3-fcf5-4d27-8e0c-7431192dbb01",
+   "session_id": "ea84cfb3-137e-48d7-adce-7540cef54e00",
+   "client_id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "entry_type": "exercise_card",
+   "sequence_order": 1,
+   "exercise_name": "Barbell Bench Press",
+   "exercise_canonical": "barbell_bench_press",
+   "sets": [
+    {
+     "rpe": 8.4,
+     "set": 1,
+     "reps": 8,
+     "weight_kg": 60.0
+    },
+    {
+     "rpe": 8.4,
+     "set": 2,
+     "reps": 8,
+     "weight_kg": 60.0
+    },
+    {
+     "rpe": 8.4,
+     "set": 3,
+     "reps": 8,
+     "weight_kg": 60.0
+    },
+    {
+     "rpe": 8.4,
+     "set": 4,
+     "reps": 8,
+     "weight_kg": 60.0
+    }
+   ],
+   "total_volume_kg": 1920.0,
+   "form_notes": [
+    "better tuck, good progress"
+   ],
+   "cues_given": [
+    "tuck elbows",
+    "leg drive"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "58401893-1c16-410d-b50e-cb104007b6c3",
+   "session_id": "ea84cfb3-137e-48d7-adce-7540cef54e00",
+   "client_id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "entry_type": "exercise_card",
+   "sequence_order": 2,
+   "exercise_name": "Lat Pulldown",
+   "exercise_canonical": "lat_pulldown",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 10,
+     "weight_kg": 65.0
+    },
+    {
+     "set": 2,
+     "reps": 10,
+     "weight_kg": 65.0
+    },
+    {
+     "set": 3,
+     "reps": 10,
+     "weight_kg": 65.0
+    }
+   ],
+   "total_volume_kg": 1950.0,
+   "form_notes": [
+    "engaging lats better"
+   ],
+   "cues_given": [
+    "pull with elbows",
+    "squeeze shoulder blades"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "e9417a84-49cc-49c9-91e8-e81bdaca7a92",
+   "session_id": "ea84cfb3-137e-48d7-adce-7540cef54e00",
+   "client_id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "entry_type": "exercise_card",
+   "sequence_order": 3,
+   "exercise_name": "Overhead Press",
+   "exercise_canonical": "overhead_press",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 10,
+     "weight_kg": 36
+    },
+    {
+     "set": 2,
+     "reps": 10,
+     "weight_kg": 36
+    },
+    {
+     "set": 3,
+     "reps": 10,
+     "weight_kg": 36
+    }
+   ],
+   "total_volume_kg": 1080.0,
+   "form_notes": null,
+   "cues_given": null,
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "2c1baf4f-248b-41cd-8e26-29dd98b4451c",
+   "session_id": "ea84cfb3-137e-48d7-adce-7540cef54e00",
+   "client_id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "entry_type": "observation_card",
+   "sequence_order": 4,
+   "exercise_name": null,
+   "exercise_canonical": null,
+   "sets": null,
+   "total_volume_kg": null,
+   "form_notes": null,
+   "cues_given": null,
+   "cue_effectiveness": null,
+   "observation_text": "Mentioned lower back tightness after last squat session. Keeping an eye on it.",
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "c54f4ff6-bbc3-4bf5-94df-9d8ab06776df",
+   "session_id": "0089e60a-58a4-4bad-bfaf-36df6f7ebdea",
+   "client_id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "entry_type": "exercise_card",
+   "sequence_order": 1,
+   "exercise_name": "Barbell Back Squat",
+   "exercise_canonical": "barbell_back_squat",
+   "sets": [
+    {
+     "rpe": 8.1,
+     "set": 1,
+     "reps": 8,
+     "weight_kg": 65.0
+    },
+    {
+     "rpe": 8.1,
+     "set": 2,
+     "reps": 8,
+     "weight_kg": 65.0
+    },
+    {
+     "rpe": 8.1,
+     "set": 3,
+     "reps": 8,
+     "weight_kg": 65.0
+    },
+    {
+     "rpe": 8.1,
+     "set": 4,
+     "reps": 8,
+     "weight_kg": 65.0
+    }
+   ],
+   "total_volume_kg": 2080.0,
+   "form_notes": [
+    "depth improving"
+   ],
+   "cues_given": [
+    "chest up",
+    "push knees out"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "a69556a7-fc88-4280-971f-a8b23866a561",
+   "session_id": "0089e60a-58a4-4bad-bfaf-36df6f7ebdea",
+   "client_id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "entry_type": "exercise_card",
+   "sequence_order": 2,
+   "exercise_name": "Romanian Deadlift",
+   "exercise_canonical": "romanian_deadlift",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 10,
+     "weight_kg": 57.5
+    },
+    {
+     "set": 2,
+     "reps": 10,
+     "weight_kg": 57.5
+    },
+    {
+     "set": 3,
+     "reps": 10,
+     "weight_kg": 57.5
+    }
+   ],
+   "total_volume_kg": 1725.0,
+   "form_notes": [
+    "hinge improving"
+   ],
+   "cues_given": [
+    "push hips back",
+    "soft knees"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "68708f83-29c4-4937-a31c-41100478afda",
+   "session_id": "0089e60a-58a4-4bad-bfaf-36df6f7ebdea",
+   "client_id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "entry_type": "exercise_card",
+   "sequence_order": 3,
+   "exercise_name": "Lunges",
+   "exercise_canonical": "lunges",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 12,
+     "weight_kg": 17
+    },
+    {
+     "set": 2,
+     "reps": 12,
+     "weight_kg": 17
+    },
+    {
+     "set": 3,
+     "reps": 12,
+     "weight_kg": 17
+    }
+   ],
+   "total_volume_kg": 612.0,
+   "form_notes": null,
+   "cues_given": null,
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "efed46cc-9f9c-46d8-a0d9-a080c8e66629",
+   "session_id": "942febdf-05ee-40be-851a-6799430a8013",
+   "client_id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "entry_type": "exercise_card",
+   "sequence_order": 1,
+   "exercise_name": "Barbell Bench Press",
+   "exercise_canonical": "barbell_bench_press",
+   "sets": [
+    {
+     "rpe": 7.8,
+     "set": 1,
+     "reps": 8,
+     "weight_kg": 55.0
+    },
+    {
+     "rpe": 7.8,
+     "set": 2,
+     "reps": 8,
+     "weight_kg": 55.0
+    },
+    {
+     "rpe": 7.8,
+     "set": 3,
+     "reps": 8,
+     "weight_kg": 55.0
+    },
+    {
+     "rpe": 7.8,
+     "set": 4,
+     "reps": 8,
+     "weight_kg": 55.0
+    }
+   ],
+   "total_volume_kg": 1760.0,
+   "form_notes": [
+    "better tuck, good progress"
+   ],
+   "cues_given": [
+    "tuck elbows",
+    "leg drive"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "efffdf33-f488-4292-bca7-3b170c4bbcb1",
+   "session_id": "942febdf-05ee-40be-851a-6799430a8013",
+   "client_id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "entry_type": "exercise_card",
+   "sequence_order": 2,
+   "exercise_name": "Lat Pulldown",
+   "exercise_canonical": "lat_pulldown",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 10,
+     "weight_kg": 60.0
+    },
+    {
+     "set": 2,
+     "reps": 10,
+     "weight_kg": 60.0
+    },
+    {
+     "set": 3,
+     "reps": 10,
+     "weight_kg": 60.0
+    }
+   ],
+   "total_volume_kg": 1800.0,
+   "form_notes": [
+    "engaging lats better"
+   ],
+   "cues_given": [
+    "pull with elbows",
+    "squeeze shoulder blades"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "aabfa673-6370-4f19-8600-88f4b7e2dfe2",
+   "session_id": "942febdf-05ee-40be-851a-6799430a8013",
+   "client_id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "entry_type": "exercise_card",
+   "sequence_order": 3,
+   "exercise_name": "Overhead Press",
+   "exercise_canonical": "overhead_press",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 10,
+     "weight_kg": 32
+    },
+    {
+     "set": 2,
+     "reps": 10,
+     "weight_kg": 32
+    },
+    {
+     "set": 3,
+     "reps": 10,
+     "weight_kg": 32
+    }
+   ],
+   "total_volume_kg": 960.0,
+   "form_notes": null,
+   "cues_given": null,
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "38f3286b-92b1-4142-97f5-a32474d73829",
+   "session_id": "f7ae8eb2-8752-4e01-9663-1c86ffbdd901",
+   "client_id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "entry_type": "exercise_card",
+   "sequence_order": 1,
+   "exercise_name": "Barbell Back Squat",
+   "exercise_canonical": "barbell_back_squat",
+   "sets": [
+    {
+     "rpe": 7.5,
+     "set": 1,
+     "reps": 8,
+     "weight_kg": 60.0
+    },
+    {
+     "rpe": 7.5,
+     "set": 2,
+     "reps": 8,
+     "weight_kg": 60.0
+    },
+    {
+     "rpe": 7.5,
+     "set": 3,
+     "reps": 8,
+     "weight_kg": 60.0
+    },
+    {
+     "rpe": 7.5,
+     "set": 4,
+     "reps": 8,
+     "weight_kg": 60.0
+    }
+   ],
+   "total_volume_kg": 1920.0,
+   "form_notes": [
+    "depth improving"
+   ],
+   "cues_given": [
+    "chest up",
+    "push knees out"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "9615dc1d-54fc-4bb9-b705-008a88863495",
+   "session_id": "f7ae8eb2-8752-4e01-9663-1c86ffbdd901",
+   "client_id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "entry_type": "exercise_card",
+   "sequence_order": 2,
+   "exercise_name": "Romanian Deadlift",
+   "exercise_canonical": "romanian_deadlift",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 10,
+     "weight_kg": 52.5
+    },
+    {
+     "set": 2,
+     "reps": 10,
+     "weight_kg": 52.5
+    },
+    {
+     "set": 3,
+     "reps": 10,
+     "weight_kg": 52.5
+    }
+   ],
+   "total_volume_kg": 1575.0,
+   "form_notes": [
+    "hinge improving"
+   ],
+   "cues_given": [
+    "push hips back",
+    "soft knees"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "c7c95713-cd2c-4ce0-a829-547e97325ca6",
+   "session_id": "f7ae8eb2-8752-4e01-9663-1c86ffbdd901",
+   "client_id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "entry_type": "exercise_card",
+   "sequence_order": 3,
+   "exercise_name": "Lunges",
+   "exercise_canonical": "lunges",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 12,
+     "weight_kg": 15
+    },
+    {
+     "set": 2,
+     "reps": 12,
+     "weight_kg": 15
+    },
+    {
+     "set": 3,
+     "reps": 12,
+     "weight_kg": 15
+    }
+   ],
+   "total_volume_kg": 540.0,
+   "form_notes": null,
+   "cues_given": null,
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "7849d9bd-5c8f-47b5-a09d-52dfc78785f2",
+   "session_id": "f7ae8eb2-8752-4e01-9663-1c86ffbdd901",
+   "client_id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "entry_type": "observation_card",
+   "sequence_order": 4,
+   "exercise_name": null,
+   "exercise_canonical": null,
+   "sets": null,
+   "total_volume_kg": null,
+   "form_notes": null,
+   "cues_given": null,
+   "cue_effectiveness": null,
+   "observation_text": "Hitting stride \u2014 weight jumps are consistent. Posture visibly better. Enjoys training.",
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "336fb8c4-72d1-4a90-9e5b-f3c0e443e7ba",
+   "session_id": "7c8029af-a1a8-437c-a271-5934f9e04a8f",
+   "client_id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "entry_type": "exercise_card",
+   "sequence_order": 1,
+   "exercise_name": "Barbell Bench Press",
+   "exercise_canonical": "barbell_bench_press",
+   "sets": [
+    {
+     "rpe": 7.2,
+     "set": 1,
+     "reps": 8,
+     "weight_kg": 50.0
+    },
+    {
+     "rpe": 7.2,
+     "set": 2,
+     "reps": 8,
+     "weight_kg": 50.0
+    },
+    {
+     "rpe": 7.2,
+     "set": 3,
+     "reps": 8,
+     "weight_kg": 50.0
+    },
+    {
+     "rpe": 7.2,
+     "set": 4,
+     "reps": 8,
+     "weight_kg": 50.0
+    }
+   ],
+   "total_volume_kg": 1600.0,
+   "form_notes": [
+    "better tuck, good progress"
+   ],
+   "cues_given": [
+    "tuck elbows",
+    "leg drive"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "496b1bbe-d5b2-4681-bbfd-1b5819a77c94",
+   "session_id": "7c8029af-a1a8-437c-a271-5934f9e04a8f",
+   "client_id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "entry_type": "exercise_card",
+   "sequence_order": 2,
+   "exercise_name": "Lat Pulldown",
+   "exercise_canonical": "lat_pulldown",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 10,
+     "weight_kg": 55.0
+    },
+    {
+     "set": 2,
+     "reps": 10,
+     "weight_kg": 55.0
+    },
+    {
+     "set": 3,
+     "reps": 10,
+     "weight_kg": 55.0
+    }
+   ],
+   "total_volume_kg": 1650.0,
+   "form_notes": [
+    "engaging lats better"
+   ],
+   "cues_given": [
+    "pull with elbows",
+    "squeeze shoulder blades"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "cecc6519-278b-4877-9663-2b026897205c",
+   "session_id": "7c8029af-a1a8-437c-a271-5934f9e04a8f",
+   "client_id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "entry_type": "exercise_card",
+   "sequence_order": 3,
+   "exercise_name": "Overhead Press",
+   "exercise_canonical": "overhead_press",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 10,
+     "weight_kg": 28
+    },
+    {
+     "set": 2,
+     "reps": 10,
+     "weight_kg": 28
+    },
+    {
+     "set": 3,
+     "reps": 10,
+     "weight_kg": 28
+    }
+   ],
+   "total_volume_kg": 840.0,
+   "form_notes": null,
+   "cues_given": null,
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "5a0f095f-bec0-4956-a866-1fa5d5dd2c61",
+   "session_id": "92c00e18-8ba4-4248-a995-a8d2d249d2a1",
+   "client_id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "entry_type": "exercise_card",
+   "sequence_order": 1,
+   "exercise_name": "Barbell Back Squat",
+   "exercise_canonical": "barbell_back_squat",
+   "sets": [
+    {
+     "rpe": 6.9,
+     "set": 1,
+     "reps": 8,
+     "weight_kg": 55.0
+    },
+    {
+     "rpe": 6.9,
+     "set": 2,
+     "reps": 8,
+     "weight_kg": 55.0
+    },
+    {
+     "rpe": 6.9,
+     "set": 3,
+     "reps": 8,
+     "weight_kg": 55.0
+    },
+    {
+     "rpe": 6.9,
+     "set": 4,
+     "reps": 8,
+     "weight_kg": 55.0
+    }
+   ],
+   "total_volume_kg": 1760.0,
+   "form_notes": [
+    "needs more depth"
+   ],
+   "cues_given": [
+    "chest up",
+    "push knees out"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "06ceab54-3f0b-486b-ba1a-f294d303c600",
+   "session_id": "92c00e18-8ba4-4248-a995-a8d2d249d2a1",
+   "client_id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "entry_type": "exercise_card",
+   "sequence_order": 2,
+   "exercise_name": "Romanian Deadlift",
+   "exercise_canonical": "romanian_deadlift",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 10,
+     "weight_kg": 47.5
+    },
+    {
+     "set": 2,
+     "reps": 10,
+     "weight_kg": 47.5
+    },
+    {
+     "set": 3,
+     "reps": 10,
+     "weight_kg": 47.5
+    }
+   ],
+   "total_volume_kg": 1425.0,
+   "form_notes": [
+    "hinge improving"
+   ],
+   "cues_given": [
+    "push hips back",
+    "soft knees"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "49b87cbd-93b9-4a8a-9b50-5fc3b7330712",
+   "session_id": "92c00e18-8ba4-4248-a995-a8d2d249d2a1",
+   "client_id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "entry_type": "exercise_card",
+   "sequence_order": 3,
+   "exercise_name": "Lunges",
+   "exercise_canonical": "lunges",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 12,
+     "weight_kg": 13
+    },
+    {
+     "set": 2,
+     "reps": 12,
+     "weight_kg": 13
+    },
+    {
+     "set": 3,
+     "reps": 12,
+     "weight_kg": 13
+    }
+   ],
+   "total_volume_kg": 468.0,
+   "form_notes": null,
+   "cues_given": null,
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "32129a21-b632-476c-8bbd-1dac3d97a6b4",
+   "session_id": "73200f28-1fb3-4bc9-8221-9d23d60886ef",
+   "client_id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "entry_type": "exercise_card",
+   "sequence_order": 1,
+   "exercise_name": "Barbell Bench Press",
+   "exercise_canonical": "barbell_bench_press",
+   "sets": [
+    {
+     "rpe": 6.6,
+     "set": 1,
+     "reps": 8,
+     "weight_kg": 45.0
+    },
+    {
+     "rpe": 6.6,
+     "set": 2,
+     "reps": 8,
+     "weight_kg": 45.0
+    },
+    {
+     "rpe": 6.6,
+     "set": 3,
+     "reps": 8,
+     "weight_kg": 45.0
+    },
+    {
+     "rpe": 6.6,
+     "set": 4,
+     "reps": 8,
+     "weight_kg": 45.0
+    }
+   ],
+   "total_volume_kg": 1440.0,
+   "form_notes": [
+    "elbows flaring"
+   ],
+   "cues_given": [
+    "tuck elbows",
+    "leg drive"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "0f320cf4-aeda-4511-b734-47a725896d92",
+   "session_id": "73200f28-1fb3-4bc9-8221-9d23d60886ef",
+   "client_id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "entry_type": "exercise_card",
+   "sequence_order": 2,
+   "exercise_name": "Lat Pulldown",
+   "exercise_canonical": "lat_pulldown",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 10,
+     "weight_kg": 50.0
+    },
+    {
+     "set": 2,
+     "reps": 10,
+     "weight_kg": 50.0
+    },
+    {
+     "set": 3,
+     "reps": 10,
+     "weight_kg": 50.0
+    }
+   ],
+   "total_volume_kg": 1500.0,
+   "form_notes": [
+    "pulling with arms initially"
+   ],
+   "cues_given": [
+    "pull with elbows",
+    "squeeze shoulder blades"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "73909136-ff47-4b3a-90b1-37490a5dc8ee",
+   "session_id": "73200f28-1fb3-4bc9-8221-9d23d60886ef",
+   "client_id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "entry_type": "exercise_card",
+   "sequence_order": 3,
+   "exercise_name": "Overhead Press",
+   "exercise_canonical": "overhead_press",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 10,
+     "weight_kg": 24
+    },
+    {
+     "set": 2,
+     "reps": 10,
+     "weight_kg": 24
+    },
+    {
+     "set": 3,
+     "reps": 10,
+     "weight_kg": 24
+    }
+   ],
+   "total_volume_kg": 720.0,
+   "form_notes": null,
+   "cues_given": null,
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "5418545e-7099-4621-9448-0827fe33a2fc",
+   "session_id": "73200f28-1fb3-4bc9-8221-9d23d60886ef",
+   "client_id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "entry_type": "observation_card",
+   "sequence_order": 4,
+   "exercise_name": null,
+   "exercise_canonical": null,
+   "sets": null,
+   "total_volume_kg": null,
+   "form_notes": null,
+   "cues_given": null,
+   "cue_effectiveness": null,
+   "observation_text": "Progressing well for a beginner. Form improving on bench. Needs cue reminders on squat depth.",
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "b9782964-8978-4d3b-912f-5e0854801859",
+   "session_id": "5fe8dce5-396c-4bc5-90f4-2592694daa0d",
+   "client_id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "entry_type": "exercise_card",
+   "sequence_order": 1,
+   "exercise_name": "Barbell Back Squat",
+   "exercise_canonical": "barbell_back_squat",
+   "sets": [
+    {
+     "rpe": 6.3,
+     "set": 1,
+     "reps": 8,
+     "weight_kg": 45.0
+    },
+    {
+     "rpe": 6.3,
+     "set": 2,
+     "reps": 8,
+     "weight_kg": 45.0
+    },
+    {
+     "rpe": 6.3,
+     "set": 3,
+     "reps": 8,
+     "weight_kg": 45.0
+    },
+    {
+     "rpe": 6.3,
+     "set": 4,
+     "reps": 8,
+     "weight_kg": 45.0
+    }
+   ],
+   "total_volume_kg": 1440.0,
+   "form_notes": [
+    "needs more depth"
+   ],
+   "cues_given": [
+    "chest up",
+    "push knees out"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "9ef24f33-3ab5-423a-bf6c-cb6afc876fea",
+   "session_id": "5fe8dce5-396c-4bc5-90f4-2592694daa0d",
+   "client_id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "entry_type": "exercise_card",
+   "sequence_order": 2,
+   "exercise_name": "Romanian Deadlift",
+   "exercise_canonical": "romanian_deadlift",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 10,
+     "weight_kg": 42.5
+    },
+    {
+     "set": 2,
+     "reps": 10,
+     "weight_kg": 42.5
+    },
+    {
+     "set": 3,
+     "reps": 10,
+     "weight_kg": 42.5
+    }
+   ],
+   "total_volume_kg": 1275.0,
+   "form_notes": [
+    "hinge improving"
+   ],
+   "cues_given": [
+    "push hips back",
+    "soft knees"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "4e3ca9bc-0c74-44c6-ae10-262be162f0bc",
+   "session_id": "5fe8dce5-396c-4bc5-90f4-2592694daa0d",
+   "client_id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "entry_type": "exercise_card",
+   "sequence_order": 3,
+   "exercise_name": "Lunges",
+   "exercise_canonical": "lunges",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 12,
+     "weight_kg": 11
+    },
+    {
+     "set": 2,
+     "reps": 12,
+     "weight_kg": 11
+    },
+    {
+     "set": 3,
+     "reps": 12,
+     "weight_kg": 11
+    }
+   ],
+   "total_volume_kg": 396.0,
+   "form_notes": null,
+   "cues_given": null,
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "4c4c7def-2344-4c7c-b6ae-70c22978df7d",
+   "session_id": "af871d14-3f96-401d-bb4a-e165a7802375",
+   "client_id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "entry_type": "exercise_card",
+   "sequence_order": 1,
+   "exercise_name": "Barbell Bench Press",
+   "exercise_canonical": "barbell_bench_press",
+   "sets": [
+    {
+     "rpe": 6.0,
+     "set": 1,
+     "reps": 8,
+     "weight_kg": 40.0
+    },
+    {
+     "rpe": 6.0,
+     "set": 2,
+     "reps": 8,
+     "weight_kg": 40.0
+    },
+    {
+     "rpe": 6.0,
+     "set": 3,
+     "reps": 8,
+     "weight_kg": 40.0
+    },
+    {
+     "rpe": 6.0,
+     "set": 4,
+     "reps": 8,
+     "weight_kg": 40.0
+    }
+   ],
+   "total_volume_kg": 1280.0,
+   "form_notes": [
+    "elbows flaring"
+   ],
+   "cues_given": [
+    "tuck elbows",
+    "leg drive"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "543a1afb-bd3b-485e-af05-50e1e5d3cf6e",
+   "session_id": "af871d14-3f96-401d-bb4a-e165a7802375",
+   "client_id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "entry_type": "exercise_card",
+   "sequence_order": 2,
+   "exercise_name": "Lat Pulldown",
+   "exercise_canonical": "lat_pulldown",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 10,
+     "weight_kg": 45.0
+    },
+    {
+     "set": 2,
+     "reps": 10,
+     "weight_kg": 45.0
+    },
+    {
+     "set": 3,
+     "reps": 10,
+     "weight_kg": 45.0
+    }
+   ],
+   "total_volume_kg": 1350.0,
+   "form_notes": [
+    "pulling with arms initially"
+   ],
+   "cues_given": [
+    "pull with elbows",
+    "squeeze shoulder blades"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "db25e4df-6ce7-47ac-bbf3-9164bc5e0d21",
+   "session_id": "af871d14-3f96-401d-bb4a-e165a7802375",
+   "client_id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "entry_type": "exercise_card",
+   "sequence_order": 3,
+   "exercise_name": "Overhead Press",
+   "exercise_canonical": "overhead_press",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 10,
+     "weight_kg": 20
+    },
+    {
+     "set": 2,
+     "reps": 10,
+     "weight_kg": 20
+    },
+    {
+     "set": 3,
+     "reps": 10,
+     "weight_kg": 20
+    }
+   ],
+   "total_volume_kg": 600.0,
+   "form_notes": null,
+   "cues_given": null,
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "b168af5f-495d-4695-b096-afc6ceb4948a",
+   "session_id": "3e8af800-bb11-4f68-ba4c-de3119981479",
+   "client_id": "c427b9bc-1744-400c-aea4-2514e178e6d4",
+   "entry_type": "exercise_card",
+   "sequence_order": 1,
+   "exercise_name": "Barbell Back Squat",
+   "exercise_canonical": "barbell_back_squat",
+   "sets": [
+    {
+     "rpe": 8.0,
+     "set": 1,
+     "reps": 5,
+     "weight_kg": 150.0
+    },
+    {
+     "rpe": 8.0,
+     "set": 2,
+     "reps": 5,
+     "weight_kg": 150.0
+    },
+    {
+     "rpe": 8.0,
+     "set": 3,
+     "reps": 5,
+     "weight_kg": 150.0
+    },
+    {
+     "rpe": 8.0,
+     "set": 4,
+     "reps": 5,
+     "weight_kg": 150.0
+    },
+    {
+     "rpe": 8.0,
+     "set": 5,
+     "reps": 5,
+     "weight_kg": 150.0
+    }
+   ],
+   "total_volume_kg": 3750.0,
+   "form_notes": [
+    "slight knee valgus on last rep"
+   ],
+   "cues_given": [
+    "brace harder",
+    "push knees out"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "479ab7c5-4612-445c-a742-e9c71efe607b",
+   "session_id": "3e8af800-bb11-4f68-ba4c-de3119981479",
+   "client_id": "c427b9bc-1744-400c-aea4-2514e178e6d4",
+   "entry_type": "exercise_card",
+   "sequence_order": 2,
+   "exercise_name": "Barbell Bench Press",
+   "exercise_canonical": "barbell_bench_press",
+   "sets": [
+    {
+     "rpe": 8.0,
+     "set": 1,
+     "reps": 5,
+     "weight_kg": 105.0
+    },
+    {
+     "rpe": 8.0,
+     "set": 2,
+     "reps": 5,
+     "weight_kg": 105.0
+    },
+    {
+     "rpe": 8.0,
+     "set": 3,
+     "reps": 5,
+     "weight_kg": 105.0
+    },
+    {
+     "rpe": 8.0,
+     "set": 4,
+     "reps": 5,
+     "weight_kg": 105.0
+    },
+    {
+     "rpe": 8.0,
+     "set": 5,
+     "reps": 5,
+     "weight_kg": 105.0
+    }
+   ],
+   "total_volume_kg": 2625.0,
+   "form_notes": [
+    "solid arch",
+    "good leg drive"
+   ],
+   "cues_given": [
+    "tuck elbows",
+    "drive feet"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "685706b1-c61b-42c0-9931-942c98dbc97b",
+   "session_id": "3e8af800-bb11-4f68-ba4c-de3119981479",
+   "client_id": "c427b9bc-1744-400c-aea4-2514e178e6d4",
+   "entry_type": "exercise_card",
+   "sequence_order": 3,
+   "exercise_name": "Deadlift",
+   "exercise_canonical": "deadlift",
+   "sets": [
+    {
+     "rpe": 9.0,
+     "set": 1,
+     "reps": 3,
+     "weight_kg": 190.0
+    },
+    {
+     "rpe": 9.0,
+     "set": 2,
+     "reps": 3,
+     "weight_kg": 190.0
+    },
+    {
+     "rpe": 9.0,
+     "set": 3,
+     "reps": 3,
+     "weight_kg": 190.0
+    }
+   ],
+   "total_volume_kg": 1710.0,
+   "form_notes": [
+    "grip starting to fatigue"
+   ],
+   "cues_given": [
+    "wedge into the bar",
+    "push the floor away"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "504cf40d-5f80-49b6-b6b5-03e0f4d6aa16",
+   "session_id": "3e8af800-bb11-4f68-ba4c-de3119981479",
+   "client_id": "c427b9bc-1744-400c-aea4-2514e178e6d4",
+   "entry_type": "exercise_card",
+   "sequence_order": 4,
+   "exercise_name": "Romanian Deadlift",
+   "exercise_canonical": "romanian_deadlift",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 8,
+     "weight_kg": 90
+    },
+    {
+     "set": 2,
+     "reps": 8,
+     "weight_kg": 90
+    },
+    {
+     "set": 3,
+     "reps": 8,
+     "weight_kg": 90
+    }
+   ],
+   "total_volume_kg": 2160.0,
+   "form_notes": null,
+   "cues_given": null,
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "5c619122-7719-4e66-a0c3-20dfa9b46c02",
+   "session_id": "f653ece9-8ca2-44a0-9484-7651d886c51d",
+   "client_id": "c427b9bc-1744-400c-aea4-2514e178e6d4",
+   "entry_type": "exercise_card",
+   "sequence_order": 1,
+   "exercise_name": "Barbell Back Squat",
+   "exercise_canonical": "barbell_back_squat",
+   "sets": [
+    {
+     "rpe": 7.5,
+     "set": 1,
+     "reps": 5,
+     "weight_kg": 145.0
+    },
+    {
+     "rpe": 7.5,
+     "set": 2,
+     "reps": 5,
+     "weight_kg": 145.0
+    },
+    {
+     "rpe": 7.5,
+     "set": 3,
+     "reps": 5,
+     "weight_kg": 145.0
+    },
+    {
+     "rpe": 7.5,
+     "set": 4,
+     "reps": 5,
+     "weight_kg": 145.0
+    },
+    {
+     "rpe": 7.5,
+     "set": 5,
+     "reps": 5,
+     "weight_kg": 145.0
+    }
+   ],
+   "total_volume_kg": 3625.0,
+   "form_notes": [
+    "good depth"
+   ],
+   "cues_given": [
+    "brace harder",
+    "push knees out"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "88fe8cb7-723e-4a91-b7db-ac0b065b2b89",
+   "session_id": "f653ece9-8ca2-44a0-9484-7651d886c51d",
+   "client_id": "c427b9bc-1744-400c-aea4-2514e178e6d4",
+   "entry_type": "exercise_card",
+   "sequence_order": 2,
+   "exercise_name": "Barbell Bench Press",
+   "exercise_canonical": "barbell_bench_press",
+   "sets": [
+    {
+     "rpe": 7.5,
+     "set": 1,
+     "reps": 5,
+     "weight_kg": 102.5
+    },
+    {
+     "rpe": 7.5,
+     "set": 2,
+     "reps": 5,
+     "weight_kg": 102.5
+    },
+    {
+     "rpe": 7.5,
+     "set": 3,
+     "reps": 5,
+     "weight_kg": 102.5
+    },
+    {
+     "rpe": 7.5,
+     "set": 4,
+     "reps": 5,
+     "weight_kg": 102.5
+    },
+    {
+     "rpe": 7.5,
+     "set": 5,
+     "reps": 5,
+     "weight_kg": 102.5
+    }
+   ],
+   "total_volume_kg": 2562.5,
+   "form_notes": [
+    "solid arch",
+    "good leg drive"
+   ],
+   "cues_given": [
+    "tuck elbows",
+    "drive feet"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "0392224d-3f81-4f3a-8f89-b3f4bdd4f27a",
+   "session_id": "f653ece9-8ca2-44a0-9484-7651d886c51d",
+   "client_id": "c427b9bc-1744-400c-aea4-2514e178e6d4",
+   "entry_type": "exercise_card",
+   "sequence_order": 3,
+   "exercise_name": "Deadlift",
+   "exercise_canonical": "deadlift",
+   "sets": [
+    {
+     "rpe": 8.5,
+     "set": 1,
+     "reps": 3,
+     "weight_kg": 185.0
+    },
+    {
+     "rpe": 8.5,
+     "set": 2,
+     "reps": 3,
+     "weight_kg": 185.0
+    },
+    {
+     "rpe": 8.5,
+     "set": 3,
+     "reps": 3,
+     "weight_kg": 185.0
+    }
+   ],
+   "total_volume_kg": 1665.0,
+   "form_notes": [
+    "strong lockout"
+   ],
+   "cues_given": [
+    "wedge into the bar",
+    "push the floor away"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "b6c190f9-17c0-4205-b0cf-63ea92fe90fb",
+   "session_id": "f653ece9-8ca2-44a0-9484-7651d886c51d",
+   "client_id": "c427b9bc-1744-400c-aea4-2514e178e6d4",
+   "entry_type": "exercise_card",
+   "sequence_order": 4,
+   "exercise_name": "Romanian Deadlift",
+   "exercise_canonical": "romanian_deadlift",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 8,
+     "weight_kg": 85
+    },
+    {
+     "set": 2,
+     "reps": 8,
+     "weight_kg": 85
+    },
+    {
+     "set": 3,
+     "reps": 8,
+     "weight_kg": 85
+    }
+   ],
+   "total_volume_kg": 2040.0,
+   "form_notes": null,
+   "cues_given": null,
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "a8e5145c-15b6-40e3-b4bc-8c828e8fec42",
+   "session_id": "f653ece9-8ca2-44a0-9484-7651d886c51d",
+   "client_id": "c427b9bc-1744-400c-aea4-2514e178e6d4",
+   "entry_type": "observation_card",
+   "sequence_order": 5,
+   "exercise_name": null,
+   "exercise_canonical": null,
+   "sets": null,
+   "total_volume_kg": null,
+   "form_notes": null,
+   "cues_given": null,
+   "cue_effectiveness": null,
+   "observation_text": "Weight is progressing well across all lifts. Squat depth consistent. Watch right knee tracking as load increases \u2014 history of ACL repair.",
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "643b2613-db19-423a-a99e-4542f1d8db08",
+   "session_id": "0028cf12-9313-4f19-8418-da4cd7907d6c",
+   "client_id": "c427b9bc-1744-400c-aea4-2514e178e6d4",
+   "entry_type": "exercise_card",
+   "sequence_order": 1,
+   "exercise_name": "Barbell Back Squat",
+   "exercise_canonical": "barbell_back_squat",
+   "sets": [
+    {
+     "rpe": 7.0,
+     "set": 1,
+     "reps": 5,
+     "weight_kg": 140.0
+    },
+    {
+     "rpe": 7.0,
+     "set": 2,
+     "reps": 5,
+     "weight_kg": 140.0
+    },
+    {
+     "rpe": 7.0,
+     "set": 3,
+     "reps": 5,
+     "weight_kg": 140.0
+    },
+    {
+     "rpe": 7.0,
+     "set": 4,
+     "reps": 5,
+     "weight_kg": 140.0
+    },
+    {
+     "rpe": 7.0,
+     "set": 5,
+     "reps": 5,
+     "weight_kg": 140.0
+    }
+   ],
+   "total_volume_kg": 3500.0,
+   "form_notes": [
+    "good depth"
+   ],
+   "cues_given": [
+    "brace harder",
+    "push knees out"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "cef592de-dd91-4ddf-b927-510cbfbc2354",
+   "session_id": "0028cf12-9313-4f19-8418-da4cd7907d6c",
+   "client_id": "c427b9bc-1744-400c-aea4-2514e178e6d4",
+   "entry_type": "exercise_card",
+   "sequence_order": 2,
+   "exercise_name": "Barbell Bench Press",
+   "exercise_canonical": "barbell_bench_press",
+   "sets": [
+    {
+     "rpe": 7.0,
+     "set": 1,
+     "reps": 5,
+     "weight_kg": 100.0
+    },
+    {
+     "rpe": 7.0,
+     "set": 2,
+     "reps": 5,
+     "weight_kg": 100.0
+    },
+    {
+     "rpe": 7.0,
+     "set": 3,
+     "reps": 5,
+     "weight_kg": 100.0
+    },
+    {
+     "rpe": 7.0,
+     "set": 4,
+     "reps": 5,
+     "weight_kg": 100.0
+    },
+    {
+     "rpe": 7.0,
+     "set": 5,
+     "reps": 5,
+     "weight_kg": 100.0
+    }
+   ],
+   "total_volume_kg": 2500.0,
+   "form_notes": [
+    "solid arch",
+    "good leg drive"
+   ],
+   "cues_given": [
+    "tuck elbows",
+    "drive feet"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "dd266857-b6ac-4607-8647-759b59195d88",
+   "session_id": "0028cf12-9313-4f19-8418-da4cd7907d6c",
+   "client_id": "c427b9bc-1744-400c-aea4-2514e178e6d4",
+   "entry_type": "exercise_card",
+   "sequence_order": 3,
+   "exercise_name": "Deadlift",
+   "exercise_canonical": "deadlift",
+   "sets": [
+    {
+     "rpe": 8.0,
+     "set": 1,
+     "reps": 3,
+     "weight_kg": 180.0
+    },
+    {
+     "rpe": 8.0,
+     "set": 2,
+     "reps": 3,
+     "weight_kg": 180.0
+    },
+    {
+     "rpe": 8.0,
+     "set": 3,
+     "reps": 3,
+     "weight_kg": 180.0
+    }
+   ],
+   "total_volume_kg": 1620.0,
+   "form_notes": [
+    "strong lockout"
+   ],
+   "cues_given": [
+    "wedge into the bar",
+    "push the floor away"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "28e2f424-ddc4-46d4-9063-c75a31f06c6c",
+   "session_id": "0028cf12-9313-4f19-8418-da4cd7907d6c",
+   "client_id": "c427b9bc-1744-400c-aea4-2514e178e6d4",
+   "entry_type": "exercise_card",
+   "sequence_order": 4,
+   "exercise_name": "Romanian Deadlift",
+   "exercise_canonical": "romanian_deadlift",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 8,
+     "weight_kg": 80
+    },
+    {
+     "set": 2,
+     "reps": 8,
+     "weight_kg": 80
+    },
+    {
+     "set": 3,
+     "reps": 8,
+     "weight_kg": 80
+    }
+   ],
+   "total_volume_kg": 1920.0,
+   "form_notes": null,
+   "cues_given": null,
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "1f533a2e-3e8a-4ec4-a4ef-76e113e95139",
+   "session_id": "5aa91adb-c280-43ee-ab69-e8641d6257a3",
+   "client_id": "d6e6a691-6bb7-47c8-b79d-fe5b90665855",
+   "entry_type": "exercise_card",
+   "sequence_order": 1,
+   "exercise_name": "Goblet Squat",
+   "exercise_canonical": "goblet_squat",
+   "sets": [
+    {
+     "rpe": 7.0,
+     "set": 1,
+     "reps": 10,
+     "weight_kg": 12.0
+    },
+    {
+     "rpe": 7.0,
+     "set": 2,
+     "reps": 10,
+     "weight_kg": 12.0
+    },
+    {
+     "rpe": 7.0,
+     "set": 3,
+     "reps": 10,
+     "weight_kg": 12.0
+    }
+   ],
+   "total_volume_kg": 360.0,
+   "form_notes": [
+    "good control",
+    "no doming observed"
+   ],
+   "cues_given": [
+    "engage core",
+    "breathe out on exertion"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "58e2aa66-a0e2-44c4-a80d-b03702c332ae",
+   "session_id": "5aa91adb-c280-43ee-ab69-e8641d6257a3",
+   "client_id": "d6e6a691-6bb7-47c8-b79d-fe5b90665855",
+   "entry_type": "exercise_card",
+   "sequence_order": 2,
+   "exercise_name": "Dead Bug",
+   "exercise_canonical": "dead_bug",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 10,
+     "duration_seconds": 30
+    },
+    {
+     "set": 2,
+     "reps": 10,
+     "duration_seconds": 30
+    },
+    {
+     "set": 3,
+     "reps": 10,
+     "duration_seconds": 30
+    }
+   ],
+   "total_volume_kg": 0.0,
+   "form_notes": [
+    "maintaining neutral spine well"
+   ],
+   "cues_given": [
+    "opposite arm-leg",
+    "press low back into floor"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "d8ee3ab1-b413-42ab-a449-c391a0ca37b3",
+   "session_id": "5aa91adb-c280-43ee-ab69-e8641d6257a3",
+   "client_id": "d6e6a691-6bb7-47c8-b79d-fe5b90665855",
+   "entry_type": "exercise_card",
+   "sequence_order": 3,
+   "exercise_name": "Band Pull-Apart",
+   "exercise_canonical": "band_pull_apart",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 15
+    },
+    {
+     "set": 2,
+     "reps": 15
+    },
+    {
+     "set": 3,
+     "reps": 15
+    }
+   ],
+   "total_volume_kg": 0.0,
+   "form_notes": [
+    "good scapular retraction"
+   ],
+   "cues_given": null,
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "d4608d43-9fc7-479d-a895-289ce2dc25c7",
+   "session_id": "5aa91adb-c280-43ee-ab69-e8641d6257a3",
+   "client_id": "d6e6a691-6bb7-47c8-b79d-fe5b90665855",
+   "entry_type": "observation_card",
+   "sequence_order": 4,
+   "exercise_name": null,
+   "exercise_canonical": null,
+   "sets": null,
+   "total_volume_kg": null,
+   "form_notes": null,
+   "cues_given": null,
+   "cue_effectiveness": null,
+   "observation_text": "Best session yet. Moved to 12kg goblet squat. Core stable throughout. Great progress.",
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "f442340a-7a81-4c6a-a2b7-f34551efe07e",
+   "session_id": "24cb344d-33ab-48b3-8efe-9484e2c7754b",
+   "client_id": "d6e6a691-6bb7-47c8-b79d-fe5b90665855",
+   "entry_type": "exercise_card",
+   "sequence_order": 1,
+   "exercise_name": "Goblet Squat",
+   "exercise_canonical": "goblet_squat",
+   "sets": [
+    {
+     "rpe": 6.5,
+     "set": 1,
+     "reps": 10,
+     "weight_kg": 10.0
+    },
+    {
+     "rpe": 6.5,
+     "set": 2,
+     "reps": 10,
+     "weight_kg": 10.0
+    },
+    {
+     "rpe": 6.5,
+     "set": 3,
+     "reps": 10,
+     "weight_kg": 10.0
+    }
+   ],
+   "total_volume_kg": 300.0,
+   "form_notes": [
+    "good control",
+    "no doming observed"
+   ],
+   "cues_given": [
+    "engage core",
+    "breathe out on exertion"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "a77bffcf-ffc0-4313-9536-8d22681e8ee7",
+   "session_id": "24cb344d-33ab-48b3-8efe-9484e2c7754b",
+   "client_id": "d6e6a691-6bb7-47c8-b79d-fe5b90665855",
+   "entry_type": "exercise_card",
+   "sequence_order": 2,
+   "exercise_name": "Dead Bug",
+   "exercise_canonical": "dead_bug",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 10,
+     "duration_seconds": 30
+    },
+    {
+     "set": 2,
+     "reps": 10,
+     "duration_seconds": 30
+    },
+    {
+     "set": 3,
+     "reps": 10,
+     "duration_seconds": 30
+    }
+   ],
+   "total_volume_kg": 0.0,
+   "form_notes": [
+    "maintaining neutral spine well"
+   ],
+   "cues_given": [
+    "opposite arm-leg",
+    "press low back into floor"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "dc2a65d6-6e07-482b-bf06-ffa6adc90427",
+   "session_id": "24cb344d-33ab-48b3-8efe-9484e2c7754b",
+   "client_id": "d6e6a691-6bb7-47c8-b79d-fe5b90665855",
+   "entry_type": "exercise_card",
+   "sequence_order": 3,
+   "exercise_name": "Band Pull-Apart",
+   "exercise_canonical": "band_pull_apart",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 15
+    },
+    {
+     "set": 2,
+     "reps": 15
+    },
+    {
+     "set": 3,
+     "reps": 15
+    }
+   ],
+   "total_volume_kg": 0.0,
+   "form_notes": [
+    "good scapular retraction"
+   ],
+   "cues_given": null,
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "e7757d59-0c3e-4b4c-b0eb-2ba53779946d",
+   "session_id": "24cb344d-33ab-48b3-8efe-9484e2c7754b",
+   "client_id": "d6e6a691-6bb7-47c8-b79d-fe5b90665855",
+   "entry_type": "observation_card",
+   "sequence_order": 4,
+   "exercise_name": null,
+   "exercise_canonical": null,
+   "sets": null,
+   "total_volume_kg": null,
+   "form_notes": null,
+   "cues_given": null,
+   "cue_effectiveness": null,
+   "observation_text": "Recovery going well. Mentioned sleeping better. Ready to add a third exercise next session.",
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "b5d998d1-2692-4f9f-8f03-13f473ca3465",
+   "session_id": "06369595-6fe8-43b0-986f-d295b84854b1",
+   "client_id": "d6e6a691-6bb7-47c8-b79d-fe5b90665855",
+   "entry_type": "exercise_card",
+   "sequence_order": 1,
+   "exercise_name": "Goblet Squat",
+   "exercise_canonical": "goblet_squat",
+   "sets": [
+    {
+     "rpe": 6.0,
+     "set": 1,
+     "reps": 10,
+     "weight_kg": 10.0
+    },
+    {
+     "rpe": 6.0,
+     "set": 2,
+     "reps": 10,
+     "weight_kg": 10.0
+    },
+    {
+     "rpe": 6.0,
+     "set": 3,
+     "reps": 10,
+     "weight_kg": 10.0
+    }
+   ],
+   "total_volume_kg": 300.0,
+   "form_notes": [
+    "good control",
+    "no doming observed"
+   ],
+   "cues_given": [
+    "engage core",
+    "breathe out on exertion"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "b329842d-ef06-4fed-8772-c7bdef1a4925",
+   "session_id": "06369595-6fe8-43b0-986f-d295b84854b1",
+   "client_id": "d6e6a691-6bb7-47c8-b79d-fe5b90665855",
+   "entry_type": "exercise_card",
+   "sequence_order": 2,
+   "exercise_name": "Dead Bug",
+   "exercise_canonical": "dead_bug",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 10,
+     "duration_seconds": 30
+    },
+    {
+     "set": 2,
+     "reps": 10,
+     "duration_seconds": 30
+    },
+    {
+     "set": 3,
+     "reps": 10,
+     "duration_seconds": 30
+    }
+   ],
+   "total_volume_kg": 0.0,
+   "form_notes": [
+    "maintaining neutral spine well"
+   ],
+   "cues_given": [
+    "opposite arm-leg",
+    "press low back into floor"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "a6ec93d3-9134-4ba7-9fe9-d8eead4675d4",
+   "session_id": "06369595-6fe8-43b0-986f-d295b84854b1",
+   "client_id": "d6e6a691-6bb7-47c8-b79d-fe5b90665855",
+   "entry_type": "exercise_card",
+   "sequence_order": 3,
+   "exercise_name": "Band Pull-Apart",
+   "exercise_canonical": "band_pull_apart",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 15
+    },
+    {
+     "set": 2,
+     "reps": 15
+    },
+    {
+     "set": 3,
+     "reps": 15
+    }
+   ],
+   "total_volume_kg": 0.0,
+   "form_notes": [
+    "good scapular retraction"
+   ],
+   "cues_given": null,
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "a63fc90d-5935-4ca4-89ae-c11158c78058",
+   "session_id": "06369595-6fe8-43b0-986f-d295b84854b1",
+   "client_id": "d6e6a691-6bb7-47c8-b79d-fe5b90665855",
+   "entry_type": "observation_card",
+   "sequence_order": 4,
+   "exercise_name": null,
+   "exercise_canonical": null,
+   "sets": null,
+   "total_volume_kg": null,
+   "form_notes": null,
+   "cues_given": null,
+   "cue_effectiveness": null,
+   "observation_text": "Progressed goblet squat to 10kg \u2014 handled it well. Confidence growing.",
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "ed017d76-103d-40a8-8fa6-a004de2342d5",
+   "session_id": "74c65068-4bb0-4ff4-9acd-e2e1d9b91019",
+   "client_id": "d6e6a691-6bb7-47c8-b79d-fe5b90665855",
+   "entry_type": "exercise_card",
+   "sequence_order": 1,
+   "exercise_name": "Goblet Squat",
+   "exercise_canonical": "goblet_squat",
+   "sets": [
+    {
+     "rpe": 5.5,
+     "set": 1,
+     "reps": 10,
+     "weight_kg": 8.0
+    },
+    {
+     "rpe": 5.5,
+     "set": 2,
+     "reps": 10,
+     "weight_kg": 8.0
+    },
+    {
+     "rpe": 5.5,
+     "set": 3,
+     "reps": 10,
+     "weight_kg": 8.0
+    }
+   ],
+   "total_volume_kg": 240.0,
+   "form_notes": [
+    "good control",
+    "no doming observed"
+   ],
+   "cues_given": [
+    "engage core",
+    "breathe out on exertion"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "76bdc990-14ac-4cd9-abe7-a1b67a36f180",
+   "session_id": "74c65068-4bb0-4ff4-9acd-e2e1d9b91019",
+   "client_id": "d6e6a691-6bb7-47c8-b79d-fe5b90665855",
+   "entry_type": "exercise_card",
+   "sequence_order": 2,
+   "exercise_name": "Dead Bug",
+   "exercise_canonical": "dead_bug",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 10,
+     "duration_seconds": 30
+    },
+    {
+     "set": 2,
+     "reps": 10,
+     "duration_seconds": 30
+    },
+    {
+     "set": 3,
+     "reps": 10,
+     "duration_seconds": 30
+    }
+   ],
+   "total_volume_kg": 0.0,
+   "form_notes": [
+    "maintaining neutral spine well"
+   ],
+   "cues_given": [
+    "opposite arm-leg",
+    "press low back into floor"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "9de2b111-10aa-4e46-9e20-75e702c25016",
+   "session_id": "74c65068-4bb0-4ff4-9acd-e2e1d9b91019",
+   "client_id": "d6e6a691-6bb7-47c8-b79d-fe5b90665855",
+   "entry_type": "observation_card",
+   "sequence_order": 3,
+   "exercise_name": null,
+   "exercise_canonical": null,
+   "sets": null,
+   "total_volume_kg": null,
+   "form_notes": null,
+   "cues_given": null,
+   "cue_effectiveness": null,
+   "observation_text": "Energy better today. Core activation improving. No diastasis symptoms during dead bugs.",
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "268b35b6-2bce-49a6-8da4-77f432e14267",
+   "session_id": "6dbb7574-5e18-4c41-9b7b-b91cf58d99c9",
+   "client_id": "d6e6a691-6bb7-47c8-b79d-fe5b90665855",
+   "entry_type": "exercise_card",
+   "sequence_order": 1,
+   "exercise_name": "Goblet Squat",
+   "exercise_canonical": "goblet_squat",
+   "sets": [
+    {
+     "rpe": 5.0,
+     "set": 1,
+     "reps": 10,
+     "weight_kg": 8.0
+    },
+    {
+     "rpe": 5.0,
+     "set": 2,
+     "reps": 10,
+     "weight_kg": 8.0
+    },
+    {
+     "rpe": 5.0,
+     "set": 3,
+     "reps": 10,
+     "weight_kg": 8.0
+    }
+   ],
+   "total_volume_kg": 240.0,
+   "form_notes": [
+    "good control",
+    "no doming observed"
+   ],
+   "cues_given": [
+    "engage core",
+    "breathe out on exertion"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "c7b9ba6c-0055-4488-b0a7-d93d844e9a10",
+   "session_id": "6dbb7574-5e18-4c41-9b7b-b91cf58d99c9",
+   "client_id": "d6e6a691-6bb7-47c8-b79d-fe5b90665855",
+   "entry_type": "exercise_card",
+   "sequence_order": 2,
+   "exercise_name": "Dead Bug",
+   "exercise_canonical": "dead_bug",
+   "sets": [
+    {
+     "set": 1,
+     "reps": 10,
+     "duration_seconds": 30
+    },
+    {
+     "set": 2,
+     "reps": 10,
+     "duration_seconds": 30
+    },
+    {
+     "set": 3,
+     "reps": 10,
+     "duration_seconds": 30
+    }
+   ],
+   "total_volume_kg": 0.0,
+   "form_notes": [
+    "maintaining neutral spine well"
+   ],
+   "cues_given": [
+    "opposite arm-leg",
+    "press low back into floor"
+   ],
+   "cue_effectiveness": null,
+   "observation_text": null,
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "1b414646-03eb-4d3d-911c-d49221df55e0",
+   "session_id": "6dbb7574-5e18-4c41-9b7b-b91cf58d99c9",
+   "client_id": "d6e6a691-6bb7-47c8-b79d-fe5b90665855",
+   "entry_type": "observation_card",
+   "sequence_order": 3,
+   "exercise_name": null,
+   "exercise_canonical": null,
+   "sets": null,
+   "total_volume_kg": null,
+   "form_notes": null,
+   "cues_given": null,
+   "cue_effectiveness": null,
+   "observation_text": "First session. Low energy, 4 hours sleep (baby waking). Kept intensity low. Good attitude.",
+   "attached_to_set": null,
+   "flag_color": null,
+   "flag_reason": null,
+   "performed_at": null,
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  }
+ ],
+ "plans": [
+  {
+   "id": "12c64024-00ca-4e49-925c-43dbf58f670e",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "trainer_id": "d249f14e-d3c0-4fa7-bda5-97d07c3b5179",
+   "plan_text": "Progress leg press by 2.5kg if last session was comfortable. Add band pull-aparts for shoulder health. Continue seated row at same weight, focus on form. Monitor left shoulder \u2014 impingement was flaring last week.",
+   "planned_exercises": null,
+   "planned_for_date": "2026-08-14",
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "13b80797-c6a1-48f1-b2eb-a34f2e759688",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "trainer_id": "d249f14e-d3c0-4fa7-bda5-97d07c3b5179",
+   "plan_text": "Long-term progression check. She's been training 12+ weeks now. Test leg press at 55kg for 3x10. Introduce bird dogs for core/balance. Right hip has been bothering her \u2014 modify step-ups to lower box height. Goal: maintain independence and bone density.",
+   "planned_exercises": null,
+   "planned_for_date": "2026-09-25",
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "dad214d6-c55e-400f-8124-50db1adc4a9d",
+   "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+   "trainer_id": "d249f14e-d3c0-4fa7-bda5-97d07c3b5179",
+   "plan_text": "Baseline assessment and gentle introduction. Leg press (light), seated row, step-ups on low box. Focus on confidence and comfort in the gym. Watch hip ROM on step-ups given replacement history.",
+   "planned_exercises": null,
+   "planned_for_date": "2026-07-10",
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "05e78b1f-f118-4044-bca7-4a0a842261a4",
+   "client_id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "trainer_id": "d249f14e-d3c0-4fa7-bda5-97d07c3b5179",
+   "plan_text": "Lower body day. 4x8 barbell back squat \u2014 watch depth and knee tracking. 3x10 Romanian deadlift, focus on hinge pattern. 3x12 lunges each side. Core work: 3x plank to failure. If back feels tight from last session, swap RDLs for leg press.",
+   "planned_exercises": null,
+   "planned_for_date": "2026-09-23",
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "8cd2113c-ca53-4eec-b7ad-42fdac92ca0f",
+   "client_id": "7cf60ca0-2ddf-46f3-a68f-f69d64d6b520",
+   "trainer_id": "d249f14e-d3c0-4fa7-bda5-97d07c3b5179",
+   "plan_text": "Upper body focus. 4x8 bench press (start 40kg, add 2.5kg if last session was RPE <8). 3x10 lat pulldown. 3x10 overhead press with dumbbells. Emphasize form over load \u2014 he's progressing fast and needs good habits.",
+   "planned_exercises": null,
+   "planned_for_date": "2026-08-24",
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  },
+  {
+   "id": "1a8f5194-ca93-456b-9e26-723e0dcef216",
+   "client_id": "d6e6a691-6bb7-47c8-b79d-fe5b90665855",
+   "trainer_id": "d249f14e-d3c0-4fa7-bda5-97d07c3b5179",
+   "plan_text": "Focus on core reconnection and hip stability. 3x10 dead bugs (strict form), 3x8 goblet squats progressing from 8kg to 10kg if last session felt controlled. Add band walks if energy allows. Watch for diastasis symptoms \u2014 stop any exercise that causes doming.",
+   "planned_exercises": null,
+   "planned_for_date": "2026-10-13",
+   "created_at": "2026-10-23T03:14:00.368922Z"
+  }
+ ],
+ "session_clips": [
+  {
+   "audio": "clip-1.m4a",
+   "response": {
+    "entries_created": [
+     {
+      "id": "6a70bc4d-bf7b-4c4a-ac6a-1a07bf99057b",
+      "session_id": "26bcce78-9df9-4705-9c05-db81bc99e0d5",
+      "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+      "entry_type": "exercise_card",
+      "sequence_order": 1,
+      "exercise_name": "Goblet squats",
+      "exercise_canonical": "Goblet Squat",
+      "sets": [
+       {
+        "reps": 10,
+        "weight": 16,
+        "weight_unit": "kg",
+        "weight_original": 16,
+        "weight_unit_original": "kg"
+       },
+       {
+        "reps": 10,
+        "weight": 16,
+        "weight_unit": "kg",
+        "weight_original": 16,
+        "weight_unit_original": "kg"
+       },
+       {
+        "rpe": 8,
+        "reps": 10,
+        "weight": 16,
+        "weight_unit": "kg",
+        "weight_original": 16,
+        "weight_unit_original": "kg"
+       }
+      ],
+      "total_volume_kg": 480.0,
+      "form_notes": null,
+      "cues_given": null,
+      "cue_effectiveness": null,
+      "observation_text": null,
+      "attached_to_set": null,
+      "flag_color": null,
+      "flag_reason": null,
+      "performed_at": null,
+      "created_at": "2026-10-23T03:16:39.185994Z"
+     }
+    ],
+    "entries_modified": [],
+    "clarifications_needed": [],
+    "warnings": [],
+    "transcript": "Goblet squats, three sets of 10 at 16 kilos. The last set was an RPE of eight.",
+    "confidence": 1.0,
+    "timing": {
+     "transcription_ms": 1364,
+     "parsing_ms": 3156,
+     "validation_ms": 17,
+     "persistence_ms": 56,
+     "total_ms": 4593
+    }
+   }
+  },
+  {
+   "audio": "clip-2.m4a",
+   "response": {
+    "entries_created": [
+     {
+      "id": "63686000-95ef-407e-a011-f5666aa298e0",
+      "session_id": "26bcce78-9df9-4705-9c05-db81bc99e0d5",
+      "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+      "entry_type": "exercise_card",
+      "sequence_order": 2,
+      "exercise_name": "Romanian deadlifts",
+      "exercise_canonical": "Romanian Deadlift",
+      "sets": [
+       {
+        "reps": 8,
+        "weight": 25,
+        "weight_unit": "kg",
+        "weight_original": 25,
+        "weight_unit_original": "kg"
+       },
+       {
+        "reps": 8,
+        "weight": 25,
+        "weight_unit": "kg",
+        "weight_original": 25,
+        "weight_unit_original": "kg"
+       },
+       {
+        "reps": 8,
+        "notes": "Hamstrings felt tight",
+        "weight": 25,
+        "weight_unit": "kg",
+        "weight_original": 25,
+        "weight_unit_original": "kg"
+       }
+      ],
+      "total_volume_kg": 600.0,
+      "form_notes": null,
+      "cues_given": null,
+      "cue_effectiveness": null,
+      "observation_text": null,
+      "attached_to_set": null,
+      "flag_color": null,
+      "flag_reason": null,
+      "performed_at": null,
+      "created_at": "2026-10-23T03:16:45.714131Z"
+     }
+    ],
+    "entries_modified": [],
+    "clarifications_needed": [],
+    "warnings": [],
+    "transcript": "Romanian deadlifts, three sets of eight at 25 kilos. Hamstrings felt tight on the last set.",
+    "confidence": 0.99902344,
+    "timing": {
+     "transcription_ms": 643,
+     "parsing_ms": 2958,
+     "validation_ms": 7,
+     "persistence_ms": 14,
+     "total_ms": 3622
+    }
+   }
+  },
+  {
+   "audio": "clip-3.m4a",
+   "response": {
+    "entries_created": [
+     {
+      "id": "cdca7810-4677-446b-9a17-62749ad20a6a",
+      "session_id": "26bcce78-9df9-4705-9c05-db81bc99e0d5",
+      "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+      "entry_type": "observation_card",
+      "sequence_order": 3,
+      "exercise_name": null,
+      "exercise_canonical": null,
+      "sets": null,
+      "total_volume_kg": null,
+      "form_notes": null,
+      "cues_given": null,
+      "cue_effectiveness": null,
+      "observation_text": "Knees caved in on the last few reps of goblet squats.",
+      "attached_to_set": 3,
+      "flag_color": "yellow",
+      "flag_reason": "Form Breakdown",
+      "performed_at": null,
+      "created_at": "2026-10-23T03:16:50.852638Z"
+     }
+    ],
+    "entries_modified": [],
+    "clarifications_needed": [],
+    "warnings": [],
+    "transcript": "Knees caved in a little on the last few squat reps. Q knees out next time.",
+    "confidence": 0.9995117,
+    "timing": {
+     "transcription_ms": 567,
+     "parsing_ms": 2835,
+     "validation_ms": 0,
+     "persistence_ms": 22,
+     "total_ms": 3424
+    }
+   }
+  },
+  {
+   "audio": "clip-4.m4a",
+   "response": {
+    "entries_created": [],
+    "entries_modified": [
+     {
+      "id": "63686000-95ef-407e-a011-f5666aa298e0",
+      "session_id": "26bcce78-9df9-4705-9c05-db81bc99e0d5",
+      "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+      "entry_type": "exercise_card",
+      "sequence_order": 2,
+      "exercise_name": "Romanian deadlifts",
+      "exercise_canonical": "Romanian Deadlift",
+      "sets": [
+       {
+        "reps": 8,
+        "weight": 25,
+        "weight_unit": "kg",
+        "weight_original": 25,
+        "weight_unit_original": "kg"
+       },
+       {
+        "reps": 8,
+        "weight": 25,
+        "weight_unit": "kg",
+        "weight_original": 25,
+        "weight_unit_original": "kg"
+       },
+       {
+        "reps": 8,
+        "notes": "Hamstrings felt tight",
+        "weight": 30,
+        "weight_unit": "kg",
+        "weight_original": 30,
+        "weight_unit_original": "kg"
+       }
+      ],
+      "total_volume_kg": 640.0,
+      "form_notes": null,
+      "cues_given": null,
+      "cue_effectiveness": null,
+      "observation_text": null,
+      "attached_to_set": null,
+      "flag_color": null,
+      "flag_reason": null,
+      "performed_at": null,
+      "created_at": "2026-10-23T03:16:45.714131Z"
+     }
+    ],
+    "clarifications_needed": [],
+    "warnings": [],
+    "transcript": "Actually, that last set of deadlifts was 30 kilos, not 25.",
+    "confidence": 1.0,
+    "timing": {
+     "transcription_ms": 407,
+     "parsing_ms": 3505,
+     "validation_ms": 0,
+     "persistence_ms": 61,
+     "total_ms": 3973
+    }
+   }
+  },
+  {
+   "audio": "clip-5.m4a",
+   "response": {
+    "entries_created": [
+     {
+      "id": "7a45da6b-1f38-4140-bc07-09fa919170c5",
+      "session_id": "26bcce78-9df9-4705-9c05-db81bc99e0d5",
+      "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+      "entry_type": "exercise_card",
+      "sequence_order": 4,
+      "exercise_name": "Push ups",
+      "exercise_canonical": "Push-Up",
+      "sets": [
+       {
+        "reps": 12
+       },
+       {
+        "reps": 12
+       },
+       {
+        "reps": 12
+       }
+      ],
+      "total_volume_kg": null,
+      "form_notes": null,
+      "cues_given": null,
+      "cue_effectiveness": null,
+      "observation_text": null,
+      "attached_to_set": null,
+      "flag_color": null,
+      "flag_reason": null,
+      "performed_at": null,
+      "created_at": "2026-10-23T03:17:04.249516Z"
+     }
+    ],
+    "entries_modified": [],
+    "clarifications_needed": [],
+    "warnings": [],
+    "transcript": "Push ups, three sets of 12. Body weight.",
+    "confidence": 0.9838867,
+    "timing": {
+     "transcription_ms": 503,
+     "parsing_ms": 2862,
+     "validation_ms": 8,
+     "persistence_ms": 33,
+     "total_ms": 3406
+    }
+   }
+  },
+  {
+   "audio": "clip-6.m4a",
+   "response": {
+    "entries_created": [
+     {
+      "id": "4fafd8b2-bcf0-4245-b672-5416bec5942d",
+      "session_id": "26bcce78-9df9-4705-9c05-db81bc99e0d5",
+      "client_id": "013fd043-f8ce-4103-a6ca-639642d6a9bd",
+      "entry_type": "exercise_card",
+      "sequence_order": 5,
+      "exercise_name": "Plank",
+      "exercise_canonical": "Plank",
+      "sets": [
+       {
+        "reps": 1,
+        "duration_seconds": 45
+       },
+       {
+        "reps": 1,
+        "duration_seconds": 45
+       },
+       {
+        "reps": 1,
+        "duration_seconds": 45
+       }
+      ],
+      "total_volume_kg": null,
+      "form_notes": null,
+      "cues_given": null,
+      "cue_effectiveness": null,
+      "observation_text": null,
+      "attached_to_set": null,
+      "flag_color": null,
+      "flag_reason": null,
+      "performed_at": null,
+      "created_at": "2026-10-23T03:17:09.679421Z"
+     }
+    ],
+    "entries_modified": [],
+    "clarifications_needed": [],
+    "warnings": [
+     {
+      "field": "reps",
+      "code": "invalid_reps",
+      "message": "Invalid reps value: 0. Must be a positive integer."
+     },
+     {
+      "field": "reps",
+      "code": "invalid_reps",
+      "message": "Invalid reps value: 0. Must be a positive integer."
+     },
+     {
+      "field": "reps",
+      "code": "invalid_reps",
+      "message": "Invalid reps value: 0. Must be a positive integer."
+     }
+    ],
+    "transcript": "Plank, three rounds of forty five seconds.",
+    "confidence": 1.0,
+    "timing": {
+     "transcription_ms": 393,
+     "parsing_ms": 1924,
+     "validation_ms": 0,
+     "persistence_ms": 33,
+     "total_ms": 2350
+    }
+   }
+  }
+ ],
+ "plan_clip": {
+  "audio": "plan.m4a",
+  "transcript": "Next session is legs. Back squats four sets of eight at sixty kilos, walking lunges three sets of 10 each side, and leg press three sets of 12 at one hundred kilos.",
+  "parsed": {
+   "workout_type": "Leg Workout",
+   "exercises": [
+    {
+     "exercise_name": "Back Squat",
+     "sets": "4",
+     "reps": "8",
+     "weight": "60kg"
+    },
+    {
+     "exercise_name": "Walking Lunges",
+     "sets": "3",
+     "reps": "10",
+     "weight": ""
+    },
+    {
+     "exercise_name": "Leg Press",
+     "sets": "3",
+     "reps": "12",
+     "weight": "100kg"
+    }
+   ]
+  }
+ },
+ "exercise_regions": {
+  "Ab Wheel Rollout": "core",
+  "Arnold Press": "push",
+  "Assault Bike Sprint": "conditioning",
+  "Atlas Stone Lift": "legs",
+  "Back Extension": "legs",
+  "Band Assisted Nordic Hamstring Curl": "legs",
+  "Band Pull-Apart": "pull",
+  "Barbell Back Squat": "legs",
+  "Barbell Bench Press": "push",
+  "Barbell Curl": "pull",
+  "Barbell Hip Thrust": "legs",
+  "Barbell Row": "pull",
+  "Battle Ropes": "conditioning",
+  "Bird Dog": "core",
+  "Bird Dog Row": "pull",
+  "Box Jump": "legs",
+  "Bulgarian Split Squat": "legs",
+  "Cable Chest Fly": "push",
+  "Cable Crunch": "core",
+  "Cable External Rotation": "pull",
+  "Cable Hip Abduction": "legs",
+  "Cable Hip Adduction": "legs",
+  "Cable Internal Rotation": "pull",
+  "Cable Pull-Through": "legs",
+  "Chin-Up": "pull",
+  "Clamshell": "legs",
+  "Clean Pull": "legs",
+  "Close-Grip Bench Press": "push",
+  "Conventional Deadlift": "legs",
+  "Copenhagen Plank": "legs",
+  "Curtsy Lunge": "legs",
+  "Dead Bug": "core",
+  "Dead Hang": "pull",
+  "Decline Bench Press": "push",
+  "Depth Jump": "legs",
+  "Dip": "push",
+  "Donkey Kick": "legs",
+  "Drag Curl": "pull",
+  "Dumbbell Bench Press": "push",
+  "Dumbbell Curl": "pull",
+  "Dumbbell Fly": "push",
+  "Dumbbell Push Press": "push",
+  "Dumbbell Shoulder Press": "push",
+  "Face Pull": "pull",
+  "Farmer's Carry": "core",
+  "Fire Hydrant": "legs",
+  "Floor Press": "push",
+  "Front Raise": "push",
+  "Front Squat": "legs",
+  "GHD Hip Extension": "legs",
+  "Glute Bridge": "legs",
+  "Goblet Squat": "legs",
+  "Good Morning": "legs",
+  "Hammer Curl": "pull",
+  "Hang Clean": "legs",
+  "Hang Power Clean": "legs",
+  "Hanging Leg Raise": "core",
+  "Incline Barbell Bench Press": "push",
+  "Incline Dumbbell Curl": "pull",
+  "Incline Dumbbell Press": "push",
+  "Jump Squat": "legs",
+  "Kettlebell Swing": "conditioning",
+  "Landmine Press": "push",
+  "Lat Pulldown": "pull",
+  "Lateral Band Walk": "legs",
+  "Lateral Bound": "legs",
+  "Lateral Lunge": "legs",
+  "Lateral Raise": "push",
+  "Leg Extension": "legs",
+  "Leg Press": "legs",
+  "Linear Sprint": "conditioning",
+  "Log Press": "push",
+  "Lying Leg Curl": "legs",
+  "Medicine Ball Rotational Throw": "core",
+  "Medicine Ball Slam": "core",
+  "Monster Walk": "legs",
+  "Nordic Hamstring Curl": "legs",
+  "Overhead Press": "push",
+  "Overhead Triceps Extension": "push",
+  "Pallof Press": "core",
+  "Pinch Grip Hold": "legs",
+  "Plank": "core",
+  "Power Clean": "legs",
+  "Power Snatch": "legs",
+  "Preacher Curl": "pull",
+  "Prone T Raise": "pull",
+  "Prone W Raise": "pull",
+  "Prone Y Raise": "pull",
+  "Prowler Sprint": "conditioning",
+  "Pull-Up": "pull",
+  "Push Jerk": "legs",
+  "Push Press": "push",
+  "Push-Up": "push",
+  "Reverse Curl": "pull",
+  "Reverse Hyperextension": "legs",
+  "Reverse Lunge": "legs",
+  "Reverse Sled Drag": "legs",
+  "Romanian Deadlift": "legs",
+  "Romanian Deadlift to Shrug": "legs",
+  "Rowing Machine": "conditioning",
+  "Sandbag Carry": "core",
+  "Scapular Pull-Up": "pull",
+  "Seated Cable Row": "pull",
+  "Serratus Anterior Punch": "push",
+  "Side Plank": "core",
+  "Single Leg Calf Raise": "legs",
+  "Single Leg Hip Thrust": "legs",
+  "Single Leg Romanian Deadlift": "legs",
+  "Single Leg Wall Sit": "legs",
+  "Single-Arm Dumbbell Row": "pull",
+  "Single-Leg Glute Bridge": "legs",
+  "Skull Crusher": "push",
+  "Sled Pull": "conditioning",
+  "Sled Push": "conditioning",
+  "Snatch Pull": "legs",
+  "Spanish Squat": "legs",
+  "Spider Curl": "pull",
+  "Split Squat": "legs",
+  "Standing Broad Jump": "legs",
+  "Standing Calf Raise": "legs",
+  "Step Down": "legs",
+  "Step Up": "legs",
+  "Suitcase Carry": "core",
+  "Suitcase Deadlift": "legs",
+  "Sumo Deadlift": "legs",
+  "T-Bar Row": "pull",
+  "Terminal Knee Extension": "legs",
+  "Tibialis Raise": "legs",
+  "Tire Flip": "legs",
+  "Trap Bar Deadlift": "legs",
+  "Trap Bar Jump": "legs",
+  "Triceps Kickback": "push",
+  "Triceps Pushdown": "push",
+  "Tuck Jump": "legs",
+  "Walking Lunge": "legs",
+  "Wall Slide": "push",
+  "Weighted Box Step-Up": "legs",
+  "Wide Grip Cable Row": "pull",
+  "Yoke Walk": "pull",
+  "Zottman Curl": "pull"
+ },
+ "classifier_cases": [
+  {
+   "names": [],
+   "expected": "Session"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout"
+   ],
+   "expected": "Core"
+  },
+  {
+   "names": [
+    "Arnold Press"
+   ],
+   "expected": "Upper Body Push"
+  },
+  {
+   "names": [
+    "Assault Bike Sprint"
+   ],
+   "expected": "Conditioning"
+  },
+  {
+   "names": [
+    "Atlas Stone Lift"
+   ],
+   "expected": "Lower Body"
+  },
+  {
+   "names": [
+    "Band Pull-Apart"
+   ],
+   "expected": "Upper Body Pull"
+  },
+  {
+   "names": [
+    "Not An Exercise"
+   ],
+   "expected": "Session"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Ab Wheel Rollout"
+   ],
+   "expected": "Core"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Arnold Press"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Assault Bike Sprint"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Atlas Stone Lift"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Band Pull-Apart"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Not An Exercise"
+   ],
+   "expected": "Core"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Arnold Press"
+   ],
+   "expected": "Upper Body Push"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Assault Bike Sprint"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Atlas Stone Lift"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Band Pull-Apart"
+   ],
+   "expected": "Upper Body"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Not An Exercise"
+   ],
+   "expected": "Upper Body Push"
+  },
+  {
+   "names": [
+    "Assault Bike Sprint",
+    "Assault Bike Sprint"
+   ],
+   "expected": "Conditioning"
+  },
+  {
+   "names": [
+    "Assault Bike Sprint",
+    "Atlas Stone Lift"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Assault Bike Sprint",
+    "Band Pull-Apart"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Assault Bike Sprint",
+    "Not An Exercise"
+   ],
+   "expected": "Conditioning"
+  },
+  {
+   "names": [
+    "Atlas Stone Lift",
+    "Atlas Stone Lift"
+   ],
+   "expected": "Lower Body"
+  },
+  {
+   "names": [
+    "Atlas Stone Lift",
+    "Band Pull-Apart"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Atlas Stone Lift",
+    "Not An Exercise"
+   ],
+   "expected": "Lower Body"
+  },
+  {
+   "names": [
+    "Band Pull-Apart",
+    "Band Pull-Apart"
+   ],
+   "expected": "Upper Body Pull"
+  },
+  {
+   "names": [
+    "Band Pull-Apart",
+    "Not An Exercise"
+   ],
+   "expected": "Upper Body Pull"
+  },
+  {
+   "names": [
+    "Not An Exercise",
+    "Not An Exercise"
+   ],
+   "expected": "Session"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Ab Wheel Rollout",
+    "Ab Wheel Rollout"
+   ],
+   "expected": "Core"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Ab Wheel Rollout",
+    "Arnold Press"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Ab Wheel Rollout",
+    "Assault Bike Sprint"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Ab Wheel Rollout",
+    "Atlas Stone Lift"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Ab Wheel Rollout",
+    "Band Pull-Apart"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Ab Wheel Rollout",
+    "Not An Exercise"
+   ],
+   "expected": "Core"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Arnold Press",
+    "Arnold Press"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Arnold Press",
+    "Assault Bike Sprint"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Arnold Press",
+    "Atlas Stone Lift"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Arnold Press",
+    "Band Pull-Apart"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Arnold Press",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Assault Bike Sprint",
+    "Assault Bike Sprint"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Assault Bike Sprint",
+    "Atlas Stone Lift"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Assault Bike Sprint",
+    "Band Pull-Apart"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Assault Bike Sprint",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Atlas Stone Lift",
+    "Atlas Stone Lift"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Atlas Stone Lift",
+    "Band Pull-Apart"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Atlas Stone Lift",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Band Pull-Apart",
+    "Band Pull-Apart"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Band Pull-Apart",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Not An Exercise",
+    "Not An Exercise"
+   ],
+   "expected": "Core"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Arnold Press",
+    "Arnold Press"
+   ],
+   "expected": "Upper Body Push"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Arnold Press",
+    "Assault Bike Sprint"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Arnold Press",
+    "Atlas Stone Lift"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Arnold Press",
+    "Band Pull-Apart"
+   ],
+   "expected": "Upper Body"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Arnold Press",
+    "Not An Exercise"
+   ],
+   "expected": "Upper Body Push"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Assault Bike Sprint",
+    "Assault Bike Sprint"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Assault Bike Sprint",
+    "Atlas Stone Lift"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Assault Bike Sprint",
+    "Band Pull-Apart"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Assault Bike Sprint",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Atlas Stone Lift",
+    "Atlas Stone Lift"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Atlas Stone Lift",
+    "Band Pull-Apart"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Atlas Stone Lift",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Band Pull-Apart",
+    "Band Pull-Apart"
+   ],
+   "expected": "Upper Body"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Band Pull-Apart",
+    "Not An Exercise"
+   ],
+   "expected": "Upper Body"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Not An Exercise",
+    "Not An Exercise"
+   ],
+   "expected": "Upper Body Push"
+  },
+  {
+   "names": [
+    "Assault Bike Sprint",
+    "Assault Bike Sprint",
+    "Assault Bike Sprint"
+   ],
+   "expected": "Conditioning"
+  },
+  {
+   "names": [
+    "Assault Bike Sprint",
+    "Assault Bike Sprint",
+    "Atlas Stone Lift"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Assault Bike Sprint",
+    "Assault Bike Sprint",
+    "Band Pull-Apart"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Assault Bike Sprint",
+    "Assault Bike Sprint",
+    "Not An Exercise"
+   ],
+   "expected": "Conditioning"
+  },
+  {
+   "names": [
+    "Assault Bike Sprint",
+    "Atlas Stone Lift",
+    "Atlas Stone Lift"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Assault Bike Sprint",
+    "Atlas Stone Lift",
+    "Band Pull-Apart"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Assault Bike Sprint",
+    "Atlas Stone Lift",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Assault Bike Sprint",
+    "Band Pull-Apart",
+    "Band Pull-Apart"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Assault Bike Sprint",
+    "Band Pull-Apart",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Assault Bike Sprint",
+    "Not An Exercise",
+    "Not An Exercise"
+   ],
+   "expected": "Conditioning"
+  },
+  {
+   "names": [
+    "Atlas Stone Lift",
+    "Atlas Stone Lift",
+    "Atlas Stone Lift"
+   ],
+   "expected": "Lower Body"
+  },
+  {
+   "names": [
+    "Atlas Stone Lift",
+    "Atlas Stone Lift",
+    "Band Pull-Apart"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Atlas Stone Lift",
+    "Atlas Stone Lift",
+    "Not An Exercise"
+   ],
+   "expected": "Lower Body"
+  },
+  {
+   "names": [
+    "Atlas Stone Lift",
+    "Band Pull-Apart",
+    "Band Pull-Apart"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Atlas Stone Lift",
+    "Band Pull-Apart",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Atlas Stone Lift",
+    "Not An Exercise",
+    "Not An Exercise"
+   ],
+   "expected": "Lower Body"
+  },
+  {
+   "names": [
+    "Band Pull-Apart",
+    "Band Pull-Apart",
+    "Band Pull-Apart"
+   ],
+   "expected": "Upper Body Pull"
+  },
+  {
+   "names": [
+    "Band Pull-Apart",
+    "Band Pull-Apart",
+    "Not An Exercise"
+   ],
+   "expected": "Upper Body Pull"
+  },
+  {
+   "names": [
+    "Band Pull-Apart",
+    "Not An Exercise",
+    "Not An Exercise"
+   ],
+   "expected": "Upper Body Pull"
+  },
+  {
+   "names": [
+    "Not An Exercise",
+    "Not An Exercise",
+    "Not An Exercise"
+   ],
+   "expected": "Session"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Ab Wheel Rollout",
+    "Ab Wheel Rollout",
+    "Ab Wheel Rollout"
+   ],
+   "expected": "Core"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Ab Wheel Rollout",
+    "Ab Wheel Rollout",
+    "Arnold Press"
+   ],
+   "expected": "Core"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Ab Wheel Rollout",
+    "Ab Wheel Rollout",
+    "Assault Bike Sprint"
+   ],
+   "expected": "Core"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Ab Wheel Rollout",
+    "Ab Wheel Rollout",
+    "Atlas Stone Lift"
+   ],
+   "expected": "Core"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Ab Wheel Rollout",
+    "Ab Wheel Rollout",
+    "Band Pull-Apart"
+   ],
+   "expected": "Core"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Ab Wheel Rollout",
+    "Ab Wheel Rollout",
+    "Not An Exercise"
+   ],
+   "expected": "Core"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Ab Wheel Rollout",
+    "Arnold Press",
+    "Arnold Press"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Ab Wheel Rollout",
+    "Arnold Press",
+    "Assault Bike Sprint"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Ab Wheel Rollout",
+    "Arnold Press",
+    "Atlas Stone Lift"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Ab Wheel Rollout",
+    "Arnold Press",
+    "Band Pull-Apart"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Ab Wheel Rollout",
+    "Arnold Press",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Ab Wheel Rollout",
+    "Assault Bike Sprint",
+    "Assault Bike Sprint"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Ab Wheel Rollout",
+    "Assault Bike Sprint",
+    "Atlas Stone Lift"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Ab Wheel Rollout",
+    "Assault Bike Sprint",
+    "Band Pull-Apart"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Ab Wheel Rollout",
+    "Assault Bike Sprint",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Ab Wheel Rollout",
+    "Atlas Stone Lift",
+    "Atlas Stone Lift"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Ab Wheel Rollout",
+    "Atlas Stone Lift",
+    "Band Pull-Apart"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Ab Wheel Rollout",
+    "Atlas Stone Lift",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Ab Wheel Rollout",
+    "Band Pull-Apart",
+    "Band Pull-Apart"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Ab Wheel Rollout",
+    "Band Pull-Apart",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Ab Wheel Rollout",
+    "Not An Exercise",
+    "Not An Exercise"
+   ],
+   "expected": "Core"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Arnold Press",
+    "Arnold Press",
+    "Arnold Press"
+   ],
+   "expected": "Upper Body Push"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Arnold Press",
+    "Arnold Press",
+    "Assault Bike Sprint"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Arnold Press",
+    "Arnold Press",
+    "Atlas Stone Lift"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Arnold Press",
+    "Arnold Press",
+    "Band Pull-Apart"
+   ],
+   "expected": "Upper Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Arnold Press",
+    "Arnold Press",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Arnold Press",
+    "Assault Bike Sprint",
+    "Assault Bike Sprint"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Arnold Press",
+    "Assault Bike Sprint",
+    "Atlas Stone Lift"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Arnold Press",
+    "Assault Bike Sprint",
+    "Band Pull-Apart"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Arnold Press",
+    "Assault Bike Sprint",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Arnold Press",
+    "Atlas Stone Lift",
+    "Atlas Stone Lift"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Arnold Press",
+    "Atlas Stone Lift",
+    "Band Pull-Apart"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Arnold Press",
+    "Atlas Stone Lift",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Arnold Press",
+    "Band Pull-Apart",
+    "Band Pull-Apart"
+   ],
+   "expected": "Upper Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Arnold Press",
+    "Band Pull-Apart",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Arnold Press",
+    "Not An Exercise",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Assault Bike Sprint",
+    "Assault Bike Sprint",
+    "Assault Bike Sprint"
+   ],
+   "expected": "Conditioning"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Assault Bike Sprint",
+    "Assault Bike Sprint",
+    "Atlas Stone Lift"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Assault Bike Sprint",
+    "Assault Bike Sprint",
+    "Band Pull-Apart"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Assault Bike Sprint",
+    "Assault Bike Sprint",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Assault Bike Sprint",
+    "Atlas Stone Lift",
+    "Atlas Stone Lift"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Assault Bike Sprint",
+    "Atlas Stone Lift",
+    "Band Pull-Apart"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Assault Bike Sprint",
+    "Atlas Stone Lift",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Assault Bike Sprint",
+    "Band Pull-Apart",
+    "Band Pull-Apart"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Assault Bike Sprint",
+    "Band Pull-Apart",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Assault Bike Sprint",
+    "Not An Exercise",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Atlas Stone Lift",
+    "Atlas Stone Lift",
+    "Atlas Stone Lift"
+   ],
+   "expected": "Lower Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Atlas Stone Lift",
+    "Atlas Stone Lift",
+    "Band Pull-Apart"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Atlas Stone Lift",
+    "Atlas Stone Lift",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Atlas Stone Lift",
+    "Band Pull-Apart",
+    "Band Pull-Apart"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Atlas Stone Lift",
+    "Band Pull-Apart",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Atlas Stone Lift",
+    "Not An Exercise",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Band Pull-Apart",
+    "Band Pull-Apart",
+    "Band Pull-Apart"
+   ],
+   "expected": "Upper Body Pull"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Band Pull-Apart",
+    "Band Pull-Apart",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Band Pull-Apart",
+    "Not An Exercise",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Ab Wheel Rollout",
+    "Not An Exercise",
+    "Not An Exercise",
+    "Not An Exercise"
+   ],
+   "expected": "Core"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Arnold Press",
+    "Arnold Press",
+    "Arnold Press"
+   ],
+   "expected": "Upper Body Push"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Arnold Press",
+    "Arnold Press",
+    "Assault Bike Sprint"
+   ],
+   "expected": "Upper Body Push"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Arnold Press",
+    "Arnold Press",
+    "Atlas Stone Lift"
+   ],
+   "expected": "Upper Body Push"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Arnold Press",
+    "Arnold Press",
+    "Band Pull-Apart"
+   ],
+   "expected": "Upper Body Push"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Arnold Press",
+    "Arnold Press",
+    "Not An Exercise"
+   ],
+   "expected": "Upper Body Push"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Arnold Press",
+    "Assault Bike Sprint",
+    "Assault Bike Sprint"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Arnold Press",
+    "Assault Bike Sprint",
+    "Atlas Stone Lift"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Arnold Press",
+    "Assault Bike Sprint",
+    "Band Pull-Apart"
+   ],
+   "expected": "Upper Body"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Arnold Press",
+    "Assault Bike Sprint",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Arnold Press",
+    "Atlas Stone Lift",
+    "Atlas Stone Lift"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Arnold Press",
+    "Atlas Stone Lift",
+    "Band Pull-Apart"
+   ],
+   "expected": "Upper Body"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Arnold Press",
+    "Atlas Stone Lift",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Arnold Press",
+    "Band Pull-Apart",
+    "Band Pull-Apart"
+   ],
+   "expected": "Upper Body"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Arnold Press",
+    "Band Pull-Apart",
+    "Not An Exercise"
+   ],
+   "expected": "Upper Body"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Arnold Press",
+    "Not An Exercise",
+    "Not An Exercise"
+   ],
+   "expected": "Upper Body Push"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Assault Bike Sprint",
+    "Assault Bike Sprint",
+    "Assault Bike Sprint"
+   ],
+   "expected": "Conditioning"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Assault Bike Sprint",
+    "Assault Bike Sprint",
+    "Atlas Stone Lift"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Assault Bike Sprint",
+    "Assault Bike Sprint",
+    "Band Pull-Apart"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Assault Bike Sprint",
+    "Assault Bike Sprint",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Assault Bike Sprint",
+    "Atlas Stone Lift",
+    "Atlas Stone Lift"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Assault Bike Sprint",
+    "Atlas Stone Lift",
+    "Band Pull-Apart"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Assault Bike Sprint",
+    "Atlas Stone Lift",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Assault Bike Sprint",
+    "Band Pull-Apart",
+    "Band Pull-Apart"
+   ],
+   "expected": "Upper Body"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Assault Bike Sprint",
+    "Band Pull-Apart",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Assault Bike Sprint",
+    "Not An Exercise",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Atlas Stone Lift",
+    "Atlas Stone Lift",
+    "Atlas Stone Lift"
+   ],
+   "expected": "Lower Body"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Atlas Stone Lift",
+    "Atlas Stone Lift",
+    "Band Pull-Apart"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Atlas Stone Lift",
+    "Atlas Stone Lift",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Atlas Stone Lift",
+    "Band Pull-Apart",
+    "Band Pull-Apart"
+   ],
+   "expected": "Upper Body"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Atlas Stone Lift",
+    "Band Pull-Apart",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Atlas Stone Lift",
+    "Not An Exercise",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Band Pull-Apart",
+    "Band Pull-Apart",
+    "Band Pull-Apart"
+   ],
+   "expected": "Upper Body Pull"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Band Pull-Apart",
+    "Band Pull-Apart",
+    "Not An Exercise"
+   ],
+   "expected": "Upper Body"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Band Pull-Apart",
+    "Not An Exercise",
+    "Not An Exercise"
+   ],
+   "expected": "Upper Body"
+  },
+  {
+   "names": [
+    "Arnold Press",
+    "Not An Exercise",
+    "Not An Exercise",
+    "Not An Exercise"
+   ],
+   "expected": "Upper Body Push"
+  },
+  {
+   "names": [
+    "Assault Bike Sprint",
+    "Assault Bike Sprint",
+    "Assault Bike Sprint",
+    "Assault Bike Sprint"
+   ],
+   "expected": "Conditioning"
+  },
+  {
+   "names": [
+    "Assault Bike Sprint",
+    "Assault Bike Sprint",
+    "Assault Bike Sprint",
+    "Atlas Stone Lift"
+   ],
+   "expected": "Conditioning"
+  },
+  {
+   "names": [
+    "Assault Bike Sprint",
+    "Assault Bike Sprint",
+    "Assault Bike Sprint",
+    "Band Pull-Apart"
+   ],
+   "expected": "Conditioning"
+  },
+  {
+   "names": [
+    "Assault Bike Sprint",
+    "Assault Bike Sprint",
+    "Assault Bike Sprint",
+    "Not An Exercise"
+   ],
+   "expected": "Conditioning"
+  },
+  {
+   "names": [
+    "Assault Bike Sprint",
+    "Assault Bike Sprint",
+    "Atlas Stone Lift",
+    "Atlas Stone Lift"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Assault Bike Sprint",
+    "Assault Bike Sprint",
+    "Atlas Stone Lift",
+    "Band Pull-Apart"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Assault Bike Sprint",
+    "Assault Bike Sprint",
+    "Atlas Stone Lift",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Assault Bike Sprint",
+    "Assault Bike Sprint",
+    "Band Pull-Apart",
+    "Band Pull-Apart"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Assault Bike Sprint",
+    "Assault Bike Sprint",
+    "Band Pull-Apart",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Assault Bike Sprint",
+    "Assault Bike Sprint",
+    "Not An Exercise",
+    "Not An Exercise"
+   ],
+   "expected": "Conditioning"
+  },
+  {
+   "names": [
+    "Assault Bike Sprint",
+    "Atlas Stone Lift",
+    "Atlas Stone Lift",
+    "Atlas Stone Lift"
+   ],
+   "expected": "Lower Body"
+  },
+  {
+   "names": [
+    "Assault Bike Sprint",
+    "Atlas Stone Lift",
+    "Atlas Stone Lift",
+    "Band Pull-Apart"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Assault Bike Sprint",
+    "Atlas Stone Lift",
+    "Atlas Stone Lift",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Assault Bike Sprint",
+    "Atlas Stone Lift",
+    "Band Pull-Apart",
+    "Band Pull-Apart"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Assault Bike Sprint",
+    "Atlas Stone Lift",
+    "Band Pull-Apart",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Assault Bike Sprint",
+    "Atlas Stone Lift",
+    "Not An Exercise",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Assault Bike Sprint",
+    "Band Pull-Apart",
+    "Band Pull-Apart",
+    "Band Pull-Apart"
+   ],
+   "expected": "Upper Body Pull"
+  },
+  {
+   "names": [
+    "Assault Bike Sprint",
+    "Band Pull-Apart",
+    "Band Pull-Apart",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Assault Bike Sprint",
+    "Band Pull-Apart",
+    "Not An Exercise",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Assault Bike Sprint",
+    "Not An Exercise",
+    "Not An Exercise",
+    "Not An Exercise"
+   ],
+   "expected": "Conditioning"
+  },
+  {
+   "names": [
+    "Atlas Stone Lift",
+    "Atlas Stone Lift",
+    "Atlas Stone Lift",
+    "Atlas Stone Lift"
+   ],
+   "expected": "Lower Body"
+  },
+  {
+   "names": [
+    "Atlas Stone Lift",
+    "Atlas Stone Lift",
+    "Atlas Stone Lift",
+    "Band Pull-Apart"
+   ],
+   "expected": "Lower Body"
+  },
+  {
+   "names": [
+    "Atlas Stone Lift",
+    "Atlas Stone Lift",
+    "Atlas Stone Lift",
+    "Not An Exercise"
+   ],
+   "expected": "Lower Body"
+  },
+  {
+   "names": [
+    "Atlas Stone Lift",
+    "Atlas Stone Lift",
+    "Band Pull-Apart",
+    "Band Pull-Apart"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Atlas Stone Lift",
+    "Atlas Stone Lift",
+    "Band Pull-Apart",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Atlas Stone Lift",
+    "Atlas Stone Lift",
+    "Not An Exercise",
+    "Not An Exercise"
+   ],
+   "expected": "Lower Body"
+  },
+  {
+   "names": [
+    "Atlas Stone Lift",
+    "Band Pull-Apart",
+    "Band Pull-Apart",
+    "Band Pull-Apart"
+   ],
+   "expected": "Upper Body Pull"
+  },
+  {
+   "names": [
+    "Atlas Stone Lift",
+    "Band Pull-Apart",
+    "Band Pull-Apart",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Atlas Stone Lift",
+    "Band Pull-Apart",
+    "Not An Exercise",
+    "Not An Exercise"
+   ],
+   "expected": "Full Body"
+  },
+  {
+   "names": [
+    "Atlas Stone Lift",
+    "Not An Exercise",
+    "Not An Exercise",
+    "Not An Exercise"
+   ],
+   "expected": "Lower Body"
+  },
+  {
+   "names": [
+    "Band Pull-Apart",
+    "Band Pull-Apart",
+    "Band Pull-Apart",
+    "Band Pull-Apart"
+   ],
+   "expected": "Upper Body Pull"
+  },
+  {
+   "names": [
+    "Band Pull-Apart",
+    "Band Pull-Apart",
+    "Band Pull-Apart",
+    "Not An Exercise"
+   ],
+   "expected": "Upper Body Pull"
+  },
+  {
+   "names": [
+    "Band Pull-Apart",
+    "Band Pull-Apart",
+    "Not An Exercise",
+    "Not An Exercise"
+   ],
+   "expected": "Upper Body Pull"
+  },
+  {
+   "names": [
+    "Band Pull-Apart",
+    "Not An Exercise",
+    "Not An Exercise",
+    "Not An Exercise"
+   ],
+   "expected": "Upper Body Pull"
+  },
+  {
+   "names": [
+    "Not An Exercise",
+    "Not An Exercise",
+    "Not An Exercise",
+    "Not An Exercise"
+   ],
+   "expected": "Session"
+  }
+ ]
+}
