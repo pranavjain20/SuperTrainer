@@ -12,7 +12,12 @@
  */
 
 import { API_BASE_URL } from "@/src/constants/config";
+import { IS_DEMO } from "@/src/demo/config";
+import { demoFetch } from "@/src/demo/server";
 import type { ErrorResponse } from "./types";
+
+// The web demo answers in the browser instead of calling the backend
+const request = IS_DEMO ? demoFetch : fetch;
 
 // ---------------------------------------------------------------------------
 // Error class
@@ -84,13 +89,13 @@ async function handleResponse<T>(response: Response): Promise<T> {
  * the endpoint function uses the full response.
  */
 export async function apiGet<T>(path: string, params?: object): Promise<T> {
-  const response = await fetch(buildUrl(path, params), { method: "GET" });
+  const response = await request(buildUrl(path, params), { method: "GET" });
   return handleResponse<T>(response);
 }
 
 /** POST request with JSON body. */
 export async function apiPost<T>(path: string, body: unknown): Promise<T> {
-  const response = await fetch(buildUrl(path), {
+  const response = await request(buildUrl(path), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
@@ -100,7 +105,7 @@ export async function apiPost<T>(path: string, body: unknown): Promise<T> {
 
 /** PATCH request with JSON body. */
 export async function apiPatch<T>(path: string, body: unknown): Promise<T> {
-  const response = await fetch(buildUrl(path), {
+  const response = await request(buildUrl(path), {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
@@ -110,7 +115,7 @@ export async function apiPatch<T>(path: string, body: unknown): Promise<T> {
 
 /** DELETE request. Returns void. */
 export async function apiDelete(path: string): Promise<void> {
-  const response = await fetch(buildUrl(path), { method: "DELETE" });
+  const response = await request(buildUrl(path), { method: "DELETE" });
   await handleResponse<void>(response);
 }
 
@@ -119,7 +124,7 @@ export async function apiDelete(path: string): Promise<void> {
  * No Content-Type header — fetch sets it automatically with the boundary.
  */
 export async function apiUpload<T>(path: string, formData: FormData): Promise<T> {
-  const response = await fetch(buildUrl(path), {
+  const response = await request(buildUrl(path), {
     method: "POST",
     body: formData,
   });
