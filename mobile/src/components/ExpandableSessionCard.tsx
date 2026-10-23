@@ -11,7 +11,7 @@ import { colors } from "@/src/constants/tokens";
 import { cardBorder } from "@/src/constants/styles";
 import { useEditableEntries } from "@/src/hooks/useEditableEntries";
 import { formatSessionDate, formatTime } from "@/src/utils/dates";
-import { classifyWorkoutFromEntries, formatDurationMinutes, numberExercises } from "@/src/utils/sessions";
+import { formatDurationMinutes, numberExercises } from "@/src/utils/sessions";
 import { formatCompactExerciseParts } from "@/src/utils/sets";
 
 type CardView = "collapsed" | "summary" | "detail";
@@ -22,7 +22,7 @@ interface ExpandableSessionCardProps {
   weightUnit: WeightUnit;
   /** Override the initial view state. Defaults to "collapsed". */
   defaultView?: CardView;
-  /** When true, collapsed state shows workout type + exercise names for quick identification. */
+  /** When true, collapsed state shows workout type + AI summary (or exercise names) for quick identification. */
   showPreview?: boolean;
   /** When true, only allows collapsed ↔ summary toggle. No detail view or "View full workout". */
   summaryOnly?: boolean;
@@ -97,20 +97,26 @@ export function ExpandableSessionCard({
           </View>
         </Pressable>
 
-        {/* ── Collapsed preview: workout type + exercise names ── */}
+        {/* ── Collapsed preview: workout type + the AI summary, or exercise names before one exists ── */}
         {view === "collapsed" && showPreview && hasCompactData && (
           <View className="px-5" style={{ paddingBottom: 12 }}>
             <ThemedText variant="body-small" color={colors.blue[400]} style={{ fontFamily: "Inter-Bold", marginBottom: 4, letterSpacing: 0.5 }}>
-              {classifyWorkoutFromEntries(exerciseEntries).toUpperCase()}
+              {session.workout_type.toUpperCase()}
             </ThemedText>
-            <ThemedText variant="body" color={colors.text.primary} numberOfLines={2} style={{ fontFamily: "Inter-Medium", lineHeight: 22 }}>
-              {exerciseEntries
-                .map((e) => {
-                  const name = e.exercise_name ?? e.exercise_canonical ?? "Unknown";
-                  return name.charAt(0).toUpperCase() + name.slice(1);
-                })
-                .join("  ·  ")}
-            </ThemedText>
+            {session.ai_summary ? (
+              <ThemedText variant="body" color={colors.text.primary} numberOfLines={3} style={{ lineHeight: 22 }}>
+                {session.ai_summary}
+              </ThemedText>
+            ) : (
+              <ThemedText variant="body" color={colors.text.primary} numberOfLines={2} style={{ fontFamily: "Inter-Medium", lineHeight: 22 }}>
+                {exerciseEntries
+                  .map((e) => {
+                    const name = e.exercise_name ?? e.exercise_canonical ?? "Unknown";
+                    return name.charAt(0).toUpperCase() + name.slice(1);
+                  })
+                  .join("  ·  ")}
+              </ThemedText>
+            )}
           </View>
         )}
 
@@ -118,8 +124,18 @@ export function ExpandableSessionCard({
         {view === "summary" && hasCompactData && (
           <View style={{ paddingHorizontal: 20, paddingBottom: 16 }}>
             <ThemedText variant="title-1" color={colors.blue[400]} style={{ fontFamily: "Inter-Bold", marginBottom: 8 }}>
-              {classifyWorkoutFromEntries(exerciseEntries)}
+              {session.workout_type}
             </ThemedText>
+            {session.ai_summary && (
+              <View
+                className="rounded-lg px-3.5 py-2.5"
+                style={{ marginBottom: 12, backgroundColor: colors.ai.alpha10, borderLeftWidth: 3, borderLeftColor: colors.ai[500] }}
+              >
+                <ThemedText variant="body" color={colors.text.primary} style={{ lineHeight: 22 }}>
+                  {session.ai_summary}
+                </ThemedText>
+              </View>
+            )}
             {exerciseEntries.map((entry, i) => {
               const { name, sets } = formatCompactExerciseParts(entry, weightUnit);
               return (

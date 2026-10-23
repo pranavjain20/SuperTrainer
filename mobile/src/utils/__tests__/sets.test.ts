@@ -1,6 +1,5 @@
 import type { SessionEntry, SetData, WeightUnit } from "@/src/api/types";
 import { convertWeight, formatCompactExercise, formatCompactSet } from "../sets";
-import { classifyWorkoutFromEntries } from "../sessions";
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -202,80 +201,3 @@ describe("formatCompactExercise", () => {
   });
 });
 
-// ---------------------------------------------------------------------------
-// classifyWorkoutFromEntries
-// ---------------------------------------------------------------------------
-
-describe("classifyWorkoutFromEntries", () => {
-  it("classifies upper body workout", () => {
-    const entries = [
-      makeEntry({ exercise_name: "Bench Press" }),
-      makeEntry({ exercise_name: "Pulldown" }),
-      makeEntry({ exercise_name: "Bicep Curl" }),
-    ];
-    expect(classifyWorkoutFromEntries(entries)).toBe("Upper Body");
-  });
-
-  it("classifies lower body workout", () => {
-    const entries = [
-      makeEntry({ exercise_name: "Squat" }),
-      makeEntry({ exercise_name: "Leg Press" }),
-      makeEntry({ exercise_name: "Calf Raise" }),
-    ];
-    expect(classifyWorkoutFromEntries(entries)).toBe("Lower Body");
-  });
-
-  it("classifies full body workout", () => {
-    const entries = [
-      makeEntry({ exercise_name: "Squat" }),
-      makeEntry({ exercise_name: "Bench Press" }),
-      makeEntry({ exercise_name: "Deadlift" }),
-    ];
-    expect(classifyWorkoutFromEntries(entries)).toBe("Full Body");
-  });
-
-  it("classifies lat pull downs + squats + lunges as full body", () => {
-    const entries = [
-      makeEntry({ exercise_name: "lat pull downs" }),
-      makeEntry({ exercise_name: "lunges" }),
-      makeEntry({ exercise_name: "squats" }),
-    ];
-    expect(classifyWorkoutFromEntries(entries)).toBe("Full Body");
-  });
-
-  it("classifies core workout", () => {
-    const entries = [
-      makeEntry({ exercise_name: "Plank" }),
-      makeEntry({ exercise_name: "Ab Crunch" }),
-    ];
-    expect(classifyWorkoutFromEntries(entries)).toBe("Core");
-  });
-
-  it("returns Workout for empty entries", () => {
-    expect(classifyWorkoutFromEntries([])).toBe("Workout");
-  });
-
-  it("returns Workout when no keywords match", () => {
-    const entries = [
-      makeEntry({ exercise_name: "Kettlebell Swing" }),
-      makeEntry({ exercise_name: "Box Jump" }),
-    ];
-    expect(classifyWorkoutFromEntries(entries)).toBe("Workout");
-  });
-
-  it("ignores observation cards", () => {
-    const entries = [
-      makeEntry({ exercise_name: "Bench Press", entry_type: "exercise_card" }),
-      makeEntry({ exercise_name: null, entry_type: "observation_card", observation_text: "Good form" }),
-    ];
-    expect(classifyWorkoutFromEntries(entries)).toBe("Upper Body");
-  });
-
-  it("uses exercise_canonical as fallback", () => {
-    const entries = [
-      makeEntry({ exercise_name: null, exercise_canonical: "barbell_squat" }),
-      makeEntry({ exercise_name: null, exercise_canonical: "leg_press" }),
-    ];
-    expect(classifyWorkoutFromEntries(entries)).toBe("Lower Body");
-  });
-});

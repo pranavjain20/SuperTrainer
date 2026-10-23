@@ -3,16 +3,21 @@
  *
  * Two concerns:
  *   1. endSession — PATCH session with ended_at (server auto-computes duration)
- *   2. classifyWorkout — POST classify to get workout type label
+ *   2. summary — POST summary to get Claude's recap of the session
  *
- * All mutations use TanStack Query. The classify query fires
- * automatically after ending (or on mount if session already ended).
+ * The workout type comes on the session itself (session.workout_type).
+ * The summary query fires automatically after ending (or on mount if the
+ * session already ended). Its key sits outside ["sessions"] so refreshing
+ * the session lists never re-triggers it.
  */
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Alert } from "react-native";
 
-import { classifyWorkout, updateSession } from "@/src/api/sessions";
+import { summarizeSession, updateSession } from "@/src/api/sessions";
+import type { Session } from "@/src/api/types";
+
+export const summaryQueryKey = (sessionId: string) => ["summary", sessionId] as const;
 
 interface UseEndSessionOptions {
   sessionId: string;
@@ -39,18 +44,27 @@ export function useEndSession({ sessionId, isSessionEnded }: UseEndSessionOption
     },
   });
 
-  // Classify workout — fires when session is ended
-  const classifyQuery = useQuery({
-    queryKey: ["sessions", sessionId, "classify"],
-    queryFn: () => classifyWorkout(sessionId),
+  // AI summary — fires when session is ended. Written once by the backend,
+  // then stored; history cards read it from the session lists.
+  const summaryQuery = useQuery({
+    queryKey: summaryQueryKey(sessionId),
+    queryFn: async () => {
+      const aiSummary = await summarizeSession(sessionId);
+      queryClient.setQueryData<Session>(["sessions", sessionId], (old) =>
+        old ? { ...old, ai_summary: aiSummary } : old,
+      );
+      queryClient.invalidateQueries({ queryKey: ["sessions"] });
+      return aiSummary;
+    },
     enabled: isSessionEnded,
     staleTime: Infinity,
+    retry: 1,
   });
 
   return {
     endSession: endSessionMutation.mutate,
     isEnding: endSessionMutation.isPending,
-    workoutType: classifyQuery.data?.workout_type ?? null,
-    isClassifying: classifyQuery.isLoading,
+    aiSummary: summaryQuery.data ?? null,
+    isSummarizing: summaryQuery.isLoading,
   };
 }

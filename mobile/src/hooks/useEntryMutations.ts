@@ -10,10 +10,18 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { deleteEntry, updateEntry } from "@/src/api/entries";
 import type { SessionEntry, SessionEntryUpdate } from "@/src/api/types";
+import { summaryQueryKey } from "@/src/hooks/useEndSession";
 
 export function useEntryMutations(sessionId: string) {
   const queryClient = useQueryClient();
   const queryKey = ["entries", "session", sessionId];
+
+  // An edit changes the session's workout type, and the backend drops its
+  // summary; refetch both (an open summary is rewritten for the edited session)
+  const refreshSession = () => {
+    queryClient.invalidateQueries({ queryKey: ["sessions"] });
+    queryClient.invalidateQueries({ queryKey: summaryQueryKey(sessionId) });
+  };
 
   const updateMutation = useMutation({
     mutationFn: ({ entryId, data }: { entryId: string; data: SessionEntryUpdate }) =>
@@ -23,6 +31,7 @@ export function useEntryMutations(sessionId: string) {
       queryClient.setQueryData<SessionEntry[]>(queryKey, (old) =>
         old?.map((e) => (e.id === updatedEntry.id ? updatedEntry : e)),
       );
+      refreshSession();
     },
   });
 
@@ -33,6 +42,7 @@ export function useEntryMutations(sessionId: string) {
       queryClient.setQueryData<SessionEntry[]>(queryKey, (old) =>
         old?.filter((e) => e.id !== entryId),
       );
+      refreshSession();
     },
   });
 

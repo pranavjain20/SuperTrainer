@@ -19,7 +19,7 @@ import type {
   Session,
   SessionCreate,
   SessionUpdate,
-  WorkoutClassification,
+  SessionSummaryResponse,
 } from "./types";
 
 // ---------------------------------------------------------------------------
@@ -89,17 +89,15 @@ export async function updateSession(
 }
 
 // ---------------------------------------------------------------------------
-// Classify workout
+// AI summary (written by the backend on first request after the session ends)
 // ---------------------------------------------------------------------------
 
-export async function classifyWorkout(
-  sessionId: string,
-): Promise<WorkoutClassification> {
-  const res = await apiPost<DataResponse<WorkoutClassification>>(
-    `/api/v1/sessions/${sessionId}/classify`,
+export async function summarizeSession(sessionId: string): Promise<string | null> {
+  const res = await apiPost<DataResponse<SessionSummaryResponse>>(
+    `/api/v1/sessions/${sessionId}/summary`,
     {},
   );
-  return res.data;
+  return res.data.ai_summary;
 }
 
 // ---------------------------------------------------------------------------

@@ -1,12 +1,12 @@
 /**
  * Post-session summary card — compact "session is done" view.
  *
- * Green success banner → workout type → stat pills.
+ * Green success banner → workout type → stat pills → AI summary.
  * Intentionally minimal — plan input lives in its own card below.
  */
 
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { View } from "react-native";
+import { ActivityIndicator, View } from "react-native";
 
 import { ThemedText } from "@/src/components/ThemedText";
 import { colors } from "@/src/constants/tokens";
@@ -16,8 +16,9 @@ interface SessionSummaryProps {
   duration: string;
   exerciseCount: number;
   totalSets: number;
-  workoutType: string | null;
-  isClassifying: boolean;
+  workoutType: string;
+  aiSummary: string | null;
+  isSummarizing: boolean;
 }
 
 export function SessionSummary({
@@ -25,7 +26,8 @@ export function SessionSummary({
   exerciseCount,
   totalSets,
   workoutType,
-  isClassifying,
+  aiSummary,
+  isSummarizing,
 }: SessionSummaryProps) {
   const statsLine = [
     exerciseCount > 0 && `${exerciseCount} ${exerciseCount === 1 ? "exercise" : "exercises"}`,
@@ -67,11 +69,9 @@ export function SessionSummary({
 
       {/* ── Workout type + stats ── */}
       <View className="px-5 pt-3 pb-3.5">
-        {exerciseCount > 0 || isClassifying ? (
+        {exerciseCount > 0 ? (
           <>
-            <ThemedText variant="title-3">
-              {isClassifying ? "Analyzing..." : (workoutType ?? "Session")}
-            </ThemedText>
+            <ThemedText variant="title-3">{workoutType}</ThemedText>
             {statsLine.length > 0 && (
               <ThemedText variant="body-small" color={colors.text.secondary} style={{ marginTop: 3 }}>
                 {statsLine}
@@ -84,6 +84,33 @@ export function SessionSummary({
           </ThemedText>
         )}
       </View>
+
+      {/* ── AI summary (purple = AI-generated, per the design system) ── */}
+      {(isSummarizing || aiSummary) && (
+        <View
+          className="mx-4 mb-4 rounded-lg px-4 py-3"
+          style={{ backgroundColor: colors.ai.alpha10, borderLeftWidth: 3, borderLeftColor: colors.ai[500] }}
+        >
+          <View className="flex-row items-center" style={{ marginBottom: 6 }}>
+            <FontAwesome name="bolt" size={12} color={colors.ai[400]} />
+            <ThemedText variant="caption" color={colors.ai[400]} style={{ marginLeft: 6 }}>
+              AI summary
+            </ThemedText>
+          </View>
+          {isSummarizing ? (
+            <View className="flex-row items-center">
+              <ActivityIndicator size="small" color={colors.ai[400]} />
+              <ThemedText variant="body-small" color={colors.text.secondary} style={{ marginLeft: 8 }}>
+                Writing the summary…
+              </ThemedText>
+            </View>
+          ) : (
+            <ThemedText variant="body" color={colors.text.primary} style={{ lineHeight: 22 }}>
+              {aiSummary}
+            </ThemedText>
+          )}
+        </View>
+      )}
     </View>
   );
 }

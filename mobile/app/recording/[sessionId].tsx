@@ -67,8 +67,8 @@ export default function SessionRecordingScreen() {
   const {
     endSession,
     isEnding,
-    workoutType,
-    isClassifying,
+    aiSummary,
+    isSummarizing,
   } = useEndSession({
     sessionId: sessionId!,
     isSessionEnded,
@@ -227,8 +227,9 @@ export default function SessionRecordingScreen() {
             duration={formatSessionDuration(session!.started_at, session!.ended_at)}
             exerciseCount={stats.exerciseCount}
             totalSets={stats.totalSets}
-            workoutType={workoutType}
-            isClassifying={isClassifying}
+            workoutType={session!.workout_type}
+            aiSummary={aiSummary}
+            isSummarizing={isSummarizing}
           />
 
           {/* ── Back to Home button (outline) ── */}

@@ -106,6 +106,10 @@ export interface Session {
   processing_status: ProcessingStatus;
   trainer_edited: boolean;
   plan_id: string | null;
+  /** Claude's 2-3 sentence recap, written once the session ends */
+  ai_summary: string | null;
+  /** Derived from the session's exercises by the backend, e.g. "Lower Body" */
+  workout_type: string;
   created_at: string;
   updated_at: string;
 }
@@ -274,11 +278,11 @@ export interface InjuryFlag {
 }
 
 // ---------------------------------------------------------------------------
-// Workout Classification
+// Session Summary
 // ---------------------------------------------------------------------------
 
-export interface WorkoutClassification {
-  workout_type: string;
+export interface SessionSummaryResponse {
+  ai_summary: string | null;
 }
 
 // ---------------------------------------------------------------------------
