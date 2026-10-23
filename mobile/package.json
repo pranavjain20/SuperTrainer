@@ -12,7 +12,7 @@
     "format": "prettier --write 'src/**/*.{ts,tsx}' 'app/**/*.{ts,tsx}'",
     "typecheck": "tsc --noEmit",
     "test": "jest",
-    "export:demo": "EXPO_PUBLIC_DEMO=1 expo export --platform web --output-dir dist-demo && cp vercel.json dist-demo/"
+    "export:demo": "EXPO_PUBLIC_DEMO=1 expo export --platform web --output-dir dist-demo && node scripts/rename-vendor-assets.js && cp vercel.json dist-demo/"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
