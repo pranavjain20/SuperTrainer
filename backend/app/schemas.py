@@ -461,6 +461,17 @@ class SessionSummaryResponse(BaseModel):
     ai_summary: str | None
 
 
+# --- Brain ---
+
+
+class BrainAskRequest(BaseModel):
+    question: str = Field(..., min_length=1, max_length=500)
+
+
+class BrainAskResponse(BaseModel):
+    answer: str
+
+
 # --- Voice Clip ---
 
 

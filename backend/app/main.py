@@ -8,6 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
+from app.api.brain import router as brain_router
 from app.api.clients import router as clients_router
 from app.api.entries import router as entries_router
 from app.api.injury_flags import router as injury_flags_router
@@ -86,6 +87,7 @@ app.include_router(entries_router, prefix="/api/v1")
 app.include_router(injury_flags_router, prefix="/api/v1")
 app.include_router(plans_router, prefix="/api/v1")
 app.include_router(voice_router, prefix="/api/v1")
+app.include_router(brain_router, prefix="/api/v1")
 
 
 @app.get("/api/v1/health")
