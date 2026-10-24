@@ -45,3 +45,21 @@ htmlcov/
 
 # Alembic
 backend/alembic/versions/__pycache__/
+
+# Working notes (kept locally, not published)
+CLAUDE.md
+STATUS.md
+devlog/
+tasks/
+concepts/
+reference/
+docs/BUILD_PLAN.md
+docs/DESIGN.md
+docs/PITCH.md
+docs/TECH_STACK.md
+docs/WORKFLOW.md
+docs/guides/
+
+# Live-API experiments and the real session transcript they quote
+backend/scripts/test_*_live.py
+backend/scripts/trimmed_session_transcript.md
