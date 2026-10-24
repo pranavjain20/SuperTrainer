@@ -121,7 +121,8 @@ export function freshen(now: Date): DemoState {
 /**
  * A session later today for each client who hasn't trained today, so the home
  * screen opens on a day still to coach, each session with its AI notes.
- * Spaced 75 minutes apart from half an hour from now, squeezed to fit before midnight.
+ * 75 minutes apart from half an hour from now, rounded to the quarter hour;
+ * late in the evening they're squeezed in between now and midnight instead.
  */
 export function upcomingSessions(
   now: Date,
@@ -134,16 +135,15 @@ export function upcomingSessions(
       .map((s) => s.client_id),
   );
   const waiting = (fixture.clients as Client[]).filter((c) => !trainedToday.has(c.id));
+  const endOfDay = todayMidnight.getTime() + DAY_MS - 60_000;
   const first =
     Math.ceil((now.getTime() + 30 * 60_000) / QUARTER_HOUR_MS) * QUARTER_HOUR_MS;
-  const lastSlot = todayMidnight.getTime() + (23 * 60 + 45) * 60_000;
+  const roomy = first + (waiting.length - 1) * 75 * 60_000 <= endOfDay;
+  const gap = (endOfDay - now.getTime()) / (waiting.length + 1);
+  const slot = (i: number) =>
+    roomy ? first + i * 75 * 60_000 : now.getTime() + (i + 1) * gap;
   return waiting.map((client, i) => {
-    const at = new Date(
-      Math.min(
-        first + i * 75 * 60_000,
-        lastSlot - (waiting.length - 1 - i) * QUARTER_HOUR_MS,
-      ),
-    ).toISOString();
+    const at = new Date(slot(i)).toISOString();
     return {
       id: `upcoming-${client.id}`,
       trainer_id: client.trainer_id,

@@ -117,9 +117,14 @@ describe("freshen", () => {
     }
   });
 
-  it("keeps late-evening sessions on today, a quarter hour apart", () => {
-    const late = new Date(2027, 2, 10, 22, 50);
+  it.each([
+    new Date(2027, 2, 10, 20, 0),
+    new Date(2027, 2, 10, 22, 50),
+    new Date(2027, 2, 10, 23, 55),
+  ])("keeps evening sessions after now and before midnight (%s)", (late) => {
     const times = upcoming(late).map((s) => new Date(s.started_at).getTime());
+    expect(times.length).toBeGreaterThan(0);
+    expect(times.every((t) => t > late.getTime())).toBe(true);
     expect(
       times.every(
         (t) => localDay(new Date(t).toISOString()) === localDay(late.toISOString()),
