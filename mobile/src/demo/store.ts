@@ -12,7 +12,8 @@ import type { Client, Session, SessionEntry, SessionPlan } from "@/src/api/types
 import fixture from "./fixture.json";
 
 export interface DemoState {
-  /** fixture.captured_at — a re-recorded fixture replaces stale saved copies */
+  /** fixture.captured_at and the day it was made: a re-recorded fixture, or a
+   *  new day (today's schedule has moved on), replaces a saved copy */
   version: string;
   clients: Client[];
   sessions: Session[];
@@ -100,12 +101,12 @@ export function freshen(now: Date): DemoState {
   });
 
   return {
-    version: fixture.captured_at,
+    version: versionFor(now),
+    sessions: [...sessions, ...upcomingSessions(now, todayMidnight, sessions)],
     clients: (fixture.clients as Client[]).map((c) => ({
       ...c,
       created_at: shiftIso(c.created_at, shiftMs)!,
     })),
-    sessions,
     entries,
     plans: (fixture.plans as SessionPlan[]).map((p) => ({
       ...p,
@@ -117,12 +118,62 @@ export function freshen(now: Date): DemoState {
   };
 }
 
+/**
+ * A session later today for each client who hasn't trained today, so the home
+ * screen opens on a day still to coach, each session with its AI notes.
+ * Spaced 75 minutes apart from half an hour from now, squeezed to fit before midnight.
+ */
+export function upcomingSessions(
+  now: Date,
+  todayMidnight: Date,
+  sessions: Session[],
+): Session[] {
+  const trainedToday = new Set(
+    sessions
+      .filter((s) => new Date(s.started_at).getTime() >= todayMidnight.getTime())
+      .map((s) => s.client_id),
+  );
+  const waiting = (fixture.clients as Client[]).filter((c) => !trainedToday.has(c.id));
+  const first =
+    Math.ceil((now.getTime() + 30 * 60_000) / QUARTER_HOUR_MS) * QUARTER_HOUR_MS;
+  const lastSlot = todayMidnight.getTime() + (23 * 60 + 45) * 60_000;
+  return waiting.map((client, i) => {
+    const at = new Date(
+      Math.min(
+        first + i * 75 * 60_000,
+        lastSlot - (waiting.length - 1 - i) * QUARTER_HOUR_MS,
+      ),
+    ).toISOString();
+    return {
+      id: `upcoming-${client.id}`,
+      trainer_id: client.trainer_id,
+      client_id: client.id,
+      started_at: at,
+      scheduled_for: at,
+      plan_id: null,
+      ended_at: null,
+      duration_minutes: null,
+      audio_url: null,
+      audio_duration_seconds: null,
+      raw_transcript: null,
+      processing_status: "pending",
+      trainer_edited: false,
+      ai_summary: null,
+      workout_type: "Session",
+      created_at: now.toISOString(),
+      updated_at: now.toISOString(),
+    };
+  });
+}
+
+const versionFor = (day: Date) => `${fixture.captured_at}|${day.toDateString()}`;
+
 function load(): DemoState | null {
   try {
     const raw = globalThis.localStorage?.getItem(STORAGE_KEY);
     if (!raw) return null;
     const saved = JSON.parse(raw) as DemoState;
-    return saved.version === fixture.captured_at ? saved : null;
+    return saved.version === versionFor(new Date()) ? saved : null;
   } catch {
     return null;
   }

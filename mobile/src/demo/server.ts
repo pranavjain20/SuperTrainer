@@ -253,6 +253,20 @@ async function replaySummary(session: Session) {
   return data({ ai_summary: session.ai_summary });
 }
 
+/**
+ * POST /sessions/{id}/brief: the brief Claude wrote for this client from the
+ * recorded history. Like the summary, it doesn't change when a visitor logs more.
+ */
+async function replayBrief(session: Session) {
+  if (session.ended_at) throw new HttpError(409, "Session has already ended");
+  const recorded = (
+    fixture.session_briefs as Record<string, { ai_brief: string | null; ms: number }>
+  )[session.client_id];
+  if (!recorded) return data({ ai_brief: null });
+  await sleep(recorded.ms);
+  return data({ ai_brief: recorded.ai_brief });
+}
+
 const normalize = (text: string) => text.trim().toLowerCase().replace(/\s+/g, " ");
 
 // ---------------------------------------------------------------------------
@@ -445,6 +459,11 @@ const routes: Array<[string, RegExp, Handler]> = [
     "POST",
     /^\/sessions\/([^/]+)\/summary$/,
     ([id]) => replaySummary(findOr404(getState().sessions, id, "Session")),
+  ],
+  [
+    "POST",
+    /^\/sessions\/([^/]+)\/brief$/,
+    ([id]) => replayBrief(findOr404(getState().sessions, id, "Session")),
   ],
   [
     "GET",

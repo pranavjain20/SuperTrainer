@@ -7767,5 +7767,27 @@
    ],
    "expected": "Session"
   }
- ]
+ ],
+ "session_briefs": {
+  "012a6871-9233-44fe-b22b-9bcbb65d18db": {
+   "ai_brief": "- Marcus hit a 12% jump on Romanian Deadlift, from 80kg to 90kg in 3 sessions \u2014 worth checking in on how that felt before loading further today.\n- Slight knee valgus appeared on the last rep of Barbell Back Squat 5x5 at 150kg five days ago; cues were brace harder and push knees out \u2014 worth revisiting those cues early in today's squat work.\n- Back hasn't been trained in the last four weeks; a lat pulldown or row would cover it and supports his deadlift.",
+   "ms": 3669
+  },
+  "29387199-efa3-413a-ab20-e57b0e804e3c": {
+   "ai_brief": "- Jake mentioned lower back tightness 12 days ago after squats; worth checking in on how it feels today before loading the back.\n- Overhead Press has jumped 12% (32kg to 36kg over 2 sessions); could be worth monitoring form closely today.\n- Calves haven't been trained in four weeks; fits Jake's muscle gain goal, so a set of calf raises would cover it.\n- Last session 5 days ago was squats 4x8 at 70kg, Romanian deadlift 3x10 at 62.5kg, and lunges 3x12 at 19kg.",
+   "ms": 4070
+  },
+  "5d6c5a9b-a809-4c0e-8aa2-3cfa6df0aaca": {
+   "ai_brief": "- Aisha had no pain or injury flags across all five sessions in the last four weeks, which is a good sign given her diastasis recti history.\n- Goblet Squat jumped from 8kg 26 days ago to 12kg today, a 50% increase over five sessions, worth keeping an eye on as load builds.\n- Hamstrings and glutes haven't been trained in the last four weeks and fit her post-pregnancy recovery goals well, a Romanian deadlift could cover both.",
+   "ms": 3630
+  },
+  "891010b8-1ea4-4caa-9697-7befc5c216c8": {
+   "ai_brief": "- Sarah reported low energy yesterday and felt dizzy on Romanian Deadlift set 3, cutting it short; energy dropped further after the first two exercises, so worth checking in on how she's feeling before loading up today.\n- Left glute felt tight on Goblet Squat set 2 yesterday; could be worth a quick check before any squat or hinge work.\n- Back hasn't been trained in the last four weeks, and building back strength fits Sarah's lower back history and strength goal; a row or lat pulldown could cover it today.",
+   "ms": 4190
+  },
+  "9f7bc4ea-14b3-4ddc-866b-bc4108b8648d": {
+   "ai_brief": "- Elena has had no pain or injury flags logged in the last four weeks, but given her right hip replacement and left shoulder impingement, worth a quick check-in on both before loading today.\n- Leg Press jumped from 50kg to 55kg over four sessions (plus 10%); could be worth confirming the right hip is comfortable before continuing at that weight.\n- Calves and core haven't been trained in four weeks \u2014 a set of calf raises and some core work would support her balance and bone density goals directly.\n- Last session 5 days ago covered Leg Press 3x12 at 55kg, Seated Row 3x12 at 20kg, and Step-ups 3x8 bodyweight.",
+   "ms": 4044
+  }
+ }
 }

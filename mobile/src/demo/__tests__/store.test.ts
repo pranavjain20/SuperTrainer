@@ -85,7 +85,57 @@ describe("freshen", () => {
     const state = freshen(nows[0]);
     expect(state.clipsUsed).toEqual({});
     expect(state.replayIds).toEqual({});
-    expect(state.version).toBe(fixture.captured_at);
+    expect(state.version).toBe(`${fixture.captured_at}|${nows[0].toDateString()}`);
+  });
+
+  const upcoming = (now: Date) =>
+    freshen(now).sessions.filter((s) => s.id.startsWith("upcoming-"));
+
+  it("schedules a session later today for each client who hasn't trained today", () => {
+    const now = nows[0];
+    const state = freshen(now);
+    const trainedToday = new Set(
+      state.sessions
+        .filter((s) => !s.id.startsWith("upcoming-"))
+        .filter((s) => localDay(s.started_at) === localDay(now.toISOString()))
+        .map((s) => s.client_id),
+    );
+    const sessions = upcoming(now);
+    expect(sessions.map((s) => s.client_id).sort()).toEqual(
+      fixture.clients
+        .map((c) => c.id)
+        .filter((id) => !trainedToday.has(id))
+        .sort(),
+    );
+    const times = sessions.map((s) => new Date(s.started_at).getTime());
+    expect(times.every((t) => t > now.getTime())).toBe(true);
+    expect([...times].sort((a, b) => a - b)).toEqual(times);
+    for (const s of sessions) {
+      expect(s.ended_at).toBeNull();
+      expect(s.scheduled_for).toBe(s.started_at);
+      expect(localDay(s.started_at)).toBe(localDay(now.toISOString()));
+    }
+  });
+
+  it("keeps late-evening sessions on today, a quarter hour apart", () => {
+    const late = new Date(2027, 2, 10, 22, 50);
+    const times = upcoming(late).map((s) => new Date(s.started_at).getTime());
+    expect(
+      times.every(
+        (t) => localDay(new Date(t).toISOString()) === localDay(late.toISOString()),
+      ),
+    ).toBe(true);
+    expect(new Set(times).size).toBe(times.length);
+  });
+
+  it("has a recorded brief for every upcoming session's client", () => {
+    for (const s of upcoming(nows[0])) {
+      expect(
+        (fixture.session_briefs as Record<string, { ai_brief: string | null }>)[
+          s.client_id
+        ]?.ai_brief,
+      ).toBeTruthy();
+    }
   });
 });
 
@@ -131,6 +181,15 @@ describe("the saved copy", () => {
     expect(loadStore(storage).getState().clients).toHaveLength(fixture.clients.length);
   });
 
+  it("is replaced on a new day, so today's schedule is current", () => {
+    const storage = memoryStorage();
+    storage.setItem!(
+      "supertrainer-demo",
+      JSON.stringify({ version: `${fixture.captured_at}|Mon Jan 01 2001`, clients: [] }),
+    );
+    expect(loadStore(storage).getState().clients).toHaveLength(fixture.clients.length);
+  });
+
   it("falls back to memory when storage throws", () => {
     const store = loadStore({
       getItem: () => {
@@ -148,6 +207,9 @@ describe("the saved copy", () => {
     const store = loadStore(memoryStorage());
     store.getState().sessions = [];
     store.resetDemo();
-    expect(store.getState().sessions).toHaveLength(fixture.sessions.length);
+    const recorded = store
+      .getState()
+      .sessions.filter((s) => !s.id.startsWith("upcoming-"));
+    expect(recorded).toHaveLength(fixture.sessions.length);
   });
 });

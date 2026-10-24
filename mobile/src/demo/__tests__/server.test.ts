@@ -268,6 +268,35 @@ describe("workout_type", () => {
   });
 });
 
+describe("brief", () => {
+  const brief = (id: string) => call("POST", `/sessions/${id}/brief`, {});
+  const recorded = (clientId: string) =>
+    (fixture.session_briefs as Record<string, { ai_brief: string | null }>)[clientId]
+      .ai_brief;
+
+  it("replays the client's recorded brief for an upcoming session", async () => {
+    const upcoming = getState().sessions.find((s) => s.id.startsWith("upcoming-"))!;
+    const res = await brief(upcoming.id);
+    expect(res.status).toBe(200);
+    expect(res.body.data.ai_brief).toBe(recorded(upcoming.client_id));
+  });
+
+  it("works for a session the visitor starts", async () => {
+    const id = await startSession();
+    expect((await brief(id)).body.data.ai_brief).toBe(recorded(sarah.id));
+  });
+
+  it("refuses a finished session", async () => {
+    const id = await startSession();
+    await call("PATCH", `/sessions/${id}`, { ended_at: new Date().toISOString() });
+    expect((await brief(id)).status).toBe(409);
+  });
+
+  it("is a 404 for a missing session", async () => {
+    expect((await brief("nope")).status).toBe(404);
+  });
+});
+
 describe("summary", () => {
   const endSession = (id: string) =>
     call("PATCH", `/sessions/${id}`, { ended_at: new Date().toISOString() });

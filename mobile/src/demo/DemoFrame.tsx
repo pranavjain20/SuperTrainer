@@ -22,6 +22,10 @@ const REPO_URL = "https://github.com/pranavjain20/SuperTrainer";
 
 const TRY_IT = [
   [
+    "Read today's AI notes",
+    "On the home screen, tap AI notes on an upcoming session to see what to watch with that client.",
+  ],
+  [
     "Log a session by voice",
     "Open a client, start a session and tap the mic. A sample clip plays; tap stop and it turns into an exercise card.",
   ],
@@ -61,8 +65,9 @@ export function DemoFrame({ children }: { children: ReactNode }) {
           color={colors.text.primary}
           style={{ marginTop: 14, fontSize: 18, lineHeight: 27 }}
         >
-          Most personal trainers still log sessions in a notebook. With SuperTrainer they
-          just say what their client did, and it becomes a clean workout log.
+          A trainer with 30 clients can't remember everything. SuperTrainer remembers for
+          them: they talk during a session, it keeps the log, and before each session it
+          tells them what to watch.
         </ThemedText>
         {TRY_IT.map(([title, detail], i) => (
           <View key={title} style={{ marginTop: i === 0 ? 26 : 14 }}>
