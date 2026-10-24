@@ -461,6 +461,10 @@ class SessionSummaryResponse(BaseModel):
     ai_summary: str | None
 
 
+class SessionBriefResponse(BaseModel):
+    ai_brief: str | None
+
+
 # --- Brain ---
 
 

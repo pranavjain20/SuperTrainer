@@ -1103,7 +1103,7 @@ def validate_modification(
 _exercise_lookup_cache: dict[str, str] | None = None
 
 
-def _get_exercise_lookup() -> dict[str, str]:
+def get_exercise_lookup() -> dict[str, str]:
     """Get or build the exercise lookup from the JSON DB."""
     global _exercise_lookup_cache
     if _exercise_lookup_cache is None:
@@ -1137,7 +1137,7 @@ def validate_parser_result(
         ValidationResult with validated cards, modifications, and warnings.
     """
     if exercise_lookup is None:
-        exercise_lookup = _get_exercise_lookup()
+        exercise_lookup = get_exercise_lookup()
 
     all_warnings: list[ValidationWarning] = []
 

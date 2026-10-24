@@ -14,10 +14,12 @@ from app.schemas import (
     SessionCreate,
     SessionListResponse,
     SessionResponse,
+    SessionBriefResponse,
     SessionSummaryResponse,
     SessionUpdate,
 )
 from app.services import session_service
+from app.services.session_brief import write_brief
 from app.services.session_summary import summarize_session
 
 router = APIRouter(prefix="/sessions", tags=["sessions"])
@@ -119,6 +121,26 @@ async def summarize(
         await db.commit()
         await db.refresh(session)
     return {"data": SessionSummaryResponse(ai_summary=session.ai_summary), "meta": {}}
+
+
+@router.post("/{session_id}/brief", response_model=DataResponse[SessionBriefResponse])
+async def brief(
+    session_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+):
+    """Claude's notes on the client before this session: pain, lifts that moved, gaps.
+
+    Written fresh on each request from the client's last four weeks, so it's never stale.
+    A client with no finished sessions in that time has no brief.
+    """
+    session = await validate_session_ownership(db, session_id)
+    if session.ended_at is not None:
+        raise HTTPException(status_code=409, detail="Session has already ended")
+    try:
+        ai_brief = await write_brief(db, session)
+    except anthropic.APIError as e:
+        raise HTTPException(status_code=502, detail="Could not write the brief right now") from e
+    return {"data": SessionBriefResponse(ai_brief=ai_brief), "meta": {}}
 
 
 @router.delete("/{session_id}", status_code=204)
