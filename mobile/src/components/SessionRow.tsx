@@ -1,6 +1,7 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Pressable, View } from "react-native";
 
+import { SessionBrief } from "@/src/components/SessionBrief";
 import { ThemedText } from "@/src/components/ThemedText";
 import { colors } from "@/src/constants/tokens";
 import type { SessionWithClient } from "@/src/hooks/useSessions";
@@ -79,6 +80,8 @@ export function SessionRow({ session, onPress, hideClientName }: SessionRowProps
           </View>
         )}
       </View>
+
+      {!isCompleted && <SessionBrief sessionId={session.id} />}
     </Pressable>
   );
 }

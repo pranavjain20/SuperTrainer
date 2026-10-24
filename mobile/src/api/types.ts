@@ -285,6 +285,10 @@ export interface SessionSummaryResponse {
   ai_summary: string | null;
 }
 
+export interface SessionBriefResponse {
+  ai_brief: string | null;
+}
+
 export interface BrainAnswer {
   answer: string;
 }

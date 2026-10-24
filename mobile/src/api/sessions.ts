@@ -19,6 +19,7 @@ import type {
   Session,
   SessionCreate,
   SessionUpdate,
+  SessionBriefResponse,
   SessionSummaryResponse,
 } from "./types";
 
@@ -98,6 +99,14 @@ export async function summarizeSession(sessionId: string): Promise<string | null
     {},
   );
   return res.data.ai_summary;
+}
+
+export async function getSessionBrief(sessionId: string): Promise<string | null> {
+  const res = await apiPost<DataResponse<SessionBriefResponse>>(
+    `/api/v1/sessions/${sessionId}/brief`,
+    {},
+  );
+  return res.data.ai_brief;
 }
 
 // ---------------------------------------------------------------------------
