@@ -29,6 +29,8 @@ export function SessionBrief({ sessionId }: { sessionId: string }) {
     queryKey: briefQueryKey(sessionId),
     queryFn: () => getSessionBrief(sessionId),
     enabled: open,
+    // Each try is a Claude call; the trainer can tap to retry instead
+    retry: false,
     staleTime: 30 * 60_000,
   });
 
