@@ -18,8 +18,9 @@ So trainers walk into sessions without the full picture. They forget that a clie
 1. **Logging takes no attention away from the client.** The trainer talks the way they normally would, and each clip becomes structured cards within seconds.
 2. **Talking naturally works.** Corrections fix earlier entries, notes attach to the exercise they're about, and an unclear clip leads to a question, not a guess.
 3. **Every session leaves a short summary** that a trainer can read in a few seconds before the next session.
-4. **Any question about a client gets an answer from their history,** across every session the trainer has logged.
-5. **Never claim more than the data supports.** No invented causes, advice or trends, and a plain "the data doesn't say" when it doesn't.
+4. **Every upcoming session comes with notes on that client:** recent pain, lifts that have moved, and muscle groups not trained lately.
+5. **Any question about a client gets an answer from their history,** across every session the trainer has logged.
+6. **Never claim more than the data supports.** No invented causes, advice or trends, and a plain "the data doesn't say" when it doesn't.
 
 ## Non-goals
 
@@ -35,6 +36,8 @@ So trainers walk into sessions without the full picture. They forget that a clie
 **A session.** The trainer starts a session and taps the mic between sets. Each clip turns into an exercise card (exercise, sets, reps, weight, RPE) or a note card (pain, form, anything else). Cards can be edited by hand. Saying "actually, that was thirty kilos" fixes the last card instead of adding a new one.
 
 **The summary.** When the session ends, the trainer sees what the client did, a workout label (upper body, lower body, full body and so on) and a short AI summary. Editing the session later writes a fresh summary.
+
+**AI notes before a session.** Each upcoming session on the day's schedule has an "AI notes" bar. Tapping it shows two to four notes on that client from the past four weeks: pain or flags and whether they've come back, a lift whose weight has dropped or jumped, a muscle group they haven't trained that fits their goals, and what the last session covered. A note can end with one small suggestion that follows from it ("a set of calf raises would cover it"), never medical advice.
 
 **Plans.** The trainer can dictate the next session's plan, and it's saved on the client's page.
 

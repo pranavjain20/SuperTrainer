@@ -27,7 +27,7 @@ All backend paths below are under `backend/app/` unless they start with another 
 
 **Mobile app** (`mobile/`). Expo and React Native with Expo Router, so screens are files in `mobile/app/`: the tabs (today's sessions, clients, the Brain), `recording/[sessionId].tsx` for a live session and `plans/form.tsx` for writing a plan. Server data goes through TanStack Query hooks in `mobile/src/hooks/`, and `mobile/src/api/client.ts` is the single wrapper around `fetch`. Recording uses `expo-av` and produces m4a files (`src/hooks/useVoiceRecorder.ts`).
 
-**Web demo** (`mobile/src/demo/`). The same app built for the browser with no backend behind it. Section 10 covers it.
+**Web demo** (`mobile/src/demo/`). The same app built for the browser with no backend behind it. Section 11 covers it.
 
 ## 2. A voice clip, end to end
 
@@ -122,7 +122,22 @@ The tables are in `models.py`.
 
 The call uses temperature 0 (the least random setting) and asks for plain text in a trainer's note style, using the client's first name.
 
-## 8. The Brain
+## 8. AI notes before a session
+
+`services/session_brief.py`, served by `POST /sessions/{id}/brief` and shown by `src/components/SessionBrief.tsx` on every session row that hasn't ended. The notes are fetched only when the trainer opens the bar, and written fresh each time, so they're never stale.
+
+**Facts worked out in code** (`build_brief_prompt`). From the client's finished sessions in the four weeks before the session:
+
+- **Weight changes.** For each lift done at least twice with weight, the heaviest set the first time and the latest time, with the percentage change.
+- **Pain and flags.** Every observation flagged red or yellow, and every note or set note the pain detector in `validation.py` picks up, with when it happened and which exercise it was logged on.
+- **Muscle groups not trained.** Each exercise's primary muscles from the exercise database are mapped to ten major groups (`MUSCLE_GROUPS`), and any group no exercise touched is listed. Names are matched exactly against the database's names and aliases. If any exercise can't be matched, the gaps are reported as unknown rather than guessed.
+- **The last session**, in the same one-line format the summary uses.
+
+A client with no finished sessions in that window gets no notes, and Claude isn't called.
+
+**What Claude does** (`BRIEF_SYSTEM_PROMPT`). It picks the two to four facts that matter most (pain first, then a lift that moved, then a gap that fits the client's goals) and words them. It must quote the numbers as given and never recalculate, keep each fact with the exercise it was logged on, and may end a note with one small suggestion that follows from it. It never gives medical advice beyond checking in with the client. Temperature 0.
+
+## 9. The Brain
 
 `services/brain.py`, served by `POST /brain/ask` and the Brain tab (`app/(tabs)/brain.tsx`). The tab also offers suggested questions from `src/constants/brainSuggestions.json`.
 
@@ -138,7 +153,7 @@ The call uses temperature 0 (the least random setting) and asks for plain text i
 
 The call uses temperature 0. One question gets one answer: nothing is saved and earlier questions in the chat aren't sent. An Anthropic API error comes back as a 502 with a plain message.
 
-## 9. Workout labels
+## 10. Workout labels
 
 `services/workout_classifier.py`. Each session in an API response carries a `workout_type` such as "Lower Body" or "Upper Body Push". It isn't stored. `session_service.to_responses` works it out on every read from the session's canonical exercise names, so the label is always current after an edit.
 
@@ -146,7 +161,7 @@ The call uses temperature 0. One question gets one answer: nothing is saved and 
 2. **Count the regions.** Exercises with no canonical name, or none of whose muscles map, are skipped. If nothing is left, the label is "Session".
 3. **Pick the label.** If one region has at least 70% of the exercises, the label is that region's name. If push and pull together have at least 70% and both appear, it's "Upper Body". Anything else is "Full Body".
 
-## 10. The web demo and how it's recorded
+## 11. The web demo and how it's recorded
 
 The demo at https://supertrainer-demo.vercel.app is the real app built for the web with `EXPO_PUBLIC_DEMO=1` (`npm run export:demo` in `mobile/`).
 
@@ -158,6 +173,7 @@ The demo at https://supertrainer-demo.vercel.app is the real app built for the w
 
 - **Voice clips.** Recording plays the next of six sample clips. The upload returns what the real pipeline returned for that clip, after waiting as long as the real call took. Clip 4 corrects clip 3, and the demo tracks which live entry each recorded entry became so the correction lands on the right card.
 - **Summaries.** Seeded sessions carry their real summaries. A visitor's session gets the summary Claude wrote for the same client after the same number of clips. Editing an entry doesn't clear it, since only recorded summaries exist.
+- **AI notes.** The home screen gets a session later today for each client who hasn't trained today (`upcomingSessions` in `store.ts`), and each one's notes are the brief the real backend wrote for that client. The saved copy resets each new day so the schedule stays current.
 - **The Brain** answers only the suggested questions, with the real Brain's recorded answers.
 - **Plans.** Plan dictation returns the recorded transcript and parse. Typed plans and typed entries return an error explaining the demo can't run the parser.
 - **Workout labels** come from `src/demo/classify.ts`, a copy of the counting step. Each exercise's region is computed by the backend and stored in the recording.
@@ -165,14 +181,14 @@ The demo at https://supertrainer-demo.vercel.app is the real app built for the w
 **Recording it** (`backend/scripts/export_web_demo.py`). The script runs against a freshly seeded local backend (`python -m app.seed`, then uvicorn). In order, it:
 
 1. Moves all seeded dates so the newest session is today, so "3 days ago" is the same in the Brain's answers and on screen.
-2. Asks for a summary for every finished session, then asks the Brain each suggested question.
+2. Asks for a summary for every finished session, asks the Brain each suggested question, and records each client's brief for a session later today (`--briefs-only` re-records just these).
 3. Speaks the six clips with macOS `say` (or uses real recordings given with `--voice-dir`) and sends them through the real voice-clip route in a scratch session.
 4. For every client, builds a session holding the first one to six clips' entries and records its summary.
 5. Dictates a sample plan through `/transcribe` and `/plans/parse`.
 
 It writes everything, with timings, to `mobile/src/demo/fixture.json` and the audio to `mobile/public/demo/`. It also writes test cases for the label classifier, with the backend's own answers, so the demo's copy can be checked against them.
 
-## 11. Testing
+## 12. Testing
 
 **Backend** (`backend/tests/`, run with `pytest` from `backend/`).
 
@@ -183,7 +199,7 @@ It writes everything, with timings, to `mobile/src/demo/fixture.json` and the au
 
 **Mobile** (`npm test` in `mobile/`, Jest with ts-jest). These cover the set and plan helpers in `src/utils/`, and the demo: the fake backend's routes and rules, the store, the suggested questions, and the label classifier against the backend's recorded cases.
 
-## 12. Where things live
+## 13. Where things live
 
 - `backend/app/api/`: the routes, plus `dependencies.py` for the current trainer and ownership checks.
 - `backend/app/services/voice.py`: the voice and text pipeline, saving cards and applying modifications.

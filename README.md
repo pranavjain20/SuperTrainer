@@ -1,6 +1,6 @@
 # SuperTrainer
 
-SuperTrainer gives a personal trainer the memory of a coach with one client. The trainer talks during a session, and each voice note becomes a log of what the client did. After the session it writes a short summary, and the trainer can ask it anything about any client.
+SuperTrainer gives a personal trainer the memory of a coach with one client. The trainer talks during a session, and each voice note becomes a log of what the client did. Before each session it gives the trainer AI notes on that client, after it writes a short summary, and the trainer can ask it anything about any client.
 
 Try the demo in your browser: [supertrainer-demo.vercel.app](https://supertrainer-demo.vercel.app)
 
@@ -17,6 +17,8 @@ During a session the trainer taps the mic and says what happened, the way they'd
 Each clip is read with the rest of the session in view, so the trainer can talk the way people actually talk. "Actually, that last set was thirty kilos" fixes the earlier card instead of adding a new one, and a comment about how a set went, like "grip slipped on the last rep", is saved on that set. When a clip is unclear, the app asks the trainer instead of guessing.
 
 When the session ends, SuperTrainer writes a short summary of what the client did and anything worth watching next time. The summary only uses what was logged: it doesn't invent causes or advice, and it only calls something a personal best when there's an earlier best to compare against. If the trainer edits the session later, the summary is written again.
+
+Every morning, the trainer's schedule shows the day's sessions, and each one has AI notes on that client: pain or flags from the past few weeks, lifts whose weight has moved, and muscle groups they haven't trained lately, like "Jake mentioned lower back tightness after squats 12 days ago, worth checking in before loading the bar" or "calves haven't been trained in four weeks, a set of calf raises would cover it". The weight changes and gaps are worked out in code from the logged sessions, so the notes only put them into words.
 
 The Brain is a chat where the trainer can ask about their clients, like "anything I should watch out for with Elena today?" or "how is Jake's bench press progressing?". It answers from every session the trainer has logged, plus each client's goals and injury history, and when the data doesn't have the answer, it says so. Trainers can also dictate the plan for the next session, and the client's history shows each past session in one line per exercise, the way trainers write it in a notebook.
 
